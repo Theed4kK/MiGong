@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="CellRenderSkin" width="60" height="60" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" >
+	<w:Config id="16b367ba8b3" ></w:Config>
+	<e:Image id="img_leftWall" width="4" left="-2" top="-2" bottom="-2" anchorOffsetX="0" source="wall_jpg"/>
+	<e:Image id="img_upWall" left="-2" top="-2" anchorOffsetX="0" source="wall_jpg" rotation="90" height="64" right="-2"/>
+	<e:Image id="img_rightWall" width="4" top="-2" bottom="-2" anchorOffsetX="0" right="-2" source="wall_jpg"/>
+	<e:Image id="img_downWall" bottom="-2" anchorOffsetX="0" source="wall_jpg" rotation="90" height="64" left="-2" right="-2" anchorOffsetY="0"/>
+</e:Skin>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="Loading" width="640" height="1136" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Image left="0" right="0" top="0" bottom="0" source="loading_jpg"/>
+	<e:Image source="loading_gif" horizontalCenter="0" verticalCenter="0"/>
+	<e:ProgressBar width="478" height="20" y="755.33" anchorOffsetX="0" horizontalCenter="0"/>
+</e:Skin>
