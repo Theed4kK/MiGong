@@ -5,11 +5,11 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	}
 
 	private list: eui.List;
-	private list_bg:eui.List;
+	private list_bg: eui.List;
 
 	private btn_scale: eui.Button;
 	private btn_gen: eui.Button;
-	private btn_swapMode:eui.Button;
+	private btn_swapMode: eui.Button;
 
 	private input_col: eui.TextInput;
 	private input_speed: eui.TextInput;
@@ -44,8 +44,8 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		super.childrenCreated();
 		this.btn_scale.addEventListener(egret.TouchEvent.TOUCH_TAP, this.SetListScale, this);
 		this.btn_gen.addEventListener(egret.TouchEvent.TOUCH_TAP, this.GenMiGong, this);
-		this.stage.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.Move, this);
 		this.stage.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.BeginTouch, this);
+		this.stage.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.Move, this);
 		this.stage.addEventListener(egret.TouchEvent.TOUCH_END, this.CancelTouch, this);
 		this.stage.addEventListener(egret.TouchEvent.TOUCH_CANCEL, this.CancelTouch, this);
 		this.scroller.horizontalScrollBar.autoVisibility = false;
@@ -92,6 +92,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		}
 		this.initPos.x = e.stageX;
 		this.initPos.y = e.stageY;
+
 		this.removeEventListener(egret.Event.ENTER_FRAME, this.onEnterFrame, this);
 		this.addEventListener(egret.Event.ENTER_FRAME, this.onEnterFrame, this);
 		this.timeOnEnterFrame = egret.getTimer();
@@ -160,6 +161,9 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		this.list_bg.itemRenderer = CellBgRender;
 		this.list_bg.validateNow();
 		this.list_bg.validateDisplayList();
+
+		let tile: eui.TileLayout = this.list.layout as eui.TileLayout;
+		egret.log(tile.paddingTop);
 
 		this.bg.width = this.list.width;
 		let obj: CellRender = this.list.getElementAt(this.index) as CellRender;
