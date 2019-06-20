@@ -1,9 +1,38 @@
-class GenCells {
+class GenCells extends eui.Component implements eui.UIComponent {
 	public constructor() {
+		super();
 	}
 
+	public index: number;
+	// public speed: number;
+	public wallList: eui.List;
+	public cellList: eui.List;
+	public scroll: eui.Scroller;
+	public cells: Cell[] = [];
 
-	public static GetCells(row: number, col: number): Cell[] {
+	private col: number;
+
+	public SetIndex(type: number) {
+		switch (type) {
+			case 0: this.index--; break;
+			case 1: this.index++; break;
+			case 2: this.index -= this.col; break;
+			case 3: this.index += this.col; break;
+		}
+		this.dispatchEvent(new MyEvent(MyEvent.updateStepNum));
+
+	}
+
+	public RefreshCell(dirX: number, dirY: number, speed: number): void {
+		if (!this.cells[this.index].isPassed) {
+			let cellBgRender: CellBgRender = <CellBgRender>this.cellList.getElementAt(this.index);
+			cellBgRender.LightenUp(dirX, dirY, speed);
+			this.cells[this.index].isPassed = true;
+		}
+	}
+
+	public GetCells(row: number, col: number): Cell[] {
+		this.col = col;
 		let cells: Cell[][] = [];
 		let allCell: Cell[] = [];
 
@@ -19,7 +48,6 @@ class GenCells {
 			}
 			cells.push(cell);
 		}
-
 
 		let t: number = 0;
 		for (var i: number = 0; i < row; i++) {
@@ -101,6 +129,7 @@ class GenCells {
 				signingCell = signedCell[num - 1];
 			}
 		}
+		this.cells = allCell;
 		return allCell;
 	}
 

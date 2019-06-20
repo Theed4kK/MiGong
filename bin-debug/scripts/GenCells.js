@@ -1,10 +1,46 @@
 var __reflect = (this && this.__reflect) || function (p, c, t) {
     p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
 };
-var GenCells = (function () {
+var __extends = this && this.__extends || function __extends(t, e) { 
+ function r() { 
+ this.constructor = t;
+}
+for (var i in e) e.hasOwnProperty(i) && (t[i] = e[i]);
+r.prototype = e.prototype, t.prototype = new r();
+};
+var GenCells = (function (_super) {
+    __extends(GenCells, _super);
     function GenCells() {
+        var _this = _super.call(this) || this;
+        _this.cells = [];
+        return _this;
     }
-    GenCells.GetCells = function (row, col) {
+    GenCells.prototype.SetIndex = function (type) {
+        switch (type) {
+            case 0:
+                this.index--;
+                break;
+            case 1:
+                this.index++;
+                break;
+            case 2:
+                this.index -= this.col;
+                break;
+            case 3:
+                this.index += this.col;
+                break;
+        }
+        this.dispatchEvent(new MyEvent(MyEvent.updateStepNum));
+    };
+    GenCells.prototype.RefreshCell = function (dirX, dirY, speed) {
+        if (!this.cells[this.index].isPassed) {
+            var cellBgRender = this.cellList.getElementAt(this.index);
+            cellBgRender.LightenUp(dirX, dirY, speed);
+            this.cells[this.index].isPassed = true;
+        }
+    };
+    GenCells.prototype.GetCells = function (row, col) {
+        this.col = col;
         var cells = [];
         var allCell = [];
         var tmp = 0;
@@ -95,6 +131,7 @@ var GenCells = (function () {
                 signingCell = signedCell[num - 1];
             }
         }
+        this.cells = allCell;
         return allCell;
     };
     GenCells.GetDesignedCell = function (cell) {
@@ -130,6 +167,5 @@ var GenCells = (function () {
         return w;
     };
     return GenCells;
-}());
-__reflect(GenCells.prototype, "GenCells");
-//# sourceMappingURL=GenCells.js.map
+}(eui.Component));
+__reflect(GenCells.prototype, "GenCells", ["eui.UIComponent", "egret.DisplayObject"]);

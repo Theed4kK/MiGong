@@ -19,10 +19,15 @@ var CellRender = (function (_super) {
         this.img_downWall.visible = !cell.downCell;
         this.img_leftWall.visible = cell.leftWall == null ? true : !cell.leftWall.isOpen;
         this.img_rightWall.visible = !cell.rightCell;
+        if (cell.id == 0) {
+            this.img_leftWall.top += this.img_leftWall.height;
+        }
     };
-    CellRender.prototype.StartAni = function () {
+    CellRender.prototype.StartAni = function (wait) {
+        var aniTime = 500;
+        egret.Tween.get(this.img_leftWall).wait(wait).to({ top: -2 }, aniTime);
+        return aniTime;
     };
     return CellRender;
 }(eui.ItemRenderer));
 __reflect(CellRender.prototype, "CellRender");
-//# sourceMappingURL=CellRender.js.map

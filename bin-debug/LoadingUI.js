@@ -49,4 +49,3 @@ var LoadingUI = (function (_super) {
     return LoadingUI;
 }(eui.Component));
 __reflect(LoadingUI.prototype, "LoadingUI", ["eui.UIComponent", "egret.DisplayObject"]);
-//# sourceMappingURL=LoadingUI.js.map

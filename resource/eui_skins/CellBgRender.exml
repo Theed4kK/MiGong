@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin class="CellBgRenderSkin" width="60" height="60" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" >
 	<w:Config id="16b70ad5af4" ></w:Config>
-	<e:Image id="img_bg" left="0" right="0" top="0" bottom="0" source="selected_png"/>
+	<e:Image id="img_bg" left="0" right="0" top="0" bottom="0" source="rect_png" fillMode="repeat"/>
+	<e:Image id="img_exitSign" source="thumb_png" horizontalCenter="0" verticalCenter="0" visible="false"/>
 </e:Skin>

@@ -10,4 +10,3 @@ var Wall = (function () {
     return Wall;
 }());
 __reflect(Wall.prototype, "Wall");
-//# sourceMappingURL=Wall.js.map

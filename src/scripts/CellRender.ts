@@ -8,9 +8,6 @@ class CellRender extends eui.ItemRenderer {
 	private img_upWall: eui.Image;
 	private img_downWall: eui.Image;
 
-	private tw: egret.Tween;
-
-
 	protected dataChanged(): void {
 		let cell: Cell = this.data;
 
@@ -18,13 +15,16 @@ class CellRender extends eui.ItemRenderer {
 		this.img_downWall.visible = !cell.downCell;
 		this.img_leftWall.visible = cell.leftWall == null ? true : !cell.leftWall.isOpen;
 		this.img_rightWall.visible = !cell.rightCell;
+
+		if (cell.id == 0) {
+			this.img_leftWall.top += this.img_leftWall.height;
+		}
 	}
 
-	public StartAni(): void {
-
+	public StartAni(wait: number): number {
+		let aniTime = 500;
+		egret.Tween.get(this.img_leftWall).wait(wait).to({ top: -2 }, aniTime);
+		return aniTime;
 	}
-
-
-
 
 }

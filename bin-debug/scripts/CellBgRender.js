@@ -21,22 +21,31 @@ var CellBgRender = (function (_super) {
     };
     CellBgRender.prototype.dataChanged = function () {
         var cell = this.data;
+        if (cell.id == 0) {
+            this.img_bg.visible = false;
+        }
+        if (cell.rightCell == null && cell.downCell == null) {
+            this.img_exitSign.visible = true;
+        }
     };
-    CellBgRender.prototype.LightenUp = function (dir, speed) {
+    CellBgRender.prototype.LightenUp = function (dirX, dirY, speed) {
         var width = this.img_bg.width;
         var height = this.img_bg.height;
         this.tw = egret.Tween.get(this.img_bg);
-        switch (dir) {
+        // if(dirX )
+        switch (dirX) {
             case 0:
                 this.tw.to({ right: width }, 300);
                 break;
             case 1:
                 this.tw.to({ left: width }, 300);
                 break;
-            case 2:
+        }
+        switch (dirY) {
+            case 0:
                 this.tw.to({ top: height }, 300);
                 break;
-            case 3:
+            case 1:
                 this.tw.to({ bottom: height }, 300);
                 break;
         }
@@ -46,4 +55,3 @@ var CellBgRender = (function (_super) {
     return CellBgRender;
 }(eui.ItemRenderer));
 __reflect(CellBgRender.prototype, "CellBgRender");
-//# sourceMappingURL=CellBgRender.js.map
