@@ -22,6 +22,7 @@
 		"bin-debug/scripts/GameUI.js",
 		"bin-debug/scripts/GenCells.js",
 		"bin-debug/scripts/MyEvent.js",
+		"bin-debug/scripts/VirtualRocker.js",
 		"bin-debug/scripts/Wall.js"
 	]
 }

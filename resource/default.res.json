@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "cell_jpg,SwordsMan_ske_json,SwordsMan_tex_png,wall_jpg,common_json,rect_png",
+			"keys": "cell_jpg,SwordsMan_ske_json,SwordsMan_tex_png,wall_jpg,common_json,rect_png,padIcon_png,padIcon_01_png",
 			"name": "preload"
 		},
 		{
@@ -55,6 +55,16 @@
 			"name": "rect_png",
 			"type": "image",
 			"url": "map/rect.png"
+		},
+		{
+			"name": "padIcon_png",
+			"type": "image",
+			"url": "assets/padIcon.png"
+		},
+		{
+			"name": "padIcon_01_png",
+			"type": "image",
+			"url": "assets/padIcon_01.png"
 		}
 	]
 }

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin class="GameSkin" width="640" height="1136" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" >
+<e:Skin class="GameSkin" width="640" height="1136" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" xmlns:ns1="*" >
 	<w:Config id="16b364587c8" ></w:Config>
-	<e:Image id="img_Bg" horizontalCenter="0" verticalCenter="0" source="loading_jpg" touchEnabled="true"/>
+	<e:Image id="img_Bg" horizontalCenter="0" verticalCenter="0" source="loading_jpg" x="0" y="0" scaleX="1" scaleY="1" touchEnabled="false"/>
+
 	<e:Scroller id="scroller" height="610" top="200" touchEnabled="false" touchChildren="false" bounces="false" scaleX="1" scaleY="1" left="15" right="15">
 		<e:Group id="map" scaleX="1" scaleY="1" touchThrough="true">
 			<e:Image id="img_mapBg" top="0" fillMode="repeat" scaleX="1" scaleY="1" left="0" right="0" bottom="0" width="600" height="600" x="5" y="5" anchorOffsetX="0" includeInLayout="false" source="cell_jpg"/>
@@ -36,4 +37,5 @@
 		<e:Button id="btn_scale" label="缩放" y="999" scaleX="1" scaleY="1" horizontalCenter="0"/>
 		<e:Button id="btn_swapMode" label="拖动" y="1000" scaleX="1" scaleY="1" right="120"/>
 	</e:Group>
+	<ns1:VirtualRocker id="virt" x="244" y="698.5" anchorOffsetX="70" anchorOffsetY="70" touchEnabled="false" touchChildren="false" visible="false"/>
 </e:Skin>

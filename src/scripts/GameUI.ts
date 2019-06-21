@@ -22,7 +22,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 
 	private scroller: eui.Scroller;
 	private img_mapBg: eui.Image;
-	private img_bg: eui.Image;
+	private img_Bg: eui.Image;
 	private img_role: eui.Image;
 
 	private initPos: egret.Point = new egret.Point();
@@ -30,6 +30,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	private touchId: number;
 	private touchError: number = 5;
 	private stepNum: number = 0;
+	private virt: VirtualRocker;
 
 	protected partAdded(partName: string, instance: any): void {
 		super.partAdded(partName, instance);
@@ -41,10 +42,10 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		this.btn_scale.addEventListener(egret.TouchEvent.TOUCH_TAP, this.SetListScale, this);
 		this.btn_gen.addEventListener(egret.TouchEvent.TOUCH_TAP, this.GenMiGong, this);
 		this.input_speed.addEventListener(egret.Event.CHANGE, this.ModifySpeed, this)
-		this.stage.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.BeginTouch, this);
-		this.stage.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.Move, this);
+		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.BeginTouch, this);
+		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.Move, this);
 		this.stage.addEventListener(egret.TouchEvent.TOUCH_END, this.CancelTouch, this);
-		this.stage.addEventListener(egret.TouchEvent.TOUCH_CANCEL, this.CancelTouch, this);
+		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_CANCEL, this.CancelTouch, this);
 		this.genCells.addEventListener(MyEvent.updateStepNum, this.UpdateStepNum, this);
 		this.scroller.horizontalScrollBar.autoVisibility = false;
 		this.scroller.horizontalScrollBar.visible = false;
@@ -57,6 +58,8 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		genCells.scroll = this.scroller;
 		genCells.wallList = this.list;
 		genCells.cellList = this.list_bg;
+
+		this.GenMiGong();
 	}
 
 	private UpdateStepNum(): void {
@@ -70,38 +73,41 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		this.btn_scale.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.SetListScale, this);
 		this.btn_gen.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.GenMiGong, this);
 		this.input_speed.removeEventListener(egret.Event.CHANGE, this.ModifySpeed, this)
-		this.stage.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.BeginTouch, this);
-		this.stage.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.Move, this);
+		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.BeginTouch, this);
+		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.Move, this);
 		this.stage.removeEventListener(egret.TouchEvent.TOUCH_END, this.CancelTouch, this);
-		this.stage.removeEventListener(egret.TouchEvent.TOUCH_CANCEL, this.CancelTouch, this);
+		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_CANCEL, this.CancelTouch, this);
 	}
 
 	//触屏手指移动
 	private Move(e: egret.TouchEvent): void {
-		if (this.list.numElements == 0) { return; }
-		let difX: number = Math.abs(e.stageX - this.initPos.x);
-		let difY: number = Math.abs(e.stageY - this.initPos.y);
-		this.touchError = Number(this.input_touchError.text);
-		if (difX > this.touchError) {
-			this.gameControl.directionX = e.stageX > this.initPos.x ? 1 : 0;
-			// this.initPos.x = e.stageX;
-		}
-		if (difY > this.touchError) {
-			this.gameControl.directionY = e.stageY > this.initPos.y ? 0 : 1;
-			// this.initPos.y = e.stageY;
-		}
+		// let difX: number = Math.abs(e.stageX - this.initPos.x);
+		// let difY: number = Math.abs(e.stageY - this.initPos.y);
+		// this.touchError = Number(this.input_touchError.text);
+		// if (difX < this.touchError && difY < this.touchError) { return; }
+		// if (difX > difY) {
+		// 	this.gameControl.direction = e.stageX > this.initPos.x ? 1 : 0;
+		// }
+		// else {
+		// 	this.gameControl.direction = e.stageY > this.initPos.y ? 2 : 3;
+		// }
+		let angle: number = this.virt.onTouchMove(e);
+		this.gameControl.direction = angle;
 	}
 
 	private CancelTouch() {
-		this.gameControl.directionX = null;
-		this.gameControl.directionY = null;
+		this.gameControl.direction = null;
 		this.gameControl.RoleMoveState(1);	//停止移动
+		this.virt.stop();
 	}
 
 	private BeginTouch(e: egret.TouchEvent): void {
 		if (this.list.numElements == 0) { return; }
 		this.initPos.x = e.stageX;
 		this.initPos.y = e.stageY;
+		this.virt.x = e.stageX;
+		this.virt.y = e.stageY;
+		this.virt.start();
 		this.gameControl.RoleMoveState(0);	//开始移动
 	}
 
@@ -134,8 +140,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		egret.Tween.get(this.scroller.viewport).to({ scrollH: 0 }, this.scroller.viewport.scrollH / 0.5);
 		egret.Tween.get(this.img_role).wait(this.scroller.viewport.scrollH / 0.5).to({ x: obj.x + (obj.width / 2) }, 1000);
 		let wait: number = obj.StartAni(1000);
-		egret.Tween.get(this.scroller).wait(wait).to({ top: 205 }, 100, egret.Ease.backInOut)
-		.to({ top: 200 }, 100, egret.Ease.backInOut);
+		this.img_Bg.touchEnabled = true;
 	}
 
 	private SetListScale(): void {

@@ -5,7 +5,7 @@
     "parentPath": ""
   },
   "global": {
-    "globalAutoLayerMarkEnable": true
+    "globalAutoLayerMarkEnable": false
   },
   "16b56b6b06d": {
     "path": "scripts\\MapScroller.ts",
@@ -15,6 +15,11 @@
   "16b70ad5af4": {
     "path": "scripts\\CellBgRender.ts",
     "class": "CellBgRender",
+    "parentPath": ""
+  },
+  "16b78c6ee92": {
+    "path": "scripts\\VirtualRocker.ts",
+    "class": "VirtualRocker",
     "parentPath": ""
   }
 }

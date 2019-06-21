@@ -19,9 +19,11 @@ var GameControl = (function (_super) {
         if (start === void 0) { start = 0; }
         if (target === void 0) { target = 0; }
         switch (state) {
+            //操作移动
             case 0:
                 this.addEventListener(egret.Event.ENTER_FRAME, this.RoleMove, this);
                 break;
+            //停止操作移动
             case 1:
                 this.removeEventListener(egret.Event.ENTER_FRAME, this.RoleMove, this);
                 break;
@@ -29,10 +31,11 @@ var GameControl = (function (_super) {
     };
     //角色移动
     GameControl.prototype.RoleMove = function () {
-        if (this.directionX == null && this.directionY == null) {
+        if (this.direction == null) {
             return;
         }
-        var speed = this.speed;
+        var speedX = Math.cos(this.direction) * this.speed;
+        var speedY = Math.sin(this.direction) * this.speed;
         var cell = this.genCells.cells[this.genCells.index];
         var scroll = this.genCells.scroll;
         var hasWall = false;
@@ -40,73 +43,65 @@ var GameControl = (function (_super) {
         var scrollH = 0;
         var groupWidth = 0;
         var obj = this.genCells.wallList.getElementAt(this.genCells.index);
-        switch (this.directionX) {
-            //向左移动
-            case 0:
-                hasWall = (cell.leftCell == null || !cell.leftWall.isOpen);
-                isEdge = this.IsEdge(0);
-                if (hasWall || isEdge) {
-                    var left = this.img_role.x - (this.img_role.width / 2);
-                    var distance = (left - (obj.x + 2));
-                    this.img_role.x -= Math.min(speed, distance);
-                }
-                else {
-                    this.img_role.x -= speed;
-                }
-                scrollH = scroll.viewport.scrollH;
-                if (((this.img_role.x - scrollH) < (scroll.width / 2)) && scrollH > 0) {
-                    scroll.viewport.scrollH -= Math.min(speed, scrollH);
-                }
-                break;
-            //向右移动
-            case 1:
-                hasWall = (cell.rightCell == null || !cell.rightCell.leftWall.isOpen);
-                isEdge = this.IsEdge(0);
-                if (hasWall || isEdge) {
-                    var right = this.img_role.x + (this.img_role.width / 2);
-                    var distance = ((obj.x + obj.width - 2) - right);
-                    this.img_role.x += Math.min(speed, distance);
-                }
-                else {
-                    this.img_role.x += speed;
-                }
-                scrollH = scroll.viewport.scrollH;
-                groupWidth = scroll.viewport.measuredWidth;
-                if (((this.img_role.x - scrollH) > (scroll.width / 2)) && ((scrollH + scroll.width) < groupWidth)) {
-                    scroll.viewport.scrollH += speed;
-                }
-                break;
+        if (speedX < 0) {
+            hasWall = (cell.leftCell == null || !cell.leftWall.isOpen);
+            isEdge = this.IsEdge(0);
+            if (hasWall || isEdge) {
+                var left = this.img_role.x - (this.img_role.width / 2);
+                var distance = (left - (obj.x + 2));
+                this.img_role.x += Math.max(-distance, speedX);
+            }
+            else {
+                this.img_role.x += speedX;
+            }
+            scrollH = scroll.viewport.scrollH;
+            if (((this.img_role.x - scrollH) < (scroll.width / 2)) && scrollH > 0) {
+                scroll.viewport.scrollH += Math.max(speedX, -scrollH);
+            }
         }
-        switch (this.directionY) {
-            //向下移动
-            case 0:
-                hasWall = (cell.downCell == null || !cell.downCell.upWall.isOpen);
-                isEdge = this.IsEdge(1);
-                if (hasWall || isEdge) {
-                    var bottom = this.img_role.y + (this.img_role.height / 2);
-                    var distance = ((obj.y + obj.height - 2) - bottom);
-                    this.img_role.y += Math.min(speed, distance);
-                }
-                else {
-                    this.img_role.y += speed;
-                }
-                break;
-            //向上移动
-            case 1:
-                hasWall = (cell.upCell == null || !cell.upWall.isOpen);
-                isEdge = this.IsEdge(1);
-                if (hasWall || isEdge) {
-                    var top_1 = this.img_role.y - (this.img_role.height / 2);
-                    var distance = (top_1 - (obj.y + 2));
-                    this.img_role.y -= Math.min(speed, distance);
-                }
-                else {
-                    this.img_role.y -= speed;
-                }
-                break;
+        else {
+            hasWall = (cell.rightCell == null || !cell.rightCell.leftWall.isOpen);
+            isEdge = this.IsEdge(0);
+            if (hasWall || isEdge) {
+                var right = this.img_role.x + (this.img_role.width / 2);
+                var distance = ((obj.x + obj.width - 2) - right);
+                this.img_role.x += Math.min(speedX, distance);
+            }
+            else {
+                this.img_role.x += speedX;
+            }
+            scrollH = scroll.viewport.scrollH;
+            groupWidth = scroll.viewport.measuredWidth;
+            if (((this.img_role.x - scrollH) > (scroll.width / 2)) && ((scrollH + scroll.width) < groupWidth)) {
+                scroll.viewport.scrollH += Math.min(speedX, groupWidth - scrollH - scroll.width);
+            }
+        }
+        if (speedY < 0) {
+            hasWall = (cell.upCell == null || !cell.upWall.isOpen);
+            isEdge = this.IsEdge(1);
+            if (hasWall || isEdge) {
+                var top_1 = this.img_role.y - (this.img_role.height / 2);
+                var distance = (top_1 - (obj.y + 2));
+                this.img_role.y += Math.max(speedY, -distance);
+            }
+            else {
+                this.img_role.y += speedY;
+            }
+        }
+        else {
+            hasWall = (cell.downCell == null || !cell.downCell.upWall.isOpen);
+            isEdge = this.IsEdge(1);
+            if (hasWall || isEdge) {
+                var bottom = this.img_role.y + (this.img_role.height / 2);
+                var distance = ((obj.y + obj.height - 2) - bottom);
+                this.img_role.y += Math.min(speedY, distance);
+            }
+            else {
+                this.img_role.y += speedY;
+            }
         }
         this.ResetIndex();
-        this.genCells.RefreshCell(this.directionX, this.directionY, this.speed);
+        this.genCells.RefreshCell(this.direction, this.speed);
     };
     GameControl.prototype.ResetIndex = function () {
         var obj = this.genCells.wallList.getElementAt(this.genCells.index);

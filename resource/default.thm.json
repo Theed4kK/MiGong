@@ -17,7 +17,8 @@
 		"Loading": "resource/eui_skins/Loading.exml",
 		"CellRender": "resource/eui_skins/CellRender.exml",
 		"MapScroller": "resource/eui_skins/MapScroller.exml",
-		"CellBgRender": "resource/eui_skins/CellBgRender.exml"
+		"CellBgRender": "resource/eui_skins/CellBgRender.exml",
+		"VirtualRocker": "resource/eui_skins/VirtualRocker.exml"
 	},
 	"autoGenerateExmlsList": true,
 	"exmls": [
@@ -36,6 +37,7 @@
 		"resource/eui_skins/ScrollerSkin.exml",
 		"resource/eui_skins/TextInputSkin.exml",
 		"resource/eui_skins/ToggleSwitchSkin.exml",
+		"resource/eui_skins/VirtualRocker.exml",
 		"resource/eui_skins/VScrollBarSkin.exml",
 		"resource/eui_skins/VSliderSkin.exml"
 	],

@@ -32,10 +32,10 @@ var GenCells = (function (_super) {
         }
         this.dispatchEvent(new MyEvent(MyEvent.updateStepNum));
     };
-    GenCells.prototype.RefreshCell = function (dirX, dirY, speed) {
+    GenCells.prototype.RefreshCell = function (dirX, speed) {
         if (!this.cells[this.index].isPassed) {
             var cellBgRender = this.cellList.getElementAt(this.index);
-            cellBgRender.LightenUp(dirX, dirY, speed);
+            cellBgRender.LightenUp(dirX, speed);
             this.cells[this.index].isPassed = true;
         }
     };

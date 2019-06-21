@@ -28,24 +28,21 @@ var CellBgRender = (function (_super) {
             this.img_exitSign.visible = true;
         }
     };
-    CellBgRender.prototype.LightenUp = function (dirX, dirY, speed) {
+    CellBgRender.prototype.LightenUp = function (dir, speed) {
         var width = this.img_bg.width;
         var height = this.img_bg.height;
         this.tw = egret.Tween.get(this.img_bg);
-        // if(dirX )
-        switch (dirX) {
+        switch (dir) {
             case 0:
                 this.tw.to({ right: width }, 300);
                 break;
             case 1:
                 this.tw.to({ left: width }, 300);
                 break;
-        }
-        switch (dirY) {
-            case 0:
+            case 2:
                 this.tw.to({ top: height }, 300);
                 break;
-            case 1:
+            case 3:
                 this.tw.to({ bottom: height }, 300);
                 break;
         }
