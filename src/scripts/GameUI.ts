@@ -81,16 +81,6 @@ class GameUI extends eui.Component implements eui.UIComponent {
 
 	//触屏手指移动
 	private Move(e: egret.TouchEvent): void {
-		// let difX: number = Math.abs(e.stageX - this.initPos.x);
-		// let difY: number = Math.abs(e.stageY - this.initPos.y);
-		// this.touchError = Number(this.input_touchError.text);
-		// if (difX < this.touchError && difY < this.touchError) { return; }
-		// if (difX > difY) {
-		// 	this.gameControl.direction = e.stageX > this.initPos.x ? 1 : 0;
-		// }
-		// else {
-		// 	this.gameControl.direction = e.stageY > this.initPos.y ? 2 : 3;
-		// }
 		let angle: number = this.virt.onTouchMove(e);
 		this.gameControl.direction = angle;
 	}
