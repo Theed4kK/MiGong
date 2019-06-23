@@ -23,10 +23,10 @@ class GenCells extends eui.Component implements eui.UIComponent {
 
 	}
 
-	public RefreshCell(dirX: number, speed: number): void {
+	public RefreshCell(dir: number, speed: number): void {
 		if (!this.cells[this.index].isPassed) {
 			let cellBgRender: CellBgRender = <CellBgRender>this.cellList.getElementAt(this.index);
-			cellBgRender.LightenUp(dirX,speed);
+			cellBgRender.LightenUp(dir,speed);
 			this.cells[this.index].isPassed = true;
 		}
 	}

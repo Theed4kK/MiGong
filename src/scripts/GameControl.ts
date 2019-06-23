@@ -127,6 +127,7 @@ class GameControl extends eui.Component implements eui.UIComponent {
 			case 1:
 				isEdge = (Math.abs(img_role.x - obj.x)) < ((img_role.width / 2) + 2);
 				isEdge = isEdge || ((Math.abs(img_role.x - obj.x - obj.width) < (img_role.width / 2) + 2));
+				break;
 		}
 		return isEdge;
 	}

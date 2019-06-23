@@ -23,6 +23,9 @@ class VirtualRocker extends eui.Component implements eui.UIComponent {
 		//获取中心点
 		this.centerX = this.circleRadius;
 		this.centerY = this.circleRadius;
+		this.anchorOffsetX = this.circleRadius;
+		this.anchorOffsetY = this.circleRadius;
+		this.touchEnabled = false;
 	}
 
 	public start() {
@@ -50,11 +53,13 @@ class VirtualRocker extends eui.Component implements eui.UIComponent {
 		if (dist <= (this.circleRadius - this.ballRadius)) {
 			this.ball.x = this.centerX + e.stageX - this.x;
 			this.ball.y = this.centerY + e.stageY - this.y;
-		//手指距离在圆环范围外
+			//手指距离在圆环范围外
 		} else {
 			this.ball.x = Math.cos(angle) * (this.circleRadius - this.ballRadius) + this.centerX;
 			this.ball.y = Math.sin(angle) * (this.circleRadius - this.ballRadius) + this.centerY;
 		}
 		return angle;
 	}
+
+	// window["VirtualRocker"] = VirtualRocker;
 }

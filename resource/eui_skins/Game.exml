@@ -1,41 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin class="GameSkin" width="640" height="1136" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" xmlns:ns1="*" >
-	<w:Config id="16b364587c8" ></w:Config>
-	<e:Image id="img_Bg" horizontalCenter="0" verticalCenter="0" source="loading_jpg" x="0" y="0" scaleX="1" scaleY="1" touchEnabled="false"/>
-
-	<e:Scroller id="scroller" height="610" top="200" touchEnabled="false" touchChildren="false" bounces="false" scaleX="1" scaleY="1" left="15" right="15">
+<e:Skin class="GameSkin" width="640" height="1136" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing"
+        xmlns:ns1="*">
+	<w:Config id="16b364587c8"></w:Config>
+	<e:Image id="img_Bg" horizontalCenter="0" verticalCenter="0" source="loading_jpg" x="0" y="0" scaleX="1" scaleY="1"
+	         touchEnabled="false" />
+	<e:Scroller id="scroller" height="610" top="200" touchEnabled="false" touchChildren="false" bounces="false" scaleX="1"
+	            scaleY="1" left="15" right="15">
 		<e:Group id="map" scaleX="1" scaleY="1" touchThrough="true">
-			<e:Image id="img_mapBg" top="0" fillMode="repeat" scaleX="1" scaleY="1" left="0" right="0" bottom="0" width="600" height="600" x="5" y="5" anchorOffsetX="0" includeInLayout="false" source="cell_jpg"/>
+			<e:Image id="img_mapBg" top="0" fillMode="repeat" scaleX="1" scaleY="1" left="0" right="0" bottom="0" width="600"
+			         height="600" x="5" y="5" anchorOffsetX="0" includeInLayout="false" source="cell_jpg" />
 			<e:List id="list_bg" scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0" includeInLayout="false">
 				<e:layout>
-				<e:TileLayout horizontalGap="0" verticalGap="0" requestedRowCount="10" paddingTop="5" paddingBottom="5" paddingLeft="5" paddingRight="5"/>
+					<e:TileLayout horizontalGap="0" verticalGap="0" requestedRowCount="20" paddingTop="5" paddingBottom="5"
+					              paddingLeft="5" paddingRight="5" />
 				</e:layout>
 			</e:List>
 			<e:List id="list" scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0">
 				<e:layout>
-				<e:TileLayout horizontalGap="0" verticalGap="0" requestedRowCount="10" paddingTop="5" paddingBottom="5" paddingLeft="5" paddingRight="5"/>
+					<e:TileLayout horizontalGap="0" verticalGap="0" requestedRowCount="20" paddingTop="5" paddingBottom="5"
+					              paddingLeft="5" paddingRight="5" />
 				</e:layout>
 			</e:List>
-			<e:Image id="img_role" width="20" height="20" x="1" y="-187" scaleX="1" scaleY="1" horizontalCenter="0" source="roundthumb_png" includeInLayout="false"/>
+			<e:Image id="img_role" width="20" height="20" x="1" y="-187" scaleX="1" scaleY="1" horizontalCenter="0"
+			         source="roundthumb_png" includeInLayout="false" />
 			<e:layout>
-				<e:HorizontalLayout gap="0"/>
+				<e:HorizontalLayout gap="0" />
 			</e:layout>
 		</e:Group>
 	</e:Scroller>
-	<e:TextInput id="input_col" width="88" height="53" x="200" y="838.5" anchorOffsetX="0" anchorOffsetY="0" text="30"/>
-	<e:TextInput id="input_speed" width="88" height="53" x="472.12" y="838.5" anchorOffsetX="0" anchorOffsetY="0" text="8"/>
-	<e:TextInput id="input_touchError" width="88" height="53" x="200" y="919.5" anchorOffsetX="0" anchorOffsetY="0" text="10"/>
+	<e:TextInput id="input_col" width="88" height="53" x="200" y="838.5" anchorOffsetX="0" anchorOffsetY="0" text="30" />
+	<e:TextInput id="input_speed" width="88" height="53" x="472.12" y="838.5" anchorOffsetX="0" anchorOffsetY="0" text="8" />
+	<e:TextInput id="input_touchError" width="88" height="53" x="200" y="919.5" anchorOffsetX="0" anchorOffsetY="0"
+	             text="10" />
 	<e:Group left="0" right="0" top="0" bottom="0" touchThrough="true" touchEnabled="false" touchChildren="false">
-		<e:Label text="地图大小" x="78.12" y="838.5" anchorOffsetX="0" width="116" anchorOffsetY="0" height="53" textColor="0xD18F00" stroke="1" verticalAlign="middle" size="23" textAlign="right" scaleX="1" scaleY="1" fontFamily="Microsoft YaHei" touchEnabled="false"/>
-		<e:Label text="移动速度" x="352.12" y="838.5" anchorOffsetX="0" width="116" anchorOffsetY="0" height="53" textColor="0xD18F00" stroke="1" verticalAlign="middle" size="23" textAlign="right" scaleX="1" scaleY="1" fontFamily="Microsoft YaHei" touchEnabled="false"/>
-		<e:Label text="触摸误差" x="80" y="919.5" anchorOffsetX="0" width="116" anchorOffsetY="0" height="53" textColor="0xD18F00" stroke="1" verticalAlign="middle" size="23" textAlign="right" scaleX="1" scaleY="1" fontFamily="Microsoft YaHei" touchEnabled="false"/>
-		<e:Label id="txt_stepNum" text="已探索：0" x="63" y="141.66" scaleX="1" scaleY="1"/>
+		<e:Label text="地图大小" x="78.12" y="838.5" anchorOffsetX="0" width="116" anchorOffsetY="0" height="53"
+		         textColor="0xD18F00" stroke="1" verticalAlign="middle" size="23" textAlign="right" scaleX="1" scaleY="1"
+		         fontFamily="Microsoft YaHei" touchEnabled="false" />
+		<e:Label text="移动速度" x="352.12" y="838.5" anchorOffsetX="0" width="116" anchorOffsetY="0" height="53"
+		         textColor="0xD18F00" stroke="1" verticalAlign="middle" size="23" textAlign="right" scaleX="1" scaleY="1"
+		         fontFamily="Microsoft YaHei" touchEnabled="false" />
+		<e:Label text="触摸误差" x="80" y="919.5" anchorOffsetX="0" width="116" anchorOffsetY="0" height="53" textColor="0xD18F00"
+		         stroke="1" verticalAlign="middle" size="23" textAlign="right" scaleX="1" scaleY="1"
+		         fontFamily="Microsoft YaHei" touchEnabled="false" />
+		<e:Label id="txt_stepNum" text="已探索：0" x="63" y="141.66" scaleX="1" scaleY="1" />
 	</e:Group>
 	<e:Group left="0" right="0" top="0" bottom="0" touchThrough="true" touchEnabled="false" touchChildren="true">
-		<e:Button id="btn_gen" label="生成" y="999" scaleX="1" scaleY="1" left="120"/>
-
-		<e:Button id="btn_scale" label="缩放" y="999" scaleX="1" scaleY="1" horizontalCenter="0"/>
-		<e:Button id="btn_swapMode" label="拖动" y="1000" scaleX="1" scaleY="1" right="120"/>
+		<e:Button id="btn_gen" label="生成" y="999" scaleX="1" scaleY="1" left="120" />
+		<e:Button id="btn_scale" label="缩放" y="999" scaleX="1" scaleY="1" horizontalCenter="0" />
+		<e:Button id="btn_swapMode" label="拖动" y="1000" scaleX="1" scaleY="1" right="120" />
 	</e:Group>
-	<ns1:VirtualRocker id="virt" x="244" y="698.5" anchorOffsetX="70" anchorOffsetY="70" touchEnabled="false" touchChildren="false" visible="false"/>
+	
 </e:Skin>

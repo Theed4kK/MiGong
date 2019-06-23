@@ -28,9 +28,8 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	private initPos: egret.Point = new egret.Point();
 
 	private touchId: number;
-	private touchError: number = 5;
 	private stepNum: number = 0;
-	private virt: VirtualRocker;
+	private virt: VirtualRocker = new VirtualRocker();;
 
 	protected partAdded(partName: string, instance: any): void {
 		super.partAdded(partName, instance);
@@ -39,8 +38,10 @@ class GameUI extends eui.Component implements eui.UIComponent {
 
 	protected childrenCreated(): void {
 		super.childrenCreated();
+		this.addChild(this.virt);
 		this.btn_scale.addEventListener(egret.TouchEvent.TOUCH_TAP, this.SetListScale, this);
 		this.btn_gen.addEventListener(egret.TouchEvent.TOUCH_TAP, this.GenMiGong, this);
+		this.btn_swapMode.addEventListener(egret.TouchEvent.TOUCH_TAP, this.Test, this);
 		this.input_speed.addEventListener(egret.Event.CHANGE, this.ModifySpeed, this)
 		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.BeginTouch, this);
 		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.Move, this);
@@ -62,6 +63,18 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		this.GenMiGong();
 	}
 
+	private Test(): void {
+		egret.log("截图!");
+		/*** 本示例关键代码段开始 ***/
+		var rt: egret.RenderTexture = new egret.RenderTexture;
+		rt.drawToTexture(this.list);
+		var _bmpSnap = new egret.Bitmap;
+		_bmpSnap.texture = rt;
+		let group: eui.Group = <eui.Group>this.scroller.viewport;
+		group.addChild(_bmpSnap);
+		this.list.visible = false;
+	}
+
 	private UpdateStepNum(): void {
 		if (!this.genCells.cells[this.genCells.index].isPassed) {
 			this.stepNum++
@@ -72,6 +85,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	private RemoveListener(): void {
 		this.btn_scale.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.SetListScale, this);
 		this.btn_gen.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.GenMiGong, this);
+		this.btn_swapMode.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.GenMiGong, this);
 		this.input_speed.removeEventListener(egret.Event.CHANGE, this.ModifySpeed, this)
 		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.BeginTouch, this);
 		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.Move, this);
@@ -114,10 +128,9 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		this.genCells.GetCells(row, col)
 		this.list.dataProvider = new eui.ArrayCollection(this.genCells.cells);
 		this.list.itemRenderer = CellRender;
-		this.list.validateNow();
-		this.list.validateDisplayList();
 		this.list_bg.dataProvider = new eui.ArrayCollection(this.genCells.cells);
 		this.list_bg.itemRenderer = CellBgRender;
+		this.Test();
 		this.list_bg.validateNow();
 		this.list_bg.validateDisplayList();
 
