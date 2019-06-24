@@ -11,13 +11,13 @@
 			         height="600" x="5" y="5" anchorOffsetX="0" includeInLayout="false" source="cell_jpg" />
 			<e:List id="list_bg" scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0" includeInLayout="false">
 				<e:layout>
-					<e:TileLayout horizontalGap="0" verticalGap="0" requestedRowCount="20" paddingTop="5" paddingBottom="5"
+					<e:TileLayout horizontalGap="0" verticalGap="0" requestedRowCount="10" paddingTop="5" paddingBottom="5"
 					              paddingLeft="5" paddingRight="5" />
 				</e:layout>
 			</e:List>
 			<e:List id="list" scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0">
 				<e:layout>
-					<e:TileLayout horizontalGap="0" verticalGap="0" requestedRowCount="20" paddingTop="5" paddingBottom="5"
+					<e:TileLayout horizontalGap="0" verticalGap="0" requestedRowCount="10" paddingTop="5" paddingBottom="5"
 					              paddingLeft="5" paddingRight="5" />
 				</e:layout>
 			</e:List>

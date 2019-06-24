@@ -65,16 +65,6 @@ class GenCells extends eui.Component implements eui.UIComponent {
 					}
 				}
 				c.downCell = (i == row - 1 ? null : cells[i + 1][j]);
-				if (c.downWall == null) {
-					c.downWall = new Wall();
-					c.downWall.id = t;
-					t++;
-					c.downWall.cell1Id = c.id;
-					c.downWall.cell2Id = c.downCell != null ? c.downCell.id : null;
-					if (c.downCell != null) {
-						c.downCell.upWall = c.downWall;
-					}
-				}
 
 				c.leftCell = (j == 0 ? null : cells[i][j - 1]);
 				if (c.leftWall == null) {
@@ -89,16 +79,6 @@ class GenCells extends eui.Component implements eui.UIComponent {
 				}
 
 				c.rightCell = (j == col - 1 ? null : cells[i][j + 1]);
-				if (c.rightWall == null) {
-					c.rightWall = new Wall();
-					c.rightWall.id = t;
-					t++;
-					c.rightWall.cell1Id = c.id;
-					c.rightWall.cell2Id = c.rightCell != null ? c.rightCell.id : null;
-					if (c.rightCell != null) {
-						c.rightCell.leftWall = c.rightWall;
-					}
-				}
 			}
 		}
 

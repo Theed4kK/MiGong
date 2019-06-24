@@ -24,6 +24,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	private img_mapBg: eui.Image;
 	private img_Bg: eui.Image;
 	private img_role: eui.Image;
+	private map: egret.Bitmap = new egret.Bitmap();
 
 	private initPos: egret.Point = new egret.Point();
 
@@ -39,6 +40,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	protected childrenCreated(): void {
 		super.childrenCreated();
 		this.addChild(this.virt);
+		this.virt.visible = false;
 		this.btn_scale.addEventListener(egret.TouchEvent.TOUCH_TAP, this.SetListScale, this);
 		this.btn_gen.addEventListener(egret.TouchEvent.TOUCH_TAP, this.GenMiGong, this);
 		this.btn_swapMode.addEventListener(egret.TouchEvent.TOUCH_TAP, this.Test, this);
@@ -65,13 +67,14 @@ class GameUI extends eui.Component implements eui.UIComponent {
 
 	private Test(): void {
 		egret.log("截图!");
-		/*** 本示例关键代码段开始 ***/
+		let group: eui.Group = <eui.Group>this.scroller.viewport;
+		if (this.map.parent == group) { group.removeChild(this.map); }
 		var rt: egret.RenderTexture = new egret.RenderTexture;
 		rt.drawToTexture(this.list);
-		var _bmpSnap = new egret.Bitmap;
-		_bmpSnap.texture = rt;
-		let group: eui.Group = <eui.Group>this.scroller.viewport;
-		group.addChild(_bmpSnap);
+		var _map = new egret.Bitmap();
+		_map.texture = rt;
+		this.map = _map;
+		group.addChild(_map);
 		this.list.visible = false;
 	}
 
@@ -130,9 +133,9 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		this.list.itemRenderer = CellRender;
 		this.list_bg.dataProvider = new eui.ArrayCollection(this.genCells.cells);
 		this.list_bg.itemRenderer = CellBgRender;
+		this.list.validateNow();
+		this.list.validateDisplayList();
 		this.Test();
-		this.list_bg.validateNow();
-		this.list_bg.validateDisplayList();
 
 		this.img_mapBg.width = this.list.width;
 		let obj: CellRender = this.list.getElementAt(this.genCells.index) as CellRender;
@@ -141,9 +144,10 @@ class GameUI extends eui.Component implements eui.UIComponent {
 
 
 		egret.Tween.get(this.scroller.viewport).to({ scrollH: 0 }, this.scroller.viewport.scrollH / 0.5);
-		egret.Tween.get(this.img_role).wait(this.scroller.viewport.scrollH / 0.5).to({ x: obj.x + (obj.width / 2) }, 1000);
+		egret.Tween.get(this.img_role).wait(this.scroller.viewport.scrollH / 0.5).to({ x: obj.x + (obj.width / 2) }, 1000).call(() => {
+			this.img_Bg.touchEnabled = true;
+		});
 		let wait: number = obj.StartAni(1000);
-		this.img_Bg.touchEnabled = true;
 	}
 
 	private SetListScale(): void {
