@@ -23,27 +23,52 @@ var CellBgRender = (function (_super) {
         var cell = this.data;
         if (cell.id == 0) {
             this.img_bg.visible = false;
+            cell.isPassed = true;
+            return;
         }
+        if (cell.id == 1 && !cell.leftWall.isOpen) {
+            this.img_bg.left = CellRender.vWallwidth / 2;
+        }
+        if (cell.upCell != null && cell.upCell.id == 0 && !cell.upWall.isOpen) {
+            this.img_bg.top = CellRender.hWallHeight / 2;
+        }
+        //最右下角的出口标志
         if (cell.rightCell == null && cell.downCell == null) {
             this.img_exitSign.visible = true;
         }
+        //左边边界格子
+        if (cell.leftCell == null) {
+            this.img_bg.left = CellRender.vWallwidth / 2;
+        }
+        //右边边界格子
+        if (cell.rightCell == null) {
+            this.img_bg.right = CellRender.vWallwidth / 2;
+        }
+        //上边边界格子
+        if (cell.upCell == null) {
+            this.img_bg.top = CellRender.hWallHeight / 2;
+        }
+        //下边边界格子
+        if (cell.downCell == null) {
+            this.img_bg.bottom = CellRender.hWallHeight / 2;
+        }
     };
     CellBgRender.prototype.LightenUp = function (dir, speed) {
-        var width = this.img_bg.width;
-        var height = this.img_bg.height;
-        this.tw = egret.Tween.get(this.img_bg);
-        switch (dir) {
+        egret.Tween.get(this.img_bg).to({ alpha: 0 }, 1000);
+    };
+    CellBgRender.prototype.RefreshBg = function (type) {
+        switch (type) {
             case 0:
-                this.tw.to({ right: width }, 300);
+                egret.Tween.get(this.img_bg).to({ right: CellRender.vWallwidth / 2 }, 500);
                 break;
             case 1:
-                this.tw.to({ left: width }, 300);
+                egret.Tween.get(this.img_bg).to({ left: CellRender.vWallwidth / 2 }, 500);
                 break;
             case 2:
-                this.tw.to({ top: height }, 300);
+                egret.Tween.get(this.img_bg).to({ bottom: CellRender.hWallHeight / 2 }, 500);
                 break;
             case 3:
-                this.tw.to({ bottom: height }, 300);
+                egret.Tween.get(this.img_bg).to({ top: CellRender.hWallHeight / 2 }, 500);
                 break;
         }
     };

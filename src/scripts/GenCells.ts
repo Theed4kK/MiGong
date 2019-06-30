@@ -4,6 +4,7 @@ class GenCells extends eui.Component implements eui.UIComponent {
 	}
 
 	public index: number;
+	private lastIndex: number;
 	// public speed: number;
 	public wallList: eui.List;
 	public cellList: eui.List;
@@ -13,6 +14,7 @@ class GenCells extends eui.Component implements eui.UIComponent {
 	private col: number;
 
 	public SetIndex(type: number) {
+		this.lastIndex = this.index;
 		switch (type) {
 			case 0: this.index--; break;
 			case 1: this.index++; break;
@@ -20,14 +22,38 @@ class GenCells extends eui.Component implements eui.UIComponent {
 			case 3: this.index += this.col; break;
 		}
 		this.dispatchEvent(new MyEvent(MyEvent.updateStepNum));
-
 	}
 
 	public RefreshCell(dir: number, speed: number): void {
 		if (!this.cells[this.index].isPassed) {
 			let cellBgRender: CellBgRender = <CellBgRender>this.cellList.getElementAt(this.index);
-			cellBgRender.LightenUp(dir,speed);
+			cellBgRender.LightenUp(dir, speed);
+			this.RefreshAroundCells();
 			this.cells[this.index].isPassed = true;
+		}
+	}
+
+	private RefreshAroundCells(): void {
+		let cell: Cell = this.cells[this.index];
+		let leftCell: Cell = this.cells[this.index].leftCell;
+		if (leftCell != null && !cell.leftWall.isOpen && !leftCell.isPassed) {
+			let cellBgRender: CellBgRender = <CellBgRender>this.cellList.getElementAt(this.index - 1);
+			cellBgRender.RefreshBg(0);
+		}
+		let rightCell: Cell = this.cells[this.index].rightCell;
+		if (rightCell != null && !rightCell.leftWall.isOpen && !rightCell.isPassed) {
+			let cellBgRender: CellBgRender = <CellBgRender>this.cellList.getElementAt(this.index + 1);
+			cellBgRender.RefreshBg(1);
+		}
+		let upCell: Cell = this.cells[this.index].upCell;
+		if (upCell != null && !cell.upWall.isOpen && !upCell.isPassed) {
+			let cellBgRender: CellBgRender = <CellBgRender>this.cellList.getElementAt(this.index - this.col);
+			cellBgRender.RefreshBg(2);
+		}
+		let downCell: Cell = this.cells[this.index].downCell;
+		if (downCell != null && !downCell.upWall.isOpen && !downCell.isPassed) {
+			let cellBgRender: CellBgRender = <CellBgRender>this.cellList.getElementAt(this.index + this.col);
+			cellBgRender.RefreshBg(3);
 		}
 	}
 
@@ -77,7 +103,6 @@ class GenCells extends eui.Component implements eui.UIComponent {
 						c.leftCell.rightWall = c.leftWall;
 					}
 				}
-
 				c.rightCell = (j == col - 1 ? null : cells[i][j + 1]);
 			}
 		}

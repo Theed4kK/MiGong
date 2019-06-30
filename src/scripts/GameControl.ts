@@ -39,7 +39,7 @@ class GameControl extends eui.Component implements eui.UIComponent {
 			isEdge = this.IsEdge(0);
 			if (hasWall || isEdge) {
 				let left: number = this.img_role.x - (this.img_role.width / 2);
-				let distance: number = (left - (obj.x + 2));
+				let distance: number = (left - (obj.x + CellRender.vWallwidth * 0.5));
 				this.img_role.x += Math.max(-distance, speedX);
 			}
 			else {
@@ -55,7 +55,7 @@ class GameControl extends eui.Component implements eui.UIComponent {
 			isEdge = this.IsEdge(0);
 			if (hasWall || isEdge) {
 				let right: number = this.img_role.x + (this.img_role.width / 2);
-				let distance: number = ((obj.x + obj.width - 2) - right);
+				let distance: number = ((obj.x + obj.width - CellRender.vWallwidth * 0.5) - right);
 				this.img_role.x += Math.min(speedX, distance);
 			}
 			else {
@@ -72,7 +72,7 @@ class GameControl extends eui.Component implements eui.UIComponent {
 			isEdge = this.IsEdge(1);
 			if (hasWall || isEdge) {
 				let top: number = this.img_role.y - (this.img_role.height / 2);
-				let distance: number = (top - (obj.y + 2));
+				let distance: number = (top - (obj.y + CellRender.hWallHeight * 0.5));
 				this.img_role.y += Math.max(speedY, -distance);
 			}
 			else {
@@ -84,7 +84,7 @@ class GameControl extends eui.Component implements eui.UIComponent {
 			isEdge = this.IsEdge(1);
 			if (hasWall || isEdge) {
 				let bottom: number = this.img_role.y + (this.img_role.height / 2);
-				let distance: number = ((obj.y + obj.height - 2) - bottom);
+				let distance: number = ((obj.y + obj.height - CellRender.hWallHeight * 0.5) - bottom);
 				this.img_role.y += Math.min(speedY, distance);
 			}
 			else {
@@ -103,15 +103,19 @@ class GameControl extends eui.Component implements eui.UIComponent {
 		let bottom: number = this.img_role.y + (this.img_role.height / 2);
 		if (right < obj.x) {
 			this.genCells.SetIndex(0);
+			return;
 		}
 		if (left > obj.x + obj.width) {
 			this.genCells.SetIndex(1);
+			return;
 		}
 		if (bottom < obj.y) {
 			this.genCells.SetIndex(2);
+			return;
 		}
 		if (up > obj.y + obj.height) {
 			this.genCells.SetIndex(3);
+			return;
 		}
 	}
 
@@ -121,12 +125,12 @@ class GameControl extends eui.Component implements eui.UIComponent {
 		let obj: egret.DisplayObject = this.genCells.wallList.getElementAt(this.genCells.index);
 		switch (type) {
 			case 0:
-				isEdge = (Math.abs(img_role.y - obj.y)) < ((img_role.height / 2) + 2);
-				isEdge = isEdge || ((Math.abs(img_role.y - obj.y - obj.height) < (img_role.height / 2) + 2));
+				isEdge = (Math.abs(img_role.y - obj.y)) < ((img_role.height / 2) + CellRender.hWallHeight * 0.5);
+				isEdge = isEdge || ((Math.abs(img_role.y - obj.y - obj.height) < (img_role.height / 2) + CellRender.hWallHeight * 0.5));
 				break;
 			case 1:
-				isEdge = (Math.abs(img_role.x - obj.x)) < ((img_role.width / 2) + 2);
-				isEdge = isEdge || ((Math.abs(img_role.x - obj.x - obj.width) < (img_role.width / 2) + 2));
+				isEdge = (Math.abs(img_role.x - obj.x)) < ((img_role.width / 2) + CellRender.vWallwidth * 0.5);
+				isEdge = isEdge || ((Math.abs(img_role.x - obj.x - obj.width) < (img_role.width / 2) + CellRender.vWallwidth * 0.5));
 				break;
 		}
 		return isEdge;

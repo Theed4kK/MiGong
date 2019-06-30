@@ -16,6 +16,7 @@ var GenCells = (function (_super) {
         return _this;
     }
     GenCells.prototype.SetIndex = function (type) {
+        this.lastIndex = this.index;
         switch (type) {
             case 0:
                 this.index--;
@@ -32,11 +33,35 @@ var GenCells = (function (_super) {
         }
         this.dispatchEvent(new MyEvent(MyEvent.updateStepNum));
     };
-    GenCells.prototype.RefreshCell = function (dirX, speed) {
+    GenCells.prototype.RefreshCell = function (dir, speed) {
         if (!this.cells[this.index].isPassed) {
             var cellBgRender = this.cellList.getElementAt(this.index);
-            cellBgRender.LightenUp(dirX, speed);
+            cellBgRender.LightenUp(dir, speed);
+            this.RefreshAroundCells();
             this.cells[this.index].isPassed = true;
+        }
+    };
+    GenCells.prototype.RefreshAroundCells = function () {
+        var cell = this.cells[this.index];
+        var leftCell = this.cells[this.index].leftCell;
+        if (leftCell != null && !cell.leftWall.isOpen && !leftCell.isPassed) {
+            var cellBgRender = this.cellList.getElementAt(this.index - 1);
+            cellBgRender.RefreshBg(0);
+        }
+        var rightCell = this.cells[this.index].rightCell;
+        if (rightCell != null && !rightCell.leftWall.isOpen && !rightCell.isPassed) {
+            var cellBgRender = this.cellList.getElementAt(this.index + 1);
+            cellBgRender.RefreshBg(1);
+        }
+        var upCell = this.cells[this.index].upCell;
+        if (upCell != null && !cell.upWall.isOpen && !upCell.isPassed) {
+            var cellBgRender = this.cellList.getElementAt(this.index - this.col);
+            cellBgRender.RefreshBg(2);
+        }
+        var downCell = this.cells[this.index].downCell;
+        if (downCell != null && !downCell.upWall.isOpen && !downCell.isPassed) {
+            var cellBgRender = this.cellList.getElementAt(this.index + this.col);
+            cellBgRender.RefreshBg(3);
         }
     };
     GenCells.prototype.GetCells = function (row, col) {
@@ -71,16 +96,6 @@ var GenCells = (function (_super) {
                     }
                 }
                 c.downCell = (i == row - 1 ? null : cells[i + 1][j]);
-                if (c.downWall == null) {
-                    c.downWall = new Wall();
-                    c.downWall.id = t;
-                    t++;
-                    c.downWall.cell1Id = c.id;
-                    c.downWall.cell2Id = c.downCell != null ? c.downCell.id : null;
-                    if (c.downCell != null) {
-                        c.downCell.upWall = c.downWall;
-                    }
-                }
                 c.leftCell = (j == 0 ? null : cells[i][j - 1]);
                 if (c.leftWall == null) {
                     c.leftWall = new Wall();
@@ -93,16 +108,6 @@ var GenCells = (function (_super) {
                     }
                 }
                 c.rightCell = (j == col - 1 ? null : cells[i][j + 1]);
-                if (c.rightWall == null) {
-                    c.rightWall = new Wall();
-                    c.rightWall.id = t;
-                    t++;
-                    c.rightWall.cell1Id = c.id;
-                    c.rightWall.cell2Id = c.rightCell != null ? c.rightCell.id : null;
-                    if (c.rightCell != null) {
-                        c.rightCell.leftWall = c.rightWall;
-                    }
-                }
             }
         }
         allCell[0].isSigned = true;

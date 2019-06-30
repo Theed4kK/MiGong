@@ -13,19 +13,24 @@ var GameUI = (function (_super) {
     function GameUI() {
         var _this = _super.call(this) || this;
         _this.genCells = new GenCells();
+        _this.map = new egret.Bitmap();
         _this.initPos = new egret.Point();
-        _this.touchError = 5;
         _this.stepNum = 0;
+        _this.virt = new VirtualRocker();
         _this.once(egret.Event.REMOVED_FROM_STAGE, _this.RemoveListener, _this);
         return _this;
     }
+    ;
     GameUI.prototype.partAdded = function (partName, instance) {
         _super.prototype.partAdded.call(this, partName, instance);
     };
     GameUI.prototype.childrenCreated = function () {
         _super.prototype.childrenCreated.call(this);
+        this.addChild(this.virt);
+        this.virt.visible = false;
         this.btn_scale.addEventListener(egret.TouchEvent.TOUCH_TAP, this.SetListScale, this);
         this.btn_gen.addEventListener(egret.TouchEvent.TOUCH_TAP, this.GenMiGong, this);
+        this.btn_swapMode.addEventListener(egret.TouchEvent.TOUCH_TAP, this.GenMap, this);
         this.input_speed.addEventListener(egret.Event.CHANGE, this.ModifySpeed, this);
         this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.BeginTouch, this);
         this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.Move, this);
@@ -45,6 +50,19 @@ var GameUI = (function (_super) {
         genCells.cellList = this.list_bg;
         this.GenMiGong();
     };
+    GameUI.prototype.GenMap = function () {
+        var group = this.scroller.viewport;
+        if (this.map.parent == group) {
+            group.removeChild(this.map);
+        }
+        var rt = new egret.RenderTexture();
+        rt.drawToTexture(this.list);
+        var _map = new egret.Bitmap();
+        _map.texture = rt;
+        this.map = _map;
+        group.addChildAt(_map, group.getChildIndex(this.list_bg) - 1);
+        this.list.visible = false;
+    };
     GameUI.prototype.UpdateStepNum = function () {
         if (!this.genCells.cells[this.genCells.index].isPassed) {
             this.stepNum++;
@@ -54,6 +72,7 @@ var GameUI = (function (_super) {
     GameUI.prototype.RemoveListener = function () {
         this.btn_scale.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.SetListScale, this);
         this.btn_gen.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.GenMiGong, this);
+        this.btn_swapMode.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.GenMiGong, this);
         this.input_speed.removeEventListener(egret.Event.CHANGE, this.ModifySpeed, this);
         this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.BeginTouch, this);
         this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.Move, this);
@@ -62,16 +81,6 @@ var GameUI = (function (_super) {
     };
     //触屏手指移动
     GameUI.prototype.Move = function (e) {
-        // let difX: number = Math.abs(e.stageX - this.initPos.x);
-        // let difY: number = Math.abs(e.stageY - this.initPos.y);
-        // this.touchError = Number(this.input_touchError.text);
-        // if (difX < this.touchError && difY < this.touchError) { return; }
-        // if (difX > difY) {
-        // 	this.gameControl.direction = e.stageX > this.initPos.x ? 1 : 0;
-        // }
-        // else {
-        // 	this.gameControl.direction = e.stageY > this.initPos.y ? 2 : 3;
-        // }
         var angle = this.virt.onTouchMove(e);
         this.gameControl.direction = angle;
     };
@@ -96,27 +105,31 @@ var GameUI = (function (_super) {
         this.gameControl.speed = speed;
     };
     GameUI.prototype.GenMiGong = function () {
-        var row = 10;
+        var row = 15;
         var col = Number(this.input_col.text);
         this.genCells.index = 0;
         this.txt_stepNum.text = "已探索：0";
         this.genCells.GetCells(row, col);
         this.list.dataProvider = new eui.ArrayCollection(this.genCells.cells);
         this.list.itemRenderer = CellRender;
-        this.list.validateNow();
-        this.list.validateDisplayList();
         this.list_bg.dataProvider = new eui.ArrayCollection(this.genCells.cells);
         this.list_bg.itemRenderer = CellBgRender;
-        this.list_bg.validateNow();
-        this.list_bg.validateDisplayList();
+        this.list.validateNow();
+        this.list.validateDisplayList();
+        this.GenMap();
         this.img_mapBg.width = this.list.width;
+        this.PlayAni();
+    };
+    GameUI.prototype.PlayAni = function () {
+        var _this = this;
         var obj = this.list.getElementAt(this.genCells.index);
         this.img_role.x = obj.x;
         this.img_role.y = obj.y + (obj.height / 2);
         egret.Tween.get(this.scroller.viewport).to({ scrollH: 0 }, this.scroller.viewport.scrollH / 0.5);
-        egret.Tween.get(this.img_role).wait(this.scroller.viewport.scrollH / 0.5).to({ x: obj.x + (obj.width / 2) }, 1000);
+        egret.Tween.get(this.img_role).wait(this.scroller.viewport.scrollH / 0.5).to({ x: obj.x + (obj.width / 2) }, 1000).call(function () {
+            _this.img_Bg.touchEnabled = true;
+        });
         var wait = obj.StartAni(1000);
-        this.img_Bg.touchEnabled = true;
     };
     GameUI.prototype.SetListScale = function () {
         if (this.scroller.scaleX == 0.5) {
