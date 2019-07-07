@@ -13,6 +13,7 @@ var GenCells = (function (_super) {
     function GenCells() {
         var _this = _super.call(this) || this;
         _this.cells = [];
+        _this.returnPath = [0];
         return _this;
     }
     GenCells.prototype.SetIndex = function (type) {
@@ -31,7 +32,23 @@ var GenCells = (function (_super) {
                 this.index += this.col;
                 break;
         }
+        this.SetReturnPath();
         this.dispatchEvent(new MyEvent(MyEvent.updateStepNum));
+    };
+    GenCells.prototype.SetReturnPath = function () {
+        if (this.GetWallNum(this.cells[this.index]) == 1 && this.returnPath.length >= 5) {
+            this.returnPath = [];
+            var c = this.cellList.getElementAt(this.index);
+            c.SetReturnSign();
+        }
+        this.returnPath.push(this.index);
+    };
+    GenCells.prototype.GetWallNum = function (cell) {
+        var num = cell.downCell == null || cell.downWall.isOpen ? 1 : 0;
+        num += cell.upCell == null || cell.upWall.isOpen ? 1 : 0;
+        num += cell.leftCell == null || cell.leftWall.isOpen ? 1 : 0;
+        num += cell.rightCell == null || cell.rightWall.isOpen ? 1 : 0;
+        return num;
     };
     GenCells.prototype.RefreshCell = function (dir, speed) {
         if (!this.cells[this.index].isPassed) {

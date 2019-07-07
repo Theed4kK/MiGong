@@ -31,6 +31,7 @@ var GameUI = (function (_super) {
         this.btn_scale.addEventListener(egret.TouchEvent.TOUCH_TAP, this.SetListScale, this);
         this.btn_gen.addEventListener(egret.TouchEvent.TOUCH_TAP, this.GenMiGong, this);
         this.btn_swapMode.addEventListener(egret.TouchEvent.TOUCH_TAP, this.GenMap, this);
+        this.btn_return.addEventListener(egret.TouchEvent.TOUCH_TAP, this.Return, this);
         this.input_speed.addEventListener(egret.Event.CHANGE, this.ModifySpeed, this);
         this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.BeginTouch, this);
         this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.Move, this);
@@ -63,6 +64,9 @@ var GameUI = (function (_super) {
         group.addChildAt(_map, group.getChildIndex(this.list_bg) - 1);
         this.list.visible = false;
     };
+    GameUI.prototype.Return = function () {
+        this.gameControl.RoleMoveState(2);
+    };
     GameUI.prototype.UpdateStepNum = function () {
         if (!this.genCells.cells[this.genCells.index].isPassed) {
             this.stepNum++;
@@ -93,8 +97,6 @@ var GameUI = (function (_super) {
         if (this.list.numElements == 0) {
             return;
         }
-        this.initPos.x = e.stageX;
-        this.initPos.y = e.stageY;
         this.virt.x = e.stageX;
         this.virt.y = e.stageY;
         this.virt.start();

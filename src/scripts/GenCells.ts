@@ -10,10 +10,11 @@ class GenCells extends eui.Component implements eui.UIComponent {
 	public cellList: eui.List;
 	public scroll: eui.Scroller;
 	public cells: Cell[] = [];
+	public returnPath: number[] = [0];
 
 	private col: number;
 
-	public SetIndex(type: number) {
+	public SetIndex(type: number): void {
 		this.lastIndex = this.index;
 		switch (type) {
 			case 0: this.index--; break;
@@ -21,7 +22,25 @@ class GenCells extends eui.Component implements eui.UIComponent {
 			case 2: this.index -= this.col; break;
 			case 3: this.index += this.col; break;
 		}
+		this.SetReturnPath();
 		this.dispatchEvent(new MyEvent(MyEvent.updateStepNum));
+	}
+
+	private SetReturnPath(): void {
+		if (this.GetWallNum(this.cells[this.index]) == 1 && this.returnPath.length >= 5) {
+			this.returnPath = [];
+			let c = <CellBgRender>this.cellList.getElementAt(this.index);
+			c.SetReturnSign();
+		}
+		this.returnPath.push(this.index);
+	}
+
+	private GetWallNum(cell: Cell): number {
+		let num: number = cell.downCell == null || cell.downWall.isOpen ? 1 : 0;
+		num += cell.upCell == null || cell.upWall.isOpen ? 1 : 0;
+		num += cell.leftCell == null || cell.leftWall.isOpen ? 1 : 0;
+		num += cell.rightCell == null || cell.rightWall.isOpen ? 1 : 0;
+		return num;
 	}
 
 	public RefreshCell(dir: number, speed: number): void {

@@ -19,11 +19,22 @@ class GameControl extends eui.Component implements eui.UIComponent {
 			case 1:
 				this.removeEventListener(egret.Event.ENTER_FRAME, this.RoleMove, this);
 				break;
+			case 2:
+				this.addEventListener(egret.Event.ENTER_FRAME, this.RoleAutoMove, this, );
+				break;
+			case 3:
+				this.removeEventListener(egret.Event.ENTER_FRAME, this.RoleAutoMove, this, );
+				break;
 		}
 	}
 
+	private RoleAutoMove():void{
+		// this.genCells.returnPath.
+		
+	}
+
 	//角色移动
-	public RoleMove(): void {
+	private RoleMove(): void {
 		if (this.direction == null) { return; }
 		let speedX = Math.cos(this.direction) * this.speed;
 		let speedY = Math.sin(this.direction) * this.speed;

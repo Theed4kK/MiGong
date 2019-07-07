@@ -72,6 +72,9 @@ var CellBgRender = (function (_super) {
                 break;
         }
     };
+    CellBgRender.prototype.SetReturnSign = function () {
+        this.img_exitSign.visible = true;
+    };
     CellBgRender.prototype.StartAni = function () {
     };
     return CellBgRender;

@@ -27,7 +27,16 @@ var GameControl = (function (_super) {
             case 1:
                 this.removeEventListener(egret.Event.ENTER_FRAME, this.RoleMove, this);
                 break;
+            case 2:
+                this.addEventListener(egret.Event.ENTER_FRAME, this.RoleAutoMove, this);
+                break;
+            case 3:
+                this.removeEventListener(egret.Event.ENTER_FRAME, this.RoleAutoMove, this);
+                break;
         }
+    };
+    GameControl.prototype.RoleAutoMove = function () {
+        // this.genCells.returnPath.
     };
     //角色移动
     GameControl.prototype.RoleMove = function () {

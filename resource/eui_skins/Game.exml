@@ -49,6 +49,7 @@
 			<e:Label text="触摸误差" x="198" anchorOffsetX="0" anchorOffsetY="0" textColor="0xD18F00" stroke="1" verticalAlign="middle" size="18" textAlign="right" scaleX="1" scaleY="1" fontFamily="Microsoft YaHei" touchEnabled="false" verticalCenter="11"/>
 			<e:TextInput id="input_speed" width="88" height="30" x="520" anchorOffsetX="0" anchorOffsetY="0" text="8" verticalCenter="11"/>
 		</e:Group>
+		<e:Image id="btn_return" x="12.5" y="972" anchorOffsetX="0" anchorOffsetY="0" source="btn_change_png"/>
 	</e:Group>
 	
 </e:Skin>
