@@ -122,8 +122,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	}
 
 	private ModifySpeed(): void {
-		let speed: number = Number(this.input_speed.text);
-		this.gameControl.speed = speed;
+		this.gameControl.speed = Number(this.input_speed.text);
 	}
 
 	private GenMiGong(): void {

@@ -12,6 +12,7 @@ var GameControl = (function (_super) {
     __extends(GameControl, _super);
     function GameControl(img_role) {
         var _this = _super.call(this) || this;
+        _this.tw_roleReturn = egret.Tween.get(_this.img_role);
         _this.img_role = img_role;
         return _this;
     }
@@ -31,12 +32,23 @@ var GameControl = (function (_super) {
                 this.addEventListener(egret.Event.ENTER_FRAME, this.RoleAutoMove, this);
                 break;
             case 3:
-                this.removeEventListener(egret.Event.ENTER_FRAME, this.RoleAutoMove, this);
+                // this.removeEventListener(egret.Event.ENTER_FRAME, this.RoleAutoMove, this, );
+                this.RoleAutoMove();
                 break;
         }
     };
     GameControl.prototype.RoleAutoMove = function () {
         // this.genCells.returnPath.
+        var path = this.genCells.returnPath;
+        if (path.length > 0 && path[0] != this.genCells.index) {
+            var index = path[0] + 0.5;
+            var c = new CellRender();
+            var target = new egret.Point(index * c.width, index * c.height);
+            var now = new egret.Point(this.img_role.x, this.img_role.y);
+            var dis = egret.Point.distance(now, target);
+            path.splice(0);
+            this.tw_roleReturn.to({ x: target.x, y: target.y }, (dis / this.speed) * 100).call(this.RoleAutoMove, this);
+        }
     };
     //角色移动
     GameControl.prototype.RoleMove = function () {
@@ -53,7 +65,7 @@ var GameControl = (function (_super) {
         var groupWidth = 0;
         var obj = this.genCells.wallList.getElementAt(this.genCells.index);
         if (speedX < 0) {
-            hasWall = (cell.leftCell == null || !cell.leftWall.isOpen);
+            hasWall = (cell.leftCell == null || !cell.leftWall.isExit);
             isEdge = this.IsEdge(0);
             if (hasWall || isEdge) {
                 var left = this.img_role.x - (this.img_role.width / 2);
@@ -69,7 +81,7 @@ var GameControl = (function (_super) {
             }
         }
         else {
-            hasWall = (cell.rightCell == null || !cell.rightCell.leftWall.isOpen);
+            hasWall = (cell.rightCell == null || !cell.rightCell.leftWall.isExit);
             isEdge = this.IsEdge(0);
             if (hasWall || isEdge) {
                 var right = this.img_role.x + (this.img_role.width / 2);
@@ -86,7 +98,7 @@ var GameControl = (function (_super) {
             }
         }
         if (speedY < 0) {
-            hasWall = (cell.upCell == null || !cell.upWall.isOpen);
+            hasWall = (cell.upCell == null || !cell.upWall.isExit);
             isEdge = this.IsEdge(1);
             if (hasWall || isEdge) {
                 var top_1 = this.img_role.y - (this.img_role.height / 2);
@@ -98,7 +110,7 @@ var GameControl = (function (_super) {
             }
         }
         else {
-            hasWall = (cell.downCell == null || !cell.downCell.upWall.isOpen);
+            hasWall = (cell.downCell == null || !cell.downCell.upWall.isExit);
             isEdge = this.IsEdge(1);
             if (hasWall || isEdge) {
                 var bottom = this.img_role.y + (this.img_role.height / 2);
@@ -154,3 +166,4 @@ var GameControl = (function (_super) {
     return GameControl;
 }(eui.Component));
 __reflect(GameControl.prototype, "GameControl", ["eui.UIComponent", "egret.DisplayObject"]);
+//# sourceMappingURL=GameControl.js.map

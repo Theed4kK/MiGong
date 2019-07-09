@@ -15,7 +15,7 @@ class CellBgRender extends eui.ItemRenderer {
 	private img_bg: eui.Image;
 	private img_exitSign: eui.Image;
 
-	private tw: egret.Tween;
+	private tw_autoReturn: egret.Tween;
 
 	protected dataChanged(): void {
 		let cell: Cell = this.data;
@@ -24,10 +24,10 @@ class CellBgRender extends eui.ItemRenderer {
 			cell.isPassed = true;
 			return;
 		}
-		if (cell.id == 1 && !cell.leftWall.isOpen) {
+		if (cell.id == 1 && !cell.leftWall.isExit) {
 			this.img_bg.left = CellRender.vWallwidth / 2;
 		}
-		if (cell.upCell != null && cell.upCell.id == 0 && !cell.upWall.isOpen) {
+		if (cell.upCell != null && cell.upCell.id == 0 && !cell.upWall.isExit) {
 			this.img_bg.top = CellRender.hWallHeight / 2;
 		}
 		//最右下角的出口标志

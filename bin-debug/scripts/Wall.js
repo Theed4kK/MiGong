@@ -3,10 +3,11 @@ var __reflect = (this && this.__reflect) || function (p, c, t) {
 };
 var Wall = (function () {
     function Wall() {
-        this.isOpen = false;
+        this.isExit = false;
     }
     Wall.hWalls = [];
     Wall.wWalls = [];
     return Wall;
 }());
 __reflect(Wall.prototype, "Wall");
+//# sourceMappingURL=Wall.js.map

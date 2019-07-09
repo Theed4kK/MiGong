@@ -11,6 +11,8 @@ class CellRender extends eui.ItemRenderer {
 
 	public static hWallHeight: number = 0;
 	public static vWallwidth: number = 0;
+	public static h: number = 0;
+	public static w: number = 0;
 
 	private GetWallData(): void {
 		if (CellRender.hWallHeight == 0) {
@@ -19,14 +21,20 @@ class CellRender extends eui.ItemRenderer {
 		if (CellRender.vWallwidth == 0) {
 			CellRender.vWallwidth = this.img_leftWall.width;
 		}
+		// if (CellRender.hWallHeight == 0) {
+		// 	CellRender.hWallHeight = this.img_upWall.height;
+		// }
+		// if (CellRender.vWallwidth == 0) {
+		// 	CellRender.vWallwidth = this.img_leftWall.width;
+		// }
 	}
 
 	protected dataChanged(): void {
 		let cell: Cell = this.data;
 
-		this.img_upWall.visible = cell.upWall == null ? true : !cell.upWall.isOpen;
+		this.img_upWall.visible = cell.upWall == null ? true : !cell.upWall.isExit;
 		this.img_downWall.visible = !cell.downCell;
-		this.img_leftWall.visible = cell.leftWall == null ? true : !cell.leftWall.isOpen;
+		this.img_leftWall.visible = cell.leftWall == null ? true : !cell.leftWall.isExit;
 		this.img_rightWall.visible = !cell.rightCell;
 		this.SetLeftWall();
 
@@ -34,8 +42,8 @@ class CellRender extends eui.ItemRenderer {
 
 	private SetLeftWall(): void {
 		let cell: Cell = this.data;
-		if (!cell.leftWall.isOpen) {
-			if (cell.downCell != null && !cell.downCell.upWall.isOpen) {
+		if (!cell.leftWall.isExit) {
+			if (cell.downCell != null && !cell.downCell.upWall.isExit) {
 				this.img_leftWall.bottom = this.img_upWall.height / 2;
 			}
 		}

@@ -26,10 +26,10 @@ var CellBgRender = (function (_super) {
             cell.isPassed = true;
             return;
         }
-        if (cell.id == 1 && !cell.leftWall.isOpen) {
+        if (cell.id == 1 && !cell.leftWall.isExit) {
             this.img_bg.left = CellRender.vWallwidth / 2;
         }
-        if (cell.upCell != null && cell.upCell.id == 0 && !cell.upWall.isOpen) {
+        if (cell.upCell != null && cell.upCell.id == 0 && !cell.upWall.isExit) {
             this.img_bg.top = CellRender.hWallHeight / 2;
         }
         //最右下角的出口标志
@@ -80,3 +80,4 @@ var CellBgRender = (function (_super) {
     return CellBgRender;
 }(eui.ItemRenderer));
 __reflect(CellBgRender.prototype, "CellBgRender");
+//# sourceMappingURL=CellBgRender.js.map

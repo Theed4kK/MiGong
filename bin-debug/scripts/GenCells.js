@@ -36,18 +36,18 @@ var GenCells = (function (_super) {
         this.dispatchEvent(new MyEvent(MyEvent.updateStepNum));
     };
     GenCells.prototype.SetReturnPath = function () {
-        if (this.GetWallNum(this.cells[this.index]) == 1 && this.returnPath.length >= 5) {
+        if (this.GetOpenWallNum(this.cells[this.index]) == 3 && this.returnPath.length >= 5) {
             this.returnPath = [];
             var c = this.cellList.getElementAt(this.index);
             c.SetReturnSign();
         }
         this.returnPath.push(this.index);
     };
-    GenCells.prototype.GetWallNum = function (cell) {
-        var num = cell.downCell == null || cell.downWall.isOpen ? 1 : 0;
-        num += cell.upCell == null || cell.upWall.isOpen ? 1 : 0;
-        num += cell.leftCell == null || cell.leftWall.isOpen ? 1 : 0;
-        num += cell.rightCell == null || cell.rightWall.isOpen ? 1 : 0;
+    GenCells.prototype.GetOpenWallNum = function (cell) {
+        var num = cell.downCell == null || cell.downWall.isExit ? 1 : 0;
+        num += cell.upCell == null || cell.upWall.isExit ? 1 : 0;
+        num += cell.leftCell == null || cell.leftWall.isExit ? 1 : 0;
+        num += cell.rightCell == null || cell.rightWall.isExit ? 1 : 0;
         return num;
     };
     GenCells.prototype.RefreshCell = function (dir, speed) {
@@ -61,22 +61,22 @@ var GenCells = (function (_super) {
     GenCells.prototype.RefreshAroundCells = function () {
         var cell = this.cells[this.index];
         var leftCell = this.cells[this.index].leftCell;
-        if (leftCell != null && !cell.leftWall.isOpen && !leftCell.isPassed) {
+        if (leftCell != null && !cell.leftWall.isExit && !leftCell.isPassed) {
             var cellBgRender = this.cellList.getElementAt(this.index - 1);
             cellBgRender.RefreshBg(0);
         }
         var rightCell = this.cells[this.index].rightCell;
-        if (rightCell != null && !rightCell.leftWall.isOpen && !rightCell.isPassed) {
+        if (rightCell != null && !rightCell.leftWall.isExit && !rightCell.isPassed) {
             var cellBgRender = this.cellList.getElementAt(this.index + 1);
             cellBgRender.RefreshBg(1);
         }
         var upCell = this.cells[this.index].upCell;
-        if (upCell != null && !cell.upWall.isOpen && !upCell.isPassed) {
+        if (upCell != null && !cell.upWall.isExit && !upCell.isPassed) {
             var cellBgRender = this.cellList.getElementAt(this.index - this.col);
             cellBgRender.RefreshBg(2);
         }
         var downCell = this.cells[this.index].downCell;
-        if (downCell != null && !downCell.upWall.isOpen && !downCell.isPassed) {
+        if (downCell != null && !downCell.upWall.isExit && !downCell.isPassed) {
             var cellBgRender = this.cellList.getElementAt(this.index + this.col);
             cellBgRender.RefreshBg(3);
         }
@@ -142,7 +142,7 @@ var GenCells = (function (_super) {
             cs = GenCells.GetDesignedCell(signingCell); //周围未访问的格子集合
             if (cs.length > 0) {
                 var num = Common.getRandomInt(1, cs.length);
-                GenCells.GetSharedWall(signingCell, cs[num - 1]).isOpen = true; //获得中间的墙并设置开放
+                GenCells.GetSharedWall(signingCell, cs[num - 1]).isExit = true; //获得中间的墙并设置开放
                 signingCell = cs[num - 1];
                 signingCell.isSigned = true;
                 signedCell.push(signingCell);
@@ -191,3 +191,4 @@ var GenCells = (function (_super) {
     return GenCells;
 }(eui.Component));
 __reflect(GenCells.prototype, "GenCells", ["eui.UIComponent", "egret.DisplayObject"]);
+//# sourceMappingURL=GenCells.js.map

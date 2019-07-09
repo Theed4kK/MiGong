@@ -22,19 +22,25 @@ var CellRender = (function (_super) {
         if (CellRender.vWallwidth == 0) {
             CellRender.vWallwidth = this.img_leftWall.width;
         }
+        // if (CellRender.hWallHeight == 0) {
+        // 	CellRender.hWallHeight = this.img_upWall.height;
+        // }
+        // if (CellRender.vWallwidth == 0) {
+        // 	CellRender.vWallwidth = this.img_leftWall.width;
+        // }
     };
     CellRender.prototype.dataChanged = function () {
         var cell = this.data;
-        this.img_upWall.visible = cell.upWall == null ? true : !cell.upWall.isOpen;
+        this.img_upWall.visible = cell.upWall == null ? true : !cell.upWall.isExit;
         this.img_downWall.visible = !cell.downCell;
-        this.img_leftWall.visible = cell.leftWall == null ? true : !cell.leftWall.isOpen;
+        this.img_leftWall.visible = cell.leftWall == null ? true : !cell.leftWall.isExit;
         this.img_rightWall.visible = !cell.rightCell;
         this.SetLeftWall();
     };
     CellRender.prototype.SetLeftWall = function () {
         var cell = this.data;
-        if (!cell.leftWall.isOpen) {
-            if (cell.downCell != null && !cell.downCell.upWall.isOpen) {
+        if (!cell.leftWall.isExit) {
+            if (cell.downCell != null && !cell.downCell.upWall.isExit) {
                 this.img_leftWall.bottom = this.img_upWall.height / 2;
             }
         }
@@ -46,6 +52,9 @@ var CellRender = (function (_super) {
     };
     CellRender.hWallHeight = 0;
     CellRender.vWallwidth = 0;
+    CellRender.h = 0;
+    CellRender.w = 0;
     return CellRender;
 }(eui.ItemRenderer));
 __reflect(CellRender.prototype, "CellRender");
+//# sourceMappingURL=CellRender.js.map

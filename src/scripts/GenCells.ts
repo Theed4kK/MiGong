@@ -4,7 +4,7 @@ class GenCells extends eui.Component implements eui.UIComponent {
 	}
 
 	public index: number;
-	private lastIndex: number;
+	private lastIndex: number = 0;
 	// public speed: number;
 	public wallList: eui.List;
 	public cellList: eui.List;
@@ -14,32 +14,32 @@ class GenCells extends eui.Component implements eui.UIComponent {
 
 	private col: number;
 
-	public SetIndex(type: number): void {
-		this.lastIndex = this.index;
-		switch (type) {
-			case 0: this.index--; break;
-			case 1: this.index++; break;
-			case 2: this.index -= this.col; break;
-			case 3: this.index += this.col; break;
+	public SetIndex(h: number, v: number): void {
+		this.index = v * this.col + h;
+		egret.log("编号-----》" + this.index);
+		if (this.index != this.lastIndex) {
+			this.SetReturnPath();
+			this.dispatchEvent(new MyEvent(MyEvent.updateStepNum));
+			this.lastIndex = this.index;
 		}
-		this.SetReturnPath();
-		this.dispatchEvent(new MyEvent(MyEvent.updateStepNum));
 	}
 
 	private SetReturnPath(): void {
-		if (this.GetWallNum(this.cells[this.index]) == 1 && this.returnPath.length >= 5) {
+		if (this.GetOpenWallNum(this.cells[this.index]) == 3 && (this.returnPath.length == 0 || this.returnPath.length > 5)) {
 			this.returnPath = [];
 			let c = <CellBgRender>this.cellList.getElementAt(this.index);
 			c.SetReturnSign();
 		}
-		this.returnPath.push(this.index);
+		if (this.returnPath.indexOf(this.index) == -1) {
+			this.returnPath.push(this.index);
+		}
 	}
 
-	private GetWallNum(cell: Cell): number {
-		let num: number = cell.downCell == null || cell.downWall.isOpen ? 1 : 0;
-		num += cell.upCell == null || cell.upWall.isOpen ? 1 : 0;
-		num += cell.leftCell == null || cell.leftWall.isOpen ? 1 : 0;
-		num += cell.rightCell == null || cell.rightWall.isOpen ? 1 : 0;
+	private GetOpenWallNum(cell: Cell): number {
+		let num: number = cell.downCell != null && cell.downCell.upWall.isExit ? 1 : 0;
+		num += cell.upCell != null && cell.upWall.isExit ? 1 : 0;
+		num += cell.leftCell != null && cell.leftWall.isExit ? 1 : 0;
+		num += cell.rightCell != null && cell.leftCell.leftWall.isExit ? 1 : 0;
 		return num;
 	}
 
@@ -55,22 +55,22 @@ class GenCells extends eui.Component implements eui.UIComponent {
 	private RefreshAroundCells(): void {
 		let cell: Cell = this.cells[this.index];
 		let leftCell: Cell = this.cells[this.index].leftCell;
-		if (leftCell != null && !cell.leftWall.isOpen && !leftCell.isPassed) {
+		if (leftCell != null && !cell.leftWall.isExit && !leftCell.isPassed) {
 			let cellBgRender: CellBgRender = <CellBgRender>this.cellList.getElementAt(this.index - 1);
 			cellBgRender.RefreshBg(0);
 		}
 		let rightCell: Cell = this.cells[this.index].rightCell;
-		if (rightCell != null && !rightCell.leftWall.isOpen && !rightCell.isPassed) {
+		if (rightCell != null && !rightCell.leftWall.isExit && !rightCell.isPassed) {
 			let cellBgRender: CellBgRender = <CellBgRender>this.cellList.getElementAt(this.index + 1);
 			cellBgRender.RefreshBg(1);
 		}
 		let upCell: Cell = this.cells[this.index].upCell;
-		if (upCell != null && !cell.upWall.isOpen && !upCell.isPassed) {
+		if (upCell != null && !cell.upWall.isExit && !upCell.isPassed) {
 			let cellBgRender: CellBgRender = <CellBgRender>this.cellList.getElementAt(this.index - this.col);
 			cellBgRender.RefreshBg(2);
 		}
 		let downCell: Cell = this.cells[this.index].downCell;
-		if (downCell != null && !downCell.upWall.isOpen && !downCell.isPassed) {
+		if (downCell != null && !downCell.upWall.isExit && !downCell.isPassed) {
 			let cellBgRender: CellBgRender = <CellBgRender>this.cellList.getElementAt(this.index + this.col);
 			cellBgRender.RefreshBg(3);
 		}
@@ -142,7 +142,7 @@ class GenCells extends eui.Component implements eui.UIComponent {
 			cs = GenCells.GetDesignedCell(signingCell); //周围未访问的格子集合
 			if (cs.length > 0) {
 				let num: number = Common.getRandomInt(1, cs.length);
-				GenCells.GetSharedWall(signingCell, cs[num - 1]).isOpen = true;	//获得中间的墙并设置开放
+				GenCells.GetSharedWall(signingCell, cs[num - 1]).isExit = true;	//获得中间的墙并设置开放
 				signingCell = cs[num - 1];
 				signingCell.isSigned = true;
 				signedCell.push(signingCell);

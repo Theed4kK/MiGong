@@ -103,8 +103,7 @@ var GameUI = (function (_super) {
         this.gameControl.RoleMoveState(0); //开始移动
     };
     GameUI.prototype.ModifySpeed = function () {
-        var speed = Number(this.input_speed.text);
-        this.gameControl.speed = speed;
+        this.gameControl.speed = Number(this.input_speed.text);
     };
     GameUI.prototype.GenMiGong = function () {
         var row = 15;
@@ -146,3 +145,4 @@ var GameUI = (function (_super) {
     return GameUI;
 }(eui.Component));
 __reflect(GameUI.prototype, "GameUI", ["eui.UIComponent", "egret.DisplayObject"]);
+//# sourceMappingURL=GameUI.js.map
