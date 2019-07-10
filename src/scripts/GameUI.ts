@@ -11,7 +11,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	private btn_scale: eui.Button;
 	private btn_gen: eui.Button;
 	private btn_swapMode: eui.Button;
-	private btn_return:eui.Image;
+	private btn_return: eui.Image;
 
 	private input_col: eui.TextInput;
 	private input_speed: eui.TextInput;
@@ -45,13 +45,15 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		this.btn_scale.addEventListener(egret.TouchEvent.TOUCH_TAP, this.SetListScale, this);
 		this.btn_gen.addEventListener(egret.TouchEvent.TOUCH_TAP, this.GenMiGong, this);
 		this.btn_swapMode.addEventListener(egret.TouchEvent.TOUCH_TAP, this.GenMap, this);
-		this.btn_return.addEventListener(egret.TouchEvent.TOUCH_TAP,this.Return,this);
+		this.btn_return.addEventListener(egret.TouchEvent.TOUCH_TAP, this.Return, this);
 		this.input_speed.addEventListener(egret.Event.CHANGE, this.ModifySpeed, this)
 		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.BeginTouch, this);
 		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.Move, this);
 		this.stage.addEventListener(egret.TouchEvent.TOUCH_END, this.CancelTouch, this);
 		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_CANCEL, this.CancelTouch, this);
 		this.genCells.addEventListener(MyEvent.updateStepNum, this.UpdateStepNum, this);
+
+		this.gameControl.addEventListener(MyEvent.moveScroll, this.MoveScroll, this);
 		this.scroller.horizontalScrollBar.autoVisibility = false;
 		this.scroller.horizontalScrollBar.visible = false;
 		this.img_role.anchorOffsetX = this.img_role.width / 2;
@@ -60,7 +62,6 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		this.gameControl.speed = Number(this.input_speed.text);
 		this.gameControl.genCells = this.genCells;
 		let genCells = this.genCells;
-		genCells.scroll = this.scroller;
 		genCells.wallList = this.list;
 		genCells.cellList = this.list_bg;
 
@@ -79,8 +80,23 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		this.list.visible = false;
 	}
 
-	private Return():void{
+	private Return(): void {
 		this.gameControl.RoleMoveState(2);
+	}
+
+	private MoveScroll(data: any): void {
+		let scrollH = this.scroller.viewport.scrollH;
+		if (data.speed > 0) {
+			if (((data.x - scrollH) < (this.scroller.width / 2)) && scrollH > 0) {
+				this.scroller.viewport.scrollH += Math.max(data.speed, -scrollH);
+			}
+		}
+		else{
+			let groupWidth = this.scroller.viewport.measuredWidth;
+			if (((data.x - scrollH) > (this.scroller.width / 2)) && ((scrollH + this.scroller.width) < groupWidth)) {
+				this.scroller.viewport.scrollH += Math.min(data.speed, groupWidth - scrollH - this.scroller.width);
+			}
+		}
 	}
 
 	private UpdateStepNum(): void {
@@ -141,7 +157,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		this.img_mapBg.width = this.list.width;
 
 		this.PlayAni();
-		
+
 	}
 
 	private PlayAni(): void {

@@ -8,29 +8,33 @@ class GenCells extends eui.Component implements eui.UIComponent {
 	// public speed: number;
 	public wallList: eui.List;
 	public cellList: eui.List;
-	public scroll: eui.Scroller;
 	public cells: Cell[] = [];
 	public returnPath: number[] = [0];
 
 	private col: number;
+	private returnCell: CellBgRender = null;
 
-	public SetIndex(h: number, v: number): void {
-		this.index = v * this.col + h;
+	public SetIndex(roleX: number, roleY: number): void {
+		let h: number = Math.floor(roleX / CellRender.w);
+		let v: number = Math.floor(roleY / CellRender.h);
+		let index: number = v * this.col + h;
 		egret.log("编号-----》" + this.index);
-		if (this.index != this.lastIndex) {
+		if (this.index != index) {
+			this.index = index;
 			this.SetReturnPath();
-			this.dispatchEvent(new MyEvent(MyEvent.updateStepNum));
-			this.lastIndex = this.index;
 		}
 	}
 
 	private SetReturnPath(): void {
-		if (this.GetOpenWallNum(this.cells[this.index]) == 3 && (this.returnPath.length == 0 || this.returnPath.length > 5)) {
+		if (this.GetOpenWallNum(this.cells[this.index]) == 3 && (this.returnCell == null || this.returnPath.length > 5)) {
 			this.returnPath = [];
-			let c = <CellBgRender>this.cellList.getElementAt(this.index);
-			c.SetReturnSign();
+			if (this.returnCell != null) {
+				this.returnCell.HideReturnSign();
+			}
+			this.returnCell = <CellBgRender>this.cellList.getElementAt(this.index);
+			this.returnCell.SetReturnSign();
 		}
-		if (this.returnPath.indexOf(this.index) == -1) {
+		if (this.returnCell != null && this.returnPath.indexOf(this.index) == -1) {
 			this.returnPath.push(this.index);
 		}
 	}
@@ -45,9 +49,10 @@ class GenCells extends eui.Component implements eui.UIComponent {
 
 	public RefreshCell(dir: number, speed: number): void {
 		if (!this.cells[this.index].isPassed) {
+			this.dispatchEvent(new MyEvent(MyEvent.updateStepNum));
 			let cellBgRender: CellBgRender = <CellBgRender>this.cellList.getElementAt(this.index);
 			cellBgRender.LightenUp(dir, speed);
-			this.RefreshAroundCells();
+			// this.RefreshAroundCells();
 			this.cells[this.index].isPassed = true;
 		}
 	}

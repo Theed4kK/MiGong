@@ -30,7 +30,6 @@ class GameControl extends eui.Component implements eui.UIComponent {
 	}
 
 	private RoleAutoMove(): void {
-		// this.genCells.returnPath.
 		let path: number[] = this.genCells.returnPath;
 		if (path.length > 0 && path[0] != this.genCells.index) {
 			let index: number = path[0] + 0.5;
@@ -52,10 +51,8 @@ class GameControl extends eui.Component implements eui.UIComponent {
 		let speedX = Math.cos(this.direction) * this.speed;
 		let speedY = Math.sin(this.direction) * this.speed;
 		let cell: Cell = this.genCells.cells[this.genCells.index];
-		let scroll = this.genCells.scroll;
 		let hasWall: boolean = false;
 		let isEdge: boolean = false;
-		let scrollH: number = 0;
 		let groupWidth: number = 0;
 		let obj: egret.DisplayObject = this.genCells.wallList.getElementAt(this.genCells.index);
 		if (speedX < 0) {
@@ -69,10 +66,6 @@ class GameControl extends eui.Component implements eui.UIComponent {
 			else {
 				this.img_role.x += speedX;
 			}
-			scrollH = scroll.viewport.scrollH;
-			if (((this.img_role.x - scrollH) < (scroll.width / 2)) && scrollH > 0) {
-				scroll.viewport.scrollH += Math.max(speedX, -scrollH);
-			}
 		}
 		else {
 			hasWall = (cell.rightCell == null || !cell.rightCell.leftWall.isExit);
@@ -84,11 +77,6 @@ class GameControl extends eui.Component implements eui.UIComponent {
 			}
 			else {
 				this.img_role.x += speedX;
-			}
-			scrollH = scroll.viewport.scrollH;
-			groupWidth = scroll.viewport.measuredWidth;
-			if (((this.img_role.x - scrollH) > (scroll.width / 2)) && ((scrollH + scroll.width) < groupWidth)) {
-				scroll.viewport.scrollH += Math.min(speedX, groupWidth - scrollH - scroll.width);
 			}
 		}
 		if (speedY < 0) {
@@ -115,20 +103,9 @@ class GameControl extends eui.Component implements eui.UIComponent {
 				this.img_role.y += speedY;
 			}
 		}
-		this.ResetIndex();
+		this.dispatchEventWith(MyEvent.moveScroll, false, { x: this.img_role.x, speed: speedX })
+		this.genCells.SetIndex(this.img_role.x, this.img_role.y);
 		this.genCells.RefreshCell(this.direction, this.speed);
-	}
-
-	private ResetIndex(): void {
-		let obj: egret.DisplayObject = this.genCells.wallList.getElementAt(this.genCells.index);
-		// let left: number = this.img_role.x - (this.img_role.width / 2);
-		// let right: number = this.img_role.x + (this.img_role.width / 2);
-		// let up: number = this.img_role.y - (this.img_role.height / 2);
-		// let bottom: number = this.img_role.y + (this.img_role.height / 2);
-		// this.genCells.index = 
-		let hIndex: number = Math.floor(this.img_role.x / obj.width);
-		let vIndex: number = Math.floor(this.img_role.y / obj.height);
-		this.genCells.SetIndex(hIndex, vIndex);
 	}
 
 	private IsEdge(type: number): boolean {

@@ -69,6 +69,10 @@ class CellBgRender extends eui.ItemRenderer {
 		this.img_exitSign.visible = true;
 	}
 
+	public HideReturnSign(): void {
+		this.img_exitSign.visible = false;
+	}
+
 	public StartAni(): void {
 
 	}

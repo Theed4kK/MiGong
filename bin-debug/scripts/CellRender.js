@@ -22,12 +22,12 @@ var CellRender = (function (_super) {
         if (CellRender.vWallwidth == 0) {
             CellRender.vWallwidth = this.img_leftWall.width;
         }
-        // if (CellRender.hWallHeight == 0) {
-        // 	CellRender.hWallHeight = this.img_upWall.height;
-        // }
-        // if (CellRender.vWallwidth == 0) {
-        // 	CellRender.vWallwidth = this.img_leftWall.width;
-        // }
+        if (CellRender.h == 0) {
+            CellRender.h = this.height;
+        }
+        if (CellRender.w == 0) {
+            CellRender.w = this.width;
+        }
     };
     CellRender.prototype.dataChanged = function () {
         var cell = this.data;

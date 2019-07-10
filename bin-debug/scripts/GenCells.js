@@ -12,49 +12,48 @@ var GenCells = (function (_super) {
     __extends(GenCells, _super);
     function GenCells() {
         var _this = _super.call(this) || this;
+        _this.lastIndex = 0;
         _this.cells = [];
         _this.returnPath = [0];
+        _this.returnCell = null;
         return _this;
     }
-    GenCells.prototype.SetIndex = function (type) {
-        this.lastIndex = this.index;
-        switch (type) {
-            case 0:
-                this.index--;
-                break;
-            case 1:
-                this.index++;
-                break;
-            case 2:
-                this.index -= this.col;
-                break;
-            case 3:
-                this.index += this.col;
-                break;
+    GenCells.prototype.SetIndex = function (roleX, roleY) {
+        var h = Math.floor(roleX / CellRender.w);
+        var v = Math.floor(roleY / CellRender.h);
+        var index = v * this.col + h;
+        egret.log("编号-----》" + this.index);
+        if (this.index != index) {
+            this.index = index;
+            this.SetReturnPath();
         }
-        this.SetReturnPath();
-        this.dispatchEvent(new MyEvent(MyEvent.updateStepNum));
     };
     GenCells.prototype.SetReturnPath = function () {
-        if (this.GetOpenWallNum(this.cells[this.index]) == 3 && this.returnPath.length >= 5) {
+        if (this.GetOpenWallNum(this.cells[this.index]) == 3 && (this.returnCell == null || this.returnPath.length > 5)) {
             this.returnPath = [];
-            var c = this.cellList.getElementAt(this.index);
-            c.SetReturnSign();
+            if (this.returnCell != null) {
+                this.returnCell.HideReturnSign();
+            }
+            this.returnCell = this.cellList.getElementAt(this.index);
+            this.returnCell.SetReturnSign();
         }
-        this.returnPath.push(this.index);
+        if (this.returnCell != null && this.returnPath.indexOf(this.index) == -1) {
+            this.returnPath.push(this.index);
+        }
     };
     GenCells.prototype.GetOpenWallNum = function (cell) {
-        var num = cell.downCell == null || cell.downWall.isExit ? 1 : 0;
-        num += cell.upCell == null || cell.upWall.isExit ? 1 : 0;
-        num += cell.leftCell == null || cell.leftWall.isExit ? 1 : 0;
-        num += cell.rightCell == null || cell.rightWall.isExit ? 1 : 0;
+        var num = cell.downCell != null && cell.downCell.upWall.isExit ? 1 : 0;
+        num += cell.upCell != null && cell.upWall.isExit ? 1 : 0;
+        num += cell.leftCell != null && cell.leftWall.isExit ? 1 : 0;
+        num += cell.rightCell != null && cell.leftCell.leftWall.isExit ? 1 : 0;
         return num;
     };
     GenCells.prototype.RefreshCell = function (dir, speed) {
         if (!this.cells[this.index].isPassed) {
+            this.dispatchEvent(new MyEvent(MyEvent.updateStepNum));
             var cellBgRender = this.cellList.getElementAt(this.index);
             cellBgRender.LightenUp(dir, speed);
-            this.RefreshAroundCells();
+            // this.RefreshAroundCells();
             this.cells[this.index].isPassed = true;
         }
     };

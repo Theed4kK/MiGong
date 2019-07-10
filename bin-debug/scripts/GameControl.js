@@ -32,7 +32,6 @@ var GameControl = (function (_super) {
                 this.addEventListener(egret.Event.ENTER_FRAME, this.RoleAutoMove, this);
                 break;
             case 3:
-                // this.removeEventListener(egret.Event.ENTER_FRAME, this.RoleAutoMove, this, );
                 this.RoleAutoMove();
                 break;
         }
@@ -121,31 +120,8 @@ var GameControl = (function (_super) {
                 this.img_role.y += speedY;
             }
         }
-        this.ResetIndex();
+        this.genCells.SetIndex(this.img_role.x, this.img_role.y);
         this.genCells.RefreshCell(this.direction, this.speed);
-    };
-    GameControl.prototype.ResetIndex = function () {
-        var obj = this.genCells.wallList.getElementAt(this.genCells.index);
-        var left = this.img_role.x - (this.img_role.width / 2);
-        var right = this.img_role.x + (this.img_role.width / 2);
-        var up = this.img_role.y - (this.img_role.height / 2);
-        var bottom = this.img_role.y + (this.img_role.height / 2);
-        if (right < obj.x) {
-            this.genCells.SetIndex(0);
-            return;
-        }
-        if (left > obj.x + obj.width) {
-            this.genCells.SetIndex(1);
-            return;
-        }
-        if (bottom < obj.y) {
-            this.genCells.SetIndex(2);
-            return;
-        }
-        if (up > obj.y + obj.height) {
-            this.genCells.SetIndex(3);
-            return;
-        }
     };
     GameControl.prototype.IsEdge = function (type) {
         var isEdge = true;

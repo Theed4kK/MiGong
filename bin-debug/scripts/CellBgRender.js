@@ -75,6 +75,9 @@ var CellBgRender = (function (_super) {
     CellBgRender.prototype.SetReturnSign = function () {
         this.img_exitSign.visible = true;
     };
+    CellBgRender.prototype.HideReturnSign = function () {
+        this.img_exitSign.visible = false;
+    };
     CellBgRender.prototype.StartAni = function () {
     };
     return CellBgRender;
