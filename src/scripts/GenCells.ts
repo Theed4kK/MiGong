@@ -26,7 +26,7 @@ class GenCells extends eui.Component implements eui.UIComponent {
 	}
 
 	private SetReturnPath(): void {
-		if (this.GetOpenWallNum(this.cells[this.index]) == 3 && (this.returnCell == null || this.returnPath.length > 5)) {
+		if (this.GetUnpassedCells(this.cells[this.index]) > 1 && (this.returnCell == null || this.returnPath.length > 5)) {
 			this.returnPath = [];
 			if (this.returnCell != null) {
 				this.returnCell.HideReturnSign();
@@ -34,16 +34,21 @@ class GenCells extends eui.Component implements eui.UIComponent {
 			this.returnCell = <CellBgRender>this.cellList.getElementAt(this.index);
 			this.returnCell.SetReturnSign();
 		}
-		if (this.returnCell != null && this.returnPath.indexOf(this.index) == -1) {
-			this.returnPath.push(this.index);
+		if (this.returnCell != null) {
+			if (this.returnPath.indexOf(this.index) == -1) {
+				this.returnPath.push(this.index);
+			}
+			else {
+				this.returnPath.splice(-1, 1);
+			}
 		}
 	}
 
-	private GetOpenWallNum(cell: Cell): number {
-		let num: number = cell.downCell != null && cell.downCell.upWall.isExit ? 1 : 0;
-		num += cell.upCell != null && cell.upWall.isExit ? 1 : 0;
-		num += cell.leftCell != null && cell.leftWall.isExit ? 1 : 0;
-		num += cell.rightCell != null && cell.leftCell.leftWall.isExit ? 1 : 0;
+	private GetUnpassedCells(cell: Cell): number {
+		let num: number = cell.downCell != null && !cell.downCell.upWall.isExit && !cell.downCell.isPassed ? 1 : 0;
+		num += cell.upCell != null && !cell.upWall.isExit && !cell.upCell.isPassed ? 1 : 0;
+		num += cell.leftCell != null && !cell.leftWall.isExit && !cell.leftCell.isPassed ? 1 : 0;
+		num += cell.rightCell != null && !cell.rightCell.leftWall.isExit && !cell.rightCell.isPassed ? 1 : 0;
 		return num;
 	}
 

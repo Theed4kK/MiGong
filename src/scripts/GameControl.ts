@@ -31,18 +31,14 @@ class GameControl extends eui.Component implements eui.UIComponent {
 
 	private RoleAutoMove(): void {
 		let path: number[] = this.genCells.returnPath;
-		if (path.length > 0 && path[0] != this.genCells.index) {
-			let index: number = path[0] + 0.5;
+		if (path.length > 1) {
+			let index: number = path[path.length - 1] + 0.5;
 			let c: CellRender = new CellRender();
 			let target: egret.Point = new egret.Point(index * c.width, index * c.height);
 			let now: egret.Point = new egret.Point(this.img_role.x, this.img_role.y);
 			let dis: number = egret.Point.distance(now, target);
-			path.splice(0);
-			this.tw_roleReturn.to({ x: target.x, y: target.y }, (dis / this.speed) * 100).call(
-				this.RoleAutoMove, this
-			);
+			
 		}
-
 	}
 
 	//角色移动
