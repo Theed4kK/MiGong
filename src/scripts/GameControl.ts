@@ -8,7 +8,6 @@ class GameControl extends eui.Component implements eui.UIComponent {
 	public direction: number;
 	public speed: number;
 	private img_role: eui.Image;
-	private tw_roleReturn: egret.Tween = egret.Tween.get(this.img_role);
 
 	public RoleMoveState(state: number, start: number = 0, target: number = 0): void {
 		switch (state) {
@@ -31,14 +30,15 @@ class GameControl extends eui.Component implements eui.UIComponent {
 
 	private RoleAutoMove(): void {
 		let path: number[] = this.genCells.returnPath;
+		if (path.length == 0) { return; }
+		let index: number;
 		if (path.length > 1) {
-			let index: number = path[path.length - 1] + 0.5;
-			let c: CellRender = new CellRender();
-			let target: egret.Point = new egret.Point(index * c.width, index * c.height);
-			let now: egret.Point = new egret.Point(this.img_role.x, this.img_role.y);
-			let dis: number = egret.Point.distance(now, target);
-			
+			index = path[path.length - 2] + 0.5;
+		} else {
+			index = path[0] + 0.5;
 		}
+		this.direction = Math.atan2(index * CellRender.h - this.img_role.y, index * CellRender.w - this.img_role.x);
+		this.RoleMove();
 	}
 
 	//角色移动
@@ -51,17 +51,18 @@ class GameControl extends eui.Component implements eui.UIComponent {
 		let isEdge: boolean = false;
 		let groupWidth: number = 0;
 		let obj: egret.DisplayObject = this.genCells.wallList.getElementAt(this.genCells.index);
+		let move:number;
 		if (speedX < 0) {
 			hasWall = (cell.leftCell == null || !cell.leftWall.isExit);
 			isEdge = this.IsEdge(0);
 			if (hasWall || isEdge) {
 				let left: number = this.img_role.x - (this.img_role.width / 2);
-				let distance: number = (left - (obj.x + CellRender.vWallwidth * 0.5));
+				let distance: number = left - (obj.x + CellRender.vWallwidth * 0.5);
 				this.img_role.x += Math.max(-distance, speedX);
 			}
 			else {
-				this.img_role.x += speedX;
 			}
+				this.img_role.x += speedX;
 		}
 		else {
 			hasWall = (cell.rightCell == null || !cell.rightCell.leftWall.isExit);

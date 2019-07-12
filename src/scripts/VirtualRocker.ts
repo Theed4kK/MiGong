@@ -47,8 +47,8 @@ class VirtualRocker extends eui.Component implements eui.UIComponent {
 		this.p1.y = this.y;
 		this.p2.x = e.stageX;
 		this.p2.y = e.stageY;
-		var dist = egret.Point.distance(this.p1, this.p2);
-		var angle: number = Math.atan2(e.stageY - this.y, e.stageX - this.x);
+		let dist = egret.Point.distance(this.p1, this.p2);
+		let angle: number = Math.atan2(e.stageY - this.y, e.stageX - this.x);
 		//手指距离在圆环范围内
 		if (dist <= (this.circleRadius - this.ballRadius)) {
 			this.ball.x = this.centerX + e.stageX - this.x;
