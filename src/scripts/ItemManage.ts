@@ -1,0 +1,6 @@
+class ItemManage {
+	public constructor() {
+	}
+
+	
+}
