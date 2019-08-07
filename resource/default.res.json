@@ -317,11 +317,6 @@
 			"name": "bg_yellow_png"
 		},
 		{
-			"url": "res/box_draw/bind_box.png",
-			"type": "image",
-			"name": "bind_box_png"
-		},
-		{
 			"url": "res/box_draw/box_chat_choose_red.png",
 			"type": "image",
 			"name": "box_chat_choose_red_png"
@@ -1145,11 +1140,6 @@
 			"url": "res/box_draw/bg_yellow.png",
 			"type": "image",
 			"name": "bg_yellow2_png"
-		},
-		{
-			"url": "res/box_draw/bind_box.png",
-			"type": "image",
-			"name": "bind_box2_png"
 		},
 		{
 			"url": "res/box_draw/box_chat_choose_red.png",
@@ -2337,24 +2327,9 @@
 			"name": "btn_garden_list_png"
 		},
 		{
-			"url": "res/button/btn_go.png",
-			"type": "image",
-			"name": "btn_go_png"
-		},
-		{
-			"url": "res/button/btn_gofight.png",
-			"type": "image",
-			"name": "btn_gofight_png"
-		},
-		{
 			"url": "res/button/btn_gofight_light.png",
 			"type": "image",
 			"name": "btn_gofight_light_png"
-		},
-		{
-			"url": "res/button/btn_grade.png",
-			"type": "image",
-			"name": "btn_grade_png"
 		},
 		{
 			"url": "res/button/btn_grey.png",
@@ -2377,19 +2352,9 @@
 			"name": "btn_guide_new_png"
 		},
 		{
-			"url": "res/button/btn_match.png",
-			"type": "image",
-			"name": "btn_match_png"
-		},
-		{
 			"url": "res/button/btn_npage.png",
 			"type": "image",
 			"name": "btn_npage_png"
-		},
-		{
-			"url": "res/button/btn_return.png",
-			"type": "image",
-			"name": "btn_return_png"
 		},
 		{
 			"url": "res/button/btn_rule_default.png",
@@ -2420,21 +2385,6 @@
 			"url": "res/button/btn_sort_over.png",
 			"type": "image",
 			"name": "btn_sort_over_png"
-		},
-		{
-			"url": "res/button/btn_starlv.png",
-			"type": "image",
-			"name": "btn_starlv_png"
-		},
-		{
-			"url": "res/button/btn_visit.png",
-			"type": "image",
-			"name": "btn_visit_png"
-		},
-		{
-			"url": "res/button/btn_visit_new.png",
-			"type": "image",
-			"name": "btn_visit_new_png"
 		},
 		{
 			"url": "res/button/btn_withdraw.png",
@@ -2477,11 +2427,6 @@
 			"name": "detail_png"
 		},
 		{
-			"url": "res/button/halo_show_btn.png",
-			"type": "image",
-			"name": "halo_show_btn_png"
-		},
-		{
 			"url": "res/button/hanlin_detail_btn.png",
 			"type": "image",
 			"name": "hanlin_detail_btn_png"
@@ -2490,11 +2435,6 @@
 			"url": "res/button/lantern.png",
 			"type": "image",
 			"name": "lantern_png"
-		},
-		{
-			"url": "res/button/map2_award.png",
-			"type": "image",
-			"name": "map2_award_png"
 		},
 		{
 			"url": "res/button/map_name_bg_blue.png",

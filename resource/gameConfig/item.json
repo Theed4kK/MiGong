@@ -2,46 +2,61 @@
   {
     "id": 1,
     "name": "物品1",
+    "type": 1,
     "point": 10,
+    "need_point": 20,
+    "weight": 1,
     "des": "这是物品1",
-    "need_1": "2,1",
-    "need_2": "3,2",
-    "need_3": "4,3"
+    "need_item": "1,2",
+    "need_num": "3,2",
+    "pic": ""
   },
   {
     "id": 2,
     "name": "物品2",
+    "type": 1,
     "point": 20,
+    "need_point": 40,
+    "weight": 2,
     "des": "这是物品2",
-    "need_1": "2,1",
-    "need_2": "3,2",
-    "need_3": "4,3"
+    "need_item": "2,3",
+    "need_num": "3,2",
+    "pic": ""
   },
   {
     "id": 3,
     "name": "物品3",
+    "type": 2,
     "point": 30,
+    "need_point": 60,
+    "weight": 3,
     "des": "这是物品3",
-    "need_1": "2,1",
-    "need_2": "3,2",
-    "need_3": "4,3"
+    "need_item": "1,2",
+    "need_num": "3,2",
+    "pic": ""
   },
   {
     "id": 4,
     "name": "物品4",
+    "type": 2,
     "point": 40,
+    "need_point": 80,
+    "weight": 4,
     "des": "这是物品4",
-    "need_1": "2,1",
-    "need_2": "3,2",
-    "need_3": ""
+    "need_item": "1,2",
+    "need_num": "3,2",
+    "pic": ""
   },
   {
     "id": 5,
     "name": "物品5",
+    "type": 3,
     "point": 50,
+    "need_point": 100,
+    "weight": 5,
     "des": "这是物品5",
-    "need_1": "2,1",
-    "need_2": "",
-    "need_3": ""
+    "need_item": "",
+    "need_num": "",
+    "pic": ""
   }
 ]
