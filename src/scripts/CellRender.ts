@@ -32,9 +32,9 @@ class CellRender extends eui.ItemRenderer {
 	protected dataChanged(): void {
 		let cell: Cell = this.data;
 
-		this.img_upWall.visible = cell.upWall == null ? true : !cell.upWall.isExit;
+		this.img_upWall.visible = cell.upWall == null ? true : !cell.upWall.isOpen;
 		this.img_downWall.visible = !cell.downCell;
-		this.img_leftWall.visible = cell.leftWall == null ? true : !cell.leftWall.isExit;
+		this.img_leftWall.visible = cell.leftWall == null ? true : !cell.leftWall.isOpen;
 		this.img_rightWall.visible = !cell.rightCell;
 		this.SetLeftWall();
 
@@ -42,8 +42,8 @@ class CellRender extends eui.ItemRenderer {
 
 	private SetLeftWall(): void {
 		let cell: Cell = this.data;
-		if (!cell.leftWall.isExit) {
-			if (cell.downCell != null && !cell.downCell.upWall.isExit) {
+		if (!cell.leftWall.isOpen) {
+			if (cell.downCell != null && !cell.downCell.upWall.isOpen) {
 				this.img_leftWall.bottom = this.img_upWall.height / 2;
 			}
 		}

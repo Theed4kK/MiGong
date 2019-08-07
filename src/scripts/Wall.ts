@@ -1,6 +1,6 @@
 class Wall {
 	public constructor() {
-		this.isExit = false;
+		this.isOpen = false;
 	}
 
 	public static hWalls: Wall[] = [];
@@ -10,6 +10,6 @@ class Wall {
 	public cell1Id: number;
 	public cell2Id: number;
 
-	public isExit: boolean;
+	public isOpen: boolean;
 	public isSigned: boolean;
 }

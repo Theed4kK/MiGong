@@ -24,10 +24,11 @@ class CellBgRender extends eui.ItemRenderer {
 			cell.isPassed = true;
 			return;
 		}
-		if (cell.id == 1 && !cell.leftWall.isExit) {
+		this.img_bg.visible = false;
+		if (cell.id == 1 && !cell.leftWall.isOpen) {
 			this.img_bg.left = CellRender.vWallwidth / 2;
 		}
-		if (cell.upCell != null && cell.upCell.id == 0 && !cell.upWall.isExit) {
+		if (cell.upCell != null && cell.upCell.id == 0 && !cell.upWall.isOpen) {
 			this.img_bg.top = CellRender.hWallHeight / 2;
 		}
 		//最右下角的出口标志

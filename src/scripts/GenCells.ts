@@ -1,93 +1,9 @@
-class GenCells extends eui.Component implements eui.UIComponent {
+class GenCells {
 	public constructor() {
-		super();
 	}
 
-	public index: number;
-	private lastIndex: number = 0;
-	// public speed: number;
-	public wallList: eui.List;
-	public cellList: eui.List;
-	public cells: Cell[] = [];
-	public returnPath: number[] = [0];
-
-	private col: number;
-	private returnCell: CellBgRender = null;
-
-	public SetIndex(roleX: number, roleY: number): void {
-		let h: number = Math.floor(roleX / CellRender.w);
-		let v: number = Math.floor(roleY / CellRender.h);
-		let index: number = v * this.col + h;
-		egret.log("编号-----》" + this.index);
-		if (this.index != index) {
-			this.index = index;
-			this.SetReturnPath();
-		}
-	}
-
-	private SetReturnPath(): void {
-		if (this.GetUnpassedCells(this.cells[this.index]) > 1 && (this.returnCell == null || this.returnPath.length > 5)) {
-			this.returnPath = [];
-			if (this.returnCell != null) {
-				this.returnCell.HideReturnSign();
-			}
-			this.returnCell = <CellBgRender>this.cellList.getElementAt(this.index);
-			this.returnCell.SetReturnSign();
-		}
-		if (this.returnCell != null) {
-			if (this.returnPath.indexOf(this.index) == -1) {
-				this.returnPath.push(this.index);
-			}
-			else {
-				this.returnPath.splice(-1, 1);
-			}
-		}
-	}
-
-	private GetUnpassedCells(cell: Cell): number {
-		let num: number = cell.downCell != null && !cell.downCell.upWall.isExit && !cell.downCell.isPassed ? 1 : 0;
-		num += cell.upCell != null && !cell.upWall.isExit && !cell.upCell.isPassed ? 1 : 0;
-		num += cell.leftCell != null && !cell.leftWall.isExit && !cell.leftCell.isPassed ? 1 : 0;
-		num += cell.rightCell != null && !cell.rightCell.leftWall.isExit && !cell.rightCell.isPassed ? 1 : 0;
-		return num;
-	}
-
-	public RefreshCell(dir: number, speed: number): void {
-		if (!this.cells[this.index].isPassed) {
-			this.dispatchEvent(new MyEvent(MyEvent.updateStepNum));
-			let cellBgRender: CellBgRender = <CellBgRender>this.cellList.getElementAt(this.index);
-			cellBgRender.LightenUp(dir, speed);
-			// this.RefreshAroundCells();
-			this.cells[this.index].isPassed = true;
-		}
-	}
-
-	private RefreshAroundCells(): void {
-		let cell: Cell = this.cells[this.index];
-		let leftCell: Cell = this.cells[this.index].leftCell;
-		if (leftCell != null && !cell.leftWall.isExit && !leftCell.isPassed) {
-			let cellBgRender: CellBgRender = <CellBgRender>this.cellList.getElementAt(this.index - 1);
-			cellBgRender.RefreshBg(0);
-		}
-		let rightCell: Cell = this.cells[this.index].rightCell;
-		if (rightCell != null && !rightCell.leftWall.isExit && !rightCell.isPassed) {
-			let cellBgRender: CellBgRender = <CellBgRender>this.cellList.getElementAt(this.index + 1);
-			cellBgRender.RefreshBg(1);
-		}
-		let upCell: Cell = this.cells[this.index].upCell;
-		if (upCell != null && !cell.upWall.isExit && !upCell.isPassed) {
-			let cellBgRender: CellBgRender = <CellBgRender>this.cellList.getElementAt(this.index - this.col);
-			cellBgRender.RefreshBg(2);
-		}
-		let downCell: Cell = this.cells[this.index].downCell;
-		if (downCell != null && !downCell.upWall.isExit && !downCell.isPassed) {
-			let cellBgRender: CellBgRender = <CellBgRender>this.cellList.getElementAt(this.index + this.col);
-			cellBgRender.RefreshBg(3);
-		}
-	}
-
-	public GetCells(row: number, col: number): Cell[] {
-		this.col = col;
+	/**根据行和列返回格子列表 */
+	public static GetCells(row: number, col: number): Cell[] {
 		let cells: Cell[][] = [];
 		let allCell: Cell[] = [];
 
@@ -149,10 +65,10 @@ class GenCells extends eui.Component implements eui.UIComponent {
 
 		while (designedCell.length > 0) {
 			let cs: Cell[] = [];
-			cs = GenCells.GetDesignedCell(signingCell); //周围未访问的格子集合
+			cs = GenCells.GetDesignedCell(signingCell);
 			if (cs.length > 0) {
 				let num: number = Common.getRandomInt(1, cs.length);
-				GenCells.GetSharedWall(signingCell, cs[num - 1]).isExit = true;	//获得中间的墙并设置开放
+				GenCells.GetSharedWall(signingCell, cs[num - 1]).isOpen = true;
 				signingCell = cs[num - 1];
 				signingCell.isSigned = true;
 				signedCell.push(signingCell);
@@ -163,10 +79,10 @@ class GenCells extends eui.Component implements eui.UIComponent {
 				signingCell = signedCell[num - 1];
 			}
 		}
-		this.cells = allCell;
 		return allCell;
 	}
 
+	/**获取周围未访问的格子集合 */
 	private static GetDesignedCell(cell: Cell): Cell[] {
 		let cs: Cell[] = [];
 		if (cell.upCell != null && !cell.upCell.isSigned) {
@@ -184,6 +100,7 @@ class GenCells extends eui.Component implements eui.UIComponent {
 		return cs;
 	}
 
+	/**获得两个格子中间的墙 */
 	private static GetSharedWall(cell1: Cell, cell2: Cell): Wall {
 		let w: Wall;
 		if (cell1.leftWall == cell2.rightWall) {

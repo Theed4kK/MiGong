@@ -1,10 +1,12 @@
 class GameControl extends eui.Component implements eui.UIComponent {
-	public constructor(img_role: eui.Image) {
+	public constructor(img_role: eui.Image, speed: number, ) {
 		super();
 		this.img_role = img_role;
+		this.speed = speed;
+		this.img_role.anchorOffsetX = this.img_role.width / 2;
+		this.img_role.anchorOffsetY = this.img_role.height / 2;
 	}
 
-	public genCells: GenCells;
 	public direction: number;
 	public speed: number;
 	private img_role: eui.Image;
@@ -13,7 +15,7 @@ class GameControl extends eui.Component implements eui.UIComponent {
 		switch (state) {
 			//操作移动
 			case 0:
-				this.addEventListener(egret.Event.ENTER_FRAME, this.RoleMove, this, );
+				this.addEventListener(egret.Event.ENTER_FRAME, this.PlayerMove, this, );
 				break;
 			//停止操作移动
 			case 1:
@@ -29,7 +31,7 @@ class GameControl extends eui.Component implements eui.UIComponent {
 	}
 
 	private RoleAutoMove(): void {
-		let path: number[] = this.genCells.returnPath;
+		let path: number[] = GameUI.manageCells.returnPath;
 		if (path.length == 0) { return; }
 		let index: number;
 		if (path.length > 1) {
@@ -38,77 +40,59 @@ class GameControl extends eui.Component implements eui.UIComponent {
 			index = path[0] + 0.5;
 		}
 		this.direction = Math.atan2(index * CellRender.h - this.img_role.y, index * CellRender.w - this.img_role.x);
-		this.RoleMove();
+		this.RoleMove(2);
 	}
 
-	//角色移动
-	private RoleMove(): void {
+	private PlayerMove(): void {
+		this.RoleMove(1);
+	}
+	/**角色移动,type:1为手动引动  2为自动移动 */
+	private RoleMove(type: number = 1): void {
 		if (this.direction == null) { return; }
-		let speedX = Math.cos(this.direction) * this.speed;
-		let speedY = Math.sin(this.direction) * this.speed;
-		let cell: Cell = this.genCells.cells[this.genCells.index];
+		let speedX = Math.cos(this.direction) * this.speed * type;
+		let speedY = Math.sin(this.direction) * this.speed * type;
+		let cell: Cell = GameUI.manageCells.currentCell;
 		let hasWall: boolean = false;
 		let isEdge: boolean = false;
-		let groupWidth: number = 0;
-		let obj: egret.DisplayObject = this.genCells.wallList.getElementAt(this.genCells.index);
-		let move:number;
-		if (speedX < 0) {
-			hasWall = (cell.leftCell == null || !cell.leftWall.isExit);
-			isEdge = this.IsEdge(0);
-			if (hasWall || isEdge) {
-				let left: number = this.img_role.x - (this.img_role.width / 2);
-				let distance: number = left - (obj.x + CellRender.vWallwidth * 0.5);
-				this.img_role.x += Math.max(-distance, speedX);
-			}
-			else {
-			}
-				this.img_role.x += speedX;
+		let obj: egret.DisplayObject = GameUI.manageRenders.currentRender;
+		let move: number = 0;
+
+		let nearCell: Cell = speedX < 0 ? cell.leftCell : cell.rightCell;
+		let nearWall: Wall = speedX < 0 ? cell.leftWall : cell.rightWall;
+		hasWall = (nearCell == null || !nearWall.isOpen);
+		isEdge = this.IsEdge(0);
+		if (hasWall || isEdge) {
+			let width: number = CellRender.vWallwidth * 0.5 + this.img_role.width * 0.5;
+			let distance: number = Math.abs(obj.x + (speedX < 0 ? 0 : 1) * obj.width / type - this.img_role.x) - width;
+			move = speedX < 0 ? Math.max(-distance, speedX) : Math.min(distance, speedX);
 		}
 		else {
-			hasWall = (cell.rightCell == null || !cell.rightCell.leftWall.isExit);
-			isEdge = this.IsEdge(0);
-			if (hasWall || isEdge) {
-				let right: number = this.img_role.x + (this.img_role.width / 2);
-				let distance: number = ((obj.x + obj.width - CellRender.vWallwidth * 0.5) - right);
-				this.img_role.x += Math.min(speedX, distance);
-			}
-			else {
-				this.img_role.x += speedX;
-			}
+			move = speedX;
 		}
-		if (speedY < 0) {
-			hasWall = (cell.upCell == null || !cell.upWall.isExit);
-			isEdge = this.IsEdge(1);
-			if (hasWall || isEdge) {
-				let top: number = this.img_role.y - (this.img_role.height / 2);
-				let distance: number = (top - (obj.y + CellRender.hWallHeight * 0.5));
-				this.img_role.y += Math.max(speedY, -distance);
-			}
-			else {
-				this.img_role.y += speedY;
-			}
+		this.img_role.x += move;
+
+		nearCell = speedY < 0 ? cell.upCell : cell.downCell;
+		nearWall = speedY < 0 ? cell.upWall : cell.downWall;
+		hasWall = (nearCell == null || !nearWall.isOpen);
+		isEdge = this.IsEdge(1);
+		if (hasWall || isEdge) {
+			let height: number = CellRender.hWallHeight * 0.5 + this.img_role.height * 0.5;
+			let distance: number = Math.abs(obj.y + (speedY < 0 ? 0 : 1) * obj.height / type - this.img_role.y) - height;
+			move = speedY < 0 ? Math.max(-distance, speedY) : Math.min(distance, speedY);
 		}
 		else {
-			hasWall = (cell.downCell == null || !cell.downCell.upWall.isExit);
-			isEdge = this.IsEdge(1);
-			if (hasWall || isEdge) {
-				let bottom: number = this.img_role.y + (this.img_role.height / 2);
-				let distance: number = ((obj.y + obj.height - CellRender.hWallHeight * 0.5) - bottom);
-				this.img_role.y += Math.min(speedY, distance);
-			}
-			else {
-				this.img_role.y += speedY;
-			}
+			move = speedY;
 		}
+		this.img_role.y += move;
+
 		this.dispatchEventWith(MyEvent.moveScroll, false, { x: this.img_role.x, speed: speedX })
-		this.genCells.SetIndex(this.img_role.x, this.img_role.y);
-		this.genCells.RefreshCell(this.direction, this.speed);
+		GameUI.manageCells.SetIndex(this.img_role.x, this.img_role.y);
 	}
 
 	private IsEdge(type: number): boolean {
 		let isEdge: boolean = true;
 		let img_role: eui.Image = this.img_role;
-		let obj: egret.DisplayObject = this.genCells.wallList.getElementAt(this.genCells.index);
+		let obj: egret.DisplayObject = GameUI.manageRenders.currentRender;
 		switch (type) {
 			case 0:
 				isEdge = (Math.abs(img_role.y - obj.y)) < ((img_role.height / 2) + CellRender.hWallHeight * 0.5);
