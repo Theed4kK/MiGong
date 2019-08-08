@@ -38,6 +38,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 
 	protected childrenCreated(): void {
 		super.childrenCreated();
+		this.stage.frameRate = 60;
 		this.addChild(this.virt);
 		this.virt.visible = false;
 		this.scroller.horizontalScrollBar.autoVisibility = false;
@@ -162,7 +163,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 
 	/**播放开始动画 */
 	private PlayStartAni(): void {
-		let obj: CellRender = GameUI.manageRenders.currentRender;
+		let obj: WallRender = GameUI.manageRenders.currentRender;
 		this.img_role.x = obj.x;
 		this.img_role.y = obj.y + (obj.height / 2);
 		egret.Tween.get(this.scroller.viewport).to({ scrollH: 0 }, this.scroller.viewport.scrollH / 0.5);

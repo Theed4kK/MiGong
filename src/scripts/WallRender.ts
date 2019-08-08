@@ -1,7 +1,7 @@
-class CellRender extends eui.ItemRenderer {
+class WallRender extends eui.ItemRenderer {
 	public constructor() {
 		super()
-		this.addEventListener(egret.Event.COMPLETE, this.GetWallData, this);
+		this.addEventListener(egret.Event.COMPLETE, this.GetWallSize, this);
 	}
 
 	private img_leftWall: eui.Image;
@@ -14,18 +14,18 @@ class CellRender extends eui.ItemRenderer {
 	public static h: number = 0;
 	public static w: number = 0;
 
-	private GetWallData(): void {
-		if (CellRender.hWallHeight == 0) {
-			CellRender.hWallHeight = this.img_upWall.height;
+	private GetWallSize(): void {
+		if (WallRender.hWallHeight == 0) {
+			WallRender.hWallHeight = this.img_upWall.height;
 		}
-		if (CellRender.vWallwidth == 0) {
-			CellRender.vWallwidth = this.img_leftWall.width;
+		if (WallRender.vWallwidth == 0) {
+			WallRender.vWallwidth = this.img_leftWall.width;
 		}
-		if (CellRender.h == 0) {
-			CellRender.h = this.height;
+		if (WallRender.h == 0) {
+			WallRender.h = this.height;
 		}
-		if (CellRender.w == 0) {
-			CellRender.w = this.width;
+		if (WallRender.w == 0) {
+			WallRender.w = this.width;
 		}
 	}
 

@@ -4,7 +4,7 @@
 	<w:Config id="16b364587c8"></w:Config>
 	<e:Image id="img_Bg" horizontalCenter="0" verticalCenter="0" source="loading_jpg" x="0" y="0" scaleX="1" scaleY="1"
 	         touchEnabled="false" />
-	<e:Group height="916" top="56" left="15" right="15" touchThrough="true" touchEnabled="false" touchChildren="false">
+	<e:Group height="916" top="56" left="15" right="15" touchThrough="false" touchEnabled="false" touchChildren="false">
 		<e:Image scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0" source="map2_box5_png" scale9Grid="10,10,67,67"/>
 		<e:Scroller id="scroller" touchEnabled="false" touchChildren="false" bounces="false" scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0">
 			<e:Group id="map" scaleX="1" scaleY="1" touchThrough="true">
@@ -19,7 +19,11 @@
 				<e:TileLayout horizontalGap="0" verticalGap="0" requestedRowCount="15" paddingTop="8" paddingBottom="8" paddingLeft="5" paddingRight="5"/>
 				</e:layout>
 			</e:List>
-			<e:Image id="img_role" width="20" height="20" x="1" y="-187" scaleX="1" scaleY="1" horizontalCenter="0" source="roundthumb_png" includeInLayout="false"/>
+				<e:Group id="group_role" width="60" height="60" x="120" y="348" includeInLayout="false">
+					<e:Image id="img_light" width="20" height="20" x="1" scaleX="1" scaleY="1" horizontalCenter="0" source="roundthumb_png" includeInLayout="false" verticalCenter="0" blendMode="erase"/>
+					<e:Image id="img_role" width="20" height="20" x="-9" scaleX="1" scaleY="1" horizontalCenter="0" source="roundthumb_png" includeInLayout="false" verticalCenter="0"/>
+				</e:Group>
+
 			<e:layout>
 				<e:HorizontalLayout gap="0"/>
 			</e:layout>
@@ -27,21 +31,16 @@
 		</e:Scroller>
 	</e:Group>
 
-	<e:Image x="17" y="13" source="hanlin_lv_box_png"/>
-	<e:Label id="txt_stepNum" text="已探索：0" x="26" y="20" scaleX="1" scaleY="1" fontFamily="Microsoft YaHei" size="16" textColor="0xdfe02c"/>
-
-
-	<e:Group left="0" right="0" top="0" bottom="0" touchThrough="true" touchEnabled="false" touchChildren="false">
+	<e:Image x="17" y="13" source="hanlin_lv_box_png" touchEnabled="false"/>
+	<e:Label id="txt_stepNum" text="已探索：0" x="26" y="20" scaleX="1" scaleY="1" fontFamily="Microsoft YaHei" size="16" textColor="0xdfe02c" touchEnabled="false"/>
 
 
 
-
-	</e:Group>
 	<e:Group left="0" right="0" top="0" bottom="0" touchThrough="true" touchEnabled="false" touchChildren="true">
 		<e:Button id="btn_gen" label="重新生成" scaleX="1" scaleY="1"  horizontalCenter="0" bottom="94"/>
 		<e:Button id="btn_scale" label="缩放" y="999" scaleX="1" scaleY="1" horizontalCenter="0"  visible="false"/>
 		<e:Button id="btn_swapMode" label="拖动" y="1000" scaleX="1" scaleY="1" right="120"  visible="false"/>
-		<e:Group height="74" bottom="0" anchorOffsetX="0" left="0" right="0" anchorOffsetY="0">
+		<e:Group height="74" bottom="0" anchorOffsetX="0" left="0" right="0" anchorOffsetY="0" touchChildren="true" touchEnabled="false" touchThrough="true">
 			<e:Label text="移动速度" x="436.12" anchorOffsetX="0" anchorOffsetY="0" textColor="0xD18F00" stroke="1" verticalAlign="middle" size="18" textAlign="right" scaleX="1" scaleY="1" fontFamily="Microsoft YaHei" touchEnabled="false" verticalCenter="11"/>
 			<e:TextInput id="input_col" x="97.34" anchorOffsetX="0" anchorOffsetY="0" text="30" scaleX="1" width="78" height="30" verticalCenter="11"/>
 			<e:Label text="地图大小" x="17" anchorOffsetX="0" anchorOffsetY="0" textColor="0xD18F00" stroke="1" verticalAlign="middle" size="18" textAlign="right" scaleX="1" scaleY="1" fontFamily="Microsoft YaHei" touchEnabled="false" verticalCenter="11"/>

@@ -15,7 +15,7 @@
 		"eui.ItemRenderer": "resource/eui_skins/ItemRendererSkin.exml",
 		"GameUI": "resource/eui_skins/Game.exml",
 		"Loading": "resource/eui_skins/Loading.exml",
-		"CellRender": "resource/eui_skins/CellRender.exml",
+		"WallRender": "resource/eui_skins/WallRender.exml",
 		"MapScroller": "resource/eui_skins/MapScroller.exml",
 		"CellBgRender": "resource/eui_skins/CellBgRender.exml",
 		"VirtualRocker": "resource/eui_skins/VirtualRocker.exml",
@@ -25,7 +25,6 @@
 	"exmls": [
 		"resource/eui_skins/ButtonSkin.exml",
 		"resource/eui_skins/CellBgRender.exml",
-		"resource/eui_skins/CellRender.exml",
 		"resource/eui_skins/CheckBoxSkin.exml",
 		"resource/eui_skins/Game.exml",
 		"resource/eui_skins/HScrollBarSkin.exml",
@@ -41,7 +40,8 @@
 		"resource/eui_skins/ToggleSwitchSkin.exml",
 		"resource/eui_skins/VirtualRocker.exml",
 		"resource/eui_skins/VScrollBarSkin.exml",
-		"resource/eui_skins/VSliderSkin.exml"
+		"resource/eui_skins/VSliderSkin.exml",
+		"resource/eui_skins/WallRender.exml"
 	],
 	"path": "resource/default.thm.json"
 }

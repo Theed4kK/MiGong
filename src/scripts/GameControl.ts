@@ -39,7 +39,7 @@ class GameControl extends eui.Component implements eui.UIComponent {
 		} else {
 			index = path[0] + 0.5;
 		}
-		this.direction = Math.atan2(index * CellRender.h - this.img_role.y, index * CellRender.w - this.img_role.x);
+		this.direction = Math.atan2(index * WallRender.h - this.img_role.y, index * WallRender.w - this.img_role.x);
 		this.RoleMove(2);
 	}
 
@@ -62,7 +62,7 @@ class GameControl extends eui.Component implements eui.UIComponent {
 		hasWall = (nearCell == null || !nearWall.isOpen);
 		isEdge = this.IsEdge(0);
 		if (hasWall || isEdge) {
-			let width: number = CellRender.vWallwidth * 0.5 + this.img_role.width * 0.5;
+			let width: number = WallRender.vWallwidth * 0.5 + this.img_role.width * 0.5;
 			let distance: number = Math.abs(obj.x + (speedX < 0 ? 0 : 1) * obj.width / type - this.img_role.x) - width;
 			move = speedX < 0 ? Math.max(-distance, speedX) : Math.min(distance, speedX);
 		}
@@ -76,7 +76,7 @@ class GameControl extends eui.Component implements eui.UIComponent {
 		hasWall = (nearCell == null || !nearWall.isOpen);
 		isEdge = this.IsEdge(1);
 		if (hasWall || isEdge) {
-			let height: number = CellRender.hWallHeight * 0.5 + this.img_role.height * 0.5;
+			let height: number = WallRender.hWallHeight * 0.5 + this.img_role.height * 0.5;
 			let distance: number = Math.abs(obj.y + (speedY < 0 ? 0 : 1) * obj.height / type - this.img_role.y) - height;
 			move = speedY < 0 ? Math.max(-distance, speedY) : Math.min(distance, speedY);
 		}
@@ -87,6 +87,7 @@ class GameControl extends eui.Component implements eui.UIComponent {
 
 		this.dispatchEventWith(MyEvent.moveScroll, false, { x: this.img_role.x, speed: speedX })
 		GameUI.manageCells.SetIndex(this.img_role.x, this.img_role.y);
+		
 	}
 
 	private IsEdge(type: number): boolean {
@@ -95,12 +96,12 @@ class GameControl extends eui.Component implements eui.UIComponent {
 		let obj: egret.DisplayObject = GameUI.manageRenders.currentRender;
 		switch (type) {
 			case 0:
-				isEdge = (Math.abs(img_role.y - obj.y)) < ((img_role.height / 2) + CellRender.hWallHeight * 0.5);
-				isEdge = isEdge || ((Math.abs(img_role.y - obj.y - obj.height) < (img_role.height / 2) + CellRender.hWallHeight * 0.5));
+				isEdge = (Math.abs(img_role.y - obj.y)) < ((img_role.height / 2) + WallRender.hWallHeight * 0.5);
+				isEdge = isEdge || ((Math.abs(img_role.y - obj.y - obj.height) < (img_role.height / 2) + WallRender.hWallHeight * 0.5));
 				break;
 			case 1:
-				isEdge = (Math.abs(img_role.x - obj.x)) < ((img_role.width / 2) + CellRender.vWallwidth * 0.5);
-				isEdge = isEdge || ((Math.abs(img_role.x - obj.x - obj.width) < (img_role.width / 2) + CellRender.vWallwidth * 0.5));
+				isEdge = (Math.abs(img_role.x - obj.x)) < ((img_role.width / 2) + WallRender.vWallwidth * 0.5);
+				isEdge = isEdge || ((Math.abs(img_role.x - obj.x - obj.width) < (img_role.width / 2) + WallRender.vWallwidth * 0.5));
 				break;
 		}
 		return isEdge;

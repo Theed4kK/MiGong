@@ -26,8 +26,8 @@ class ManageCells extends eui.Component implements eui.UIComponent {
 
 	/**设置当前所在格子编号 */
 	public SetIndex(roleX: number, roleY: number): void {
-		let h: number = Math.floor(roleX / CellRender.w);
-		let v: number = Math.floor(roleY / CellRender.h);
+		let h: number = Math.floor(roleX / WallRender.w);
+		let v: number = Math.floor(roleY / WallRender.h);
 		let index: number = v * this.col + h;
 		if (this._index != index) {
 			this._index = index
