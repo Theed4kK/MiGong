@@ -54,7 +54,7 @@ class CellBgRender extends eui.ItemRenderer {
 	}
 
 	public LightenUp(): void {
-		egret.Tween.get(this.img_bg).to({ alpha: 0 }, 1000);
+		egret.Tween.get(this.img_bg).to({ alpha: 0 }, 200);
 	}
 
 	public RefreshBg(type: number): void {

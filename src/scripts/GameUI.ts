@@ -12,6 +12,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	private btn_scale: eui.Button;
 	private btn_gen: eui.Button;
 	private btn_swapMode: eui.Button;
+	private btn_test: eui.Button;
 	private btn_return: eui.Image;
 
 	private input_col: eui.TextInput;
@@ -28,6 +29,8 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	private img_role: eui.Image;
 	private mapTexture: egret.Bitmap = new egret.Bitmap();
 
+	private group_light: eui.Group;
+
 	private stepNum: number = 0;
 	private virt: VirtualRocker = new VirtualRocker();;
 
@@ -38,7 +41,6 @@ class GameUI extends eui.Component implements eui.UIComponent {
 
 	protected childrenCreated(): void {
 		super.childrenCreated();
-		this.stage.frameRate = 60;
 		this.addChild(this.virt);
 		this.virt.visible = false;
 		this.scroller.horizontalScrollBar.autoVisibility = false;
@@ -59,6 +61,10 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		this.btn_gen.addEventListener(egret.TouchEvent.TOUCH_TAP, this.GenMiGong, this);
 		this.btn_swapMode.addEventListener(egret.TouchEvent.TOUCH_TAP, this.GenMapTextrue, this);
 		this.btn_return.addEventListener(egret.TouchEvent.TOUCH_TAP, this.ReturnSignCell, this);
+		this.btn_test.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
+			this.gameControl.maskLight.setLightValue(100);
+		}, this);
+
 		this.input_speed.addEventListener(egret.Event.CHANGE, this.ModifySpeed, this)
 		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.BeginTouch, this);
 		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.Move, this);
@@ -114,6 +120,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	}
 
 	private CancelTouch() {
+		if (!this.gameControl) { return; }
 		this.gameControl.direction = null;
 		this.gameControl.RoleMoveState(1);	//停止移动
 		this.virt.stop();
@@ -121,7 +128,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	}
 
 	private BeginTouch(e: egret.TouchEvent): void {
-		if (this.list.numElements == 0) { return; }
+		if (!this.gameControl) { return; }
 		this.virt.x = e.stageX;
 		this.virt.y = e.stageY;
 		this.virt.start();
@@ -142,7 +149,8 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		this.InitManageRenders(GameUI.manageCells.cells);
 		this.GenMapTextrue();
 		this.img_mapBg.width = this.list.width;
-		this.gameControl = new GameControl(this.img_role, Number(this.input_speed.text))
+		this.group_light.width = this.list.width;
+		this.gameControl = new GameControl(this.img_role, this.group_light, Number(this.input_speed.text))
 		this.PlayStartAni();
 		egret.log("迷宫生成完成");
 	}
@@ -150,13 +158,12 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	/**生成地图底图 */
 	private GenMapTextrue(): void {
 		let group: eui.Group = <eui.Group>this.scroller.viewport;
-		if (this.mapTexture.parent == group) { group.removeChild(this.mapTexture); }
+		let mapTexture = this.mapTexture;
+		if (mapTexture.parent == group) { group.removeChild(mapTexture); }
 		var rt: egret.RenderTexture = new egret.RenderTexture();
 		rt.drawToTexture(this.list);
-		var _map = new egret.Bitmap();
-		_map.texture = rt;
-		this.mapTexture = _map;
-		group.addChildAt(_map, group.getChildIndex(this.list_bg) - 1);
+		mapTexture.texture = rt;
+		group.addChildAt(mapTexture, group.getChildIndex(this.list_bg) - 1);
 		this.list.visible = false;
 		egret.log("地图底图生成完成");
 	}

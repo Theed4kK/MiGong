@@ -8,7 +8,7 @@
 		<e:Image scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0" source="map2_box5_png" scale9Grid="10,10,67,67"/>
 		<e:Scroller id="scroller" touchEnabled="false" touchChildren="false" bounces="false" scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0">
 			<e:Group id="map" scaleX="1" scaleY="1" touchThrough="true">
-			<e:Image id="img_mapBg" top="0" fillMode="repeat" scaleX="1" scaleY="1" left="0" right="0" bottom="0" width="600" height="900" x="5" y="5" anchorOffsetX="0" includeInLayout="false" source="cell_bg_02_jpg"/>
+			<e:Image id="img_mapBg" top="1" fillMode="repeat" scaleX="1" scaleY="1" left="2" right="8" bottom="15" width="600" height="900" x="5" y="5" anchorOffsetX="0" includeInLayout="false" source="cell_bg_02_jpg"/>
 			<e:List id="list" scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0">
 				<e:layout>
 				<e:TileLayout horizontalGap="0" verticalGap="0" requestedRowCount="15" paddingLeft="5" paddingRight="5" paddingTop="8" paddingBottom="8"/>
@@ -19,10 +19,9 @@
 				<e:TileLayout horizontalGap="0" verticalGap="0" requestedRowCount="15" paddingTop="8" paddingBottom="8" paddingLeft="5" paddingRight="5"/>
 				</e:layout>
 			</e:List>
-				<e:Group id="group_role" width="60" height="60" x="120" y="348" includeInLayout="false">
-					<e:Image id="img_light" width="20" height="20" x="1" scaleX="1" scaleY="1" horizontalCenter="0" source="roundthumb_png" includeInLayout="false" verticalCenter="0" blendMode="erase"/>
-					<e:Image id="img_role" width="20" height="20" x="-9" scaleX="1" scaleY="1" horizontalCenter="0" source="roundthumb_png" includeInLayout="false" verticalCenter="0"/>
-				</e:Group>
+				<e:Group id="group_light" width="600" height="900" x="5" y="5" includeInLayout="false"/>
+				<e:Image id="img_role" width="20" height="20" x="-9" scaleX="1" scaleY="1" horizontalCenter="0" source="roundthumb_png" includeInLayout="false" verticalCenter="0"/>
+
 
 			<e:layout>
 				<e:HorizontalLayout gap="0"/>
@@ -37,7 +36,7 @@
 
 
 	<e:Group left="0" right="0" top="0" bottom="0" touchThrough="true" touchEnabled="false" touchChildren="true">
-		<e:Button id="btn_gen" label="重新生成" scaleX="1" scaleY="1"  horizontalCenter="0" bottom="94"/>
+		<e:Button id="btn_gen" label="重新生成" scaleX="1" scaleY="1"  horizontalCenter="-126.5" bottom="94"/>
 		<e:Button id="btn_scale" label="缩放" y="999" scaleX="1" scaleY="1" horizontalCenter="0"  visible="false"/>
 		<e:Button id="btn_swapMode" label="拖动" y="1000" scaleX="1" scaleY="1" right="120"  visible="false"/>
 		<e:Group height="74" bottom="0" anchorOffsetX="0" left="0" right="0" anchorOffsetY="0" touchChildren="true" touchEnabled="false" touchThrough="true">
@@ -49,6 +48,7 @@
 			<e:TextInput id="input_speed" width="88" height="30" x="520" anchorOffsetX="0" anchorOffsetY="0" text="8" verticalCenter="11"/>
 		</e:Group>
 		<e:Image id="btn_return" x="12.5" y="972" anchorOffsetX="0" anchorOffsetY="0" source="btn_change_png"/>
+		<e:Button id="btn_test" label="test" x="324.5" y="991"/>
 	</e:Group>
 	
 </e:Skin>

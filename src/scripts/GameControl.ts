@@ -1,7 +1,9 @@
 class GameControl extends eui.Component implements eui.UIComponent {
-	public constructor(img_role: eui.Image, speed: number, ) {
+	public constructor(img_role: eui.Image, group_light: eui.Group, speed: number, ) {
 		super();
 		this.img_role = img_role;
+		this.group_light = group_light;
+		this.InitLight();
 		this.speed = speed;
 		this.img_role.anchorOffsetX = this.img_role.width / 2;
 		this.img_role.anchorOffsetY = this.img_role.height / 2;
@@ -10,6 +12,31 @@ class GameControl extends eui.Component implements eui.UIComponent {
 	public direction: number;
 	public speed: number;
 	private img_role: eui.Image;
+	private group_light: eui.Group;
+	public maskLight: LightMask = new LightMask();
+	private lightBitMap: egret.Bitmap = new egret.Bitmap();
+
+	private InitLight() {
+		let maskLight = this.maskLight;
+		let group_light = this.group_light;
+		maskLight.setMaskSize(group_light.width, group_light.height);
+		maskLight.setLightValue(100);
+		this.DrawLightTexture();
+		group_light.addChild(this.lightBitMap);
+		maskLight.x = 0;
+		maskLight.y = 0;
+	}
+
+	private DrawLightTexture(){
+		let render: egret.RenderTexture = new egret.RenderTexture();
+		render.drawToTexture(this.maskLight);
+		this.lightBitMap.texture = render;
+	}
+
+	private RefreshLight() {
+		this.maskLight.setLightPos(this.img_role.x, this.img_role.y);
+		this.DrawLightTexture();
+	}
 
 	public RoleMoveState(state: number, start: number = 0, target: number = 0): void {
 		switch (state) {
@@ -56,38 +83,39 @@ class GameControl extends eui.Component implements eui.UIComponent {
 		let isEdge: boolean = false;
 		let obj: egret.DisplayObject = GameUI.manageRenders.currentRender;
 		let move: number = 0;
+		let img_role = this.img_role;
 
 		let nearCell: Cell = speedX < 0 ? cell.leftCell : cell.rightCell;
 		let nearWall: Wall = speedX < 0 ? cell.leftWall : cell.rightWall;
 		hasWall = (nearCell == null || !nearWall.isOpen);
 		isEdge = this.IsEdge(0);
 		if (hasWall || isEdge) {
-			let width: number = WallRender.vWallwidth * 0.5 + this.img_role.width * 0.5;
-			let distance: number = Math.abs(obj.x + (speedX < 0 ? 0 : 1) * obj.width / type - this.img_role.x) - width;
+			let width: number = WallRender.vWallwidth * 0.5 + img_role.width * 0.5;
+			let distance: number = Math.abs(obj.x + (speedX < 0 ? 0 : 1) * obj.width / type - img_role.x) - width;
 			move = speedX < 0 ? Math.max(-distance, speedX) : Math.min(distance, speedX);
 		}
 		else {
 			move = speedX;
 		}
-		this.img_role.x += move;
+		img_role.x += move;
 
 		nearCell = speedY < 0 ? cell.upCell : cell.downCell;
 		nearWall = speedY < 0 ? cell.upWall : cell.downWall;
 		hasWall = (nearCell == null || !nearWall.isOpen);
 		isEdge = this.IsEdge(1);
 		if (hasWall || isEdge) {
-			let height: number = WallRender.hWallHeight * 0.5 + this.img_role.height * 0.5;
-			let distance: number = Math.abs(obj.y + (speedY < 0 ? 0 : 1) * obj.height / type - this.img_role.y) - height;
+			let height: number = WallRender.hWallHeight * 0.5 + img_role.height * 0.5;
+			let distance: number = Math.abs(obj.y + (speedY < 0 ? 0 : 1) * obj.height / type - img_role.y) - height;
 			move = speedY < 0 ? Math.max(-distance, speedY) : Math.min(distance, speedY);
 		}
 		else {
 			move = speedY;
 		}
-		this.img_role.y += move;
+		img_role.y += move;
 
-		this.dispatchEventWith(MyEvent.moveScroll, false, { x: this.img_role.x, speed: speedX })
-		GameUI.manageCells.SetIndex(this.img_role.x, this.img_role.y);
-		
+		this.dispatchEventWith(MyEvent.moveScroll, false, { x: img_role.x, speed: speedX })
+		GameUI.manageCells.SetIndex(img_role.x, img_role.y);
+		this.RefreshLight();
 	}
 
 	private IsEdge(type: number): boolean {
