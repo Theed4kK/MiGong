@@ -1,18 +1,21 @@
 class WallRender extends eui.ItemRenderer {
 	public constructor() {
 		super()
-		this.addEventListener(egret.Event.COMPLETE, this.GetWallSize, this);
+		this.addEventListener(egret.Event.ADDED, this.GetWallSize, this);
 	}
 
 	private img_leftWall: eui.Image;
 	private img_rightWall: eui.Image;
 	private img_upWall: eui.Image;
 	private img_downWall: eui.Image;
+	private img_list: eui.Image[] = [];
+
+	private isPassed: boolean = false;
 
 	public static hWallHeight: number = 0;
 	public static vWallwidth: number = 0;
-	public static h: number = 0;
-	public static w: number = 0;
+	public static height: number = 0;
+	public static width: number = 0;
 
 	private GetWallSize(): void {
 		if (WallRender.hWallHeight == 0) {
@@ -21,31 +24,59 @@ class WallRender extends eui.ItemRenderer {
 		if (WallRender.vWallwidth == 0) {
 			WallRender.vWallwidth = this.img_leftWall.width;
 		}
-		if (WallRender.h == 0) {
-			WallRender.h = this.height;
+		if (WallRender.height == 0) {
+			WallRender.height = this.height;
 		}
-		if (WallRender.w == 0) {
-			WallRender.w = this.width;
+		if (WallRender.width == 0) {
+			WallRender.width = this.width;
 		}
 	}
 
 	protected dataChanged(): void {
 		let cell: Cell = this.data;
-
-		this.img_upWall.visible = cell.upWall == null ? true : !cell.upWall.isOpen;
-		this.img_downWall.visible = !cell.downCell;
-		this.img_leftWall.visible = cell.leftWall == null ? true : !cell.leftWall.isOpen;
-		this.img_rightWall.visible = !cell.rightCell;
-		this.SetLeftWall();
-
+		this.img_list = [this.img_upWall, this.img_downWall, this.img_leftWall, this.img_rightWall];
+		this.SetWallSize(cell);
+		this.img_list.forEach((v, i) => {
+			v.visible = cell.nearCells[i] == null;
+		})
 	}
 
-	private SetLeftWall(): void {
+	/**
+	 * LightingUp
+	 */
+	public LightingUp() {
+		if (this.isPassed) { return; }
 		let cell: Cell = this.data;
-		if (!cell.leftWall.isOpen) {
-			if (cell.downCell != null && !cell.downCell.upWall.isOpen) {
-				this.img_leftWall.bottom = this.img_upWall.height / 2;
+		this.SetWallSize(cell);
+		this.img_list.forEach((v, i) => {
+			let nearCell = cell.nearCells[i];
+			if (nearCell != null && !nearCell.isPassed) {
+				v.visible = !cell.walls[i].isOpen;
 			}
+		})
+		this.isPassed = true;
+	}
+
+	private SetWallSize(cell: Cell) {
+		if (cell.leftCell == null && cell.upCell == null) {
+			this.img_leftWall.top = -WallRender.hWallHeight / 2;
+		}
+		else {
+			if (cell.upCell == null) {
+				this.img_leftWall.top = WallRender.hWallHeight / 2;
+			}
+		}
+		if (cell.rightCell == null && cell.upCell == null) {
+			this.img_rightWall.top = -WallRender.hWallHeight / 2;
+		}
+		else {
+			if (cell.upCell == null) {
+				this.img_rightWall.top = WallRender.hWallHeight / 2;
+			}
+		}
+		if (cell.leftCell != null && cell.leftCell.isPassed) {
+			this.img_upWall.left = this.img_downWall.left = WallRender.vWallwidth / 2;
+
 		}
 	}
 
@@ -54,5 +85,4 @@ class WallRender extends eui.ItemRenderer {
 		egret.Tween.get(this.img_leftWall).wait(wait).to({ top: -2 }, aniTime);
 		return aniTime;
 	}
-
 }

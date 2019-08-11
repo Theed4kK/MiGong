@@ -2,7 +2,7 @@ class ManageCells extends eui.Component implements eui.UIComponent {
 	public constructor(cells: Cell[]) {
 		super();
 		this.cells = cells;
-		this._currentCell = cells[0];
+		this.SetCurrentCell();
 		this.col = this.currentCell.downCell.id - this.currentCell.id;
 	}
 
@@ -26,16 +26,21 @@ class ManageCells extends eui.Component implements eui.UIComponent {
 
 	/**设置当前所在格子编号 */
 	public SetIndex(roleX: number, roleY: number): void {
-		let h: number = Math.floor(roleX / WallRender.w);
-		let v: number = Math.floor(roleY / WallRender.h);
+		let h: number = Math.floor(roleX / WallRender.width);
+		let v: number = Math.floor(roleY / WallRender.height);
 		let index: number = v * this.col + h;
 		if (this._index != index) {
 			this._index = index
-			this._currentCell = this.cells[index]
-			this._currentCell.isPassed = true;
-			this.dispatchEventWith("RefreshCurRender", false, this.index);
+			this.SetCurrentCell();
 			this.SetReturnPath();
 		}
+	}
+
+	private SetCurrentCell() {
+		let self:ManageCells = this;
+		self._currentCell = self.cells[self.index]
+		self._currentCell.isPassed = true;
+		self.dispatchEventWith("RefreshCurRender", false, self.index);
 	}
 
 	/**设置返回路径 */

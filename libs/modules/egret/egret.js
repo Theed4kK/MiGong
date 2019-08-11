@@ -687,9 +687,45 @@ var egret;
             _this.$renderNode = null;
             _this.$renderDirty = false;
             _this.$renderMode = null;
+            /**
+             * inspired by pixi.js
+             */
+            _this._tint = 0;
+            /**
+             * @private
+             */
+            _this.$tintRGB = 0;
+            /**
+             * @private
+             * inspired by pixi.js
+             */
+            _this.$sortDirty = false;
+            /**
+             * @private
+             */
+            _this._zIndex = 0;
+            /**
+             * @private
+             */
+            _this.$lastSortedIndex = 0;
+            /**
+             * Allow objects to use zIndex sorting
+             * @version Egret 5.2.24
+             * @platform Web,Native
+             * @language en_US
+             */
+            /**
+             * 允许对象使用 zIndex 排序
+             * @version Egret 5.2.24
+             * @platform Web,Native
+             * @language zh_CN
+             */
+            _this.sortableChildren = false;
             if (egret.nativeRender) {
                 _this.createNativeDisplayObject();
             }
+            //默认都是纯白
+            _this.tint = 0xFFFFFF;
             return _this;
         }
         DisplayObject.prototype.createNativeDisplayObject = function () {
@@ -2679,6 +2715,57 @@ var egret;
             }
             return false;
         };
+        Object.defineProperty(DisplayObject.prototype, "tint", {
+            /**
+             * Set a tint color for the current object
+             * @version Egret 5.2.24
+             * @platform Web,Native
+             * @language en_US
+             */
+            /**
+             * 给当前对象设置填充色
+             * @version Egret 5.2.24
+             * @platform Web,Native
+             * @language zh_CN
+             */
+            get: function () {
+                return this._tint;
+            },
+            set: function (value) {
+                this._tint = value;
+                this.$tintRGB = (value >> 16) + (value & 0xff00) + ((value & 0xff) << 16);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        DisplayObject.prototype.sortChildren = function () {
+            this.$sortDirty = false;
+        };
+        Object.defineProperty(DisplayObject.prototype, "zIndex", {
+            /**
+             * the z-order (front-to-back order) of the object
+             * @version Egret 5.2.24
+             * @platform Web,Native
+             * @language en_US
+             */
+            /**
+             * 设置对象的 Z 轴顺序（前后顺序）
+             * @version Egret 5.2.24
+             * @platform Web,Native
+             * @language zh_CN
+             */
+            get: function () {
+                return this._zIndex;
+            },
+            set: function (value) {
+                this._zIndex = value;
+                if (this.parent) {
+                    this.parent.$sortDirty = true;
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
         /**
          * @private
          * The default touchEnabled property of DisplayObject
@@ -2850,6 +2937,10 @@ var egret;
             /**
              * @private
              */
+            _this.$ktxData = null;
+            /**
+             * @private
+             */
             _this.$rotated = false;
             return _this;
         }
@@ -2920,6 +3011,7 @@ var egret;
                 return this.$bitmapData;
             },
             set: function (value) {
+                this.$ktxData = null;
                 this._setBitmapData(value);
             },
             enumerable: true,
@@ -2943,6 +3035,59 @@ var egret;
             var w = value.width * scale;
             var h = value.height * scale;
             this.$initData(0, 0, w, h, 0, 0, w, h, value.width, value.height);
+        };
+        Object.defineProperty(Texture.prototype, "ktxData", {
+            /**
+             * The KTX object being referenced.
+            * @version Egret 5.2.21
+            * @platform Web,Native
+            * @language en_US
+            */
+            /**
+             * 被引用的 KTXData 对象。
+             * @version Egret 5.2.21
+             * @platform Web,Native
+             * @language zh_CN
+             */
+            get: function () {
+                return this.$ktxData;
+            },
+            set: function (data) {
+                this._setKtxData(data);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+        * Set the KTXData object.
+        * @version Egret 3.2.1
+        * @platform Web,Native
+        * @language en_US
+        */
+        /**
+         * 设置 KTXData 对象。
+         * @version Egret 3.2.1
+         * @platform Web,Native
+         * @language zh_CN
+         */
+        Texture.prototype._setKtxData = function (value) {
+            if (!value) {
+                egret.error('ktx data is null');
+                return;
+            }
+            if (value == this.$ktxData) {
+                return;
+            }
+            var ktx = new egret.KTXContainer(value, 1);
+            if (ktx.isInvalid) {
+                egret.error('ktx data is invalid');
+                return;
+            }
+            this.$ktxData = value;
+            var bitmapData = new egret.BitmapData(value);
+            bitmapData.format = 'ktx';
+            ktx.uploadLevels(bitmapData, false);
+            this._setBitmapData(bitmapData);
         };
         /**
          * @private
@@ -4391,6 +4536,27 @@ var egret;
             configurable: true
         });
         /**
+         * Set children sort mode.
+         * @param value {string} The sort mode
+         * @see egret.ChildrenSortMode
+         * @version Egret 5.2.19
+         * @platform Native
+         * @language en_US
+         */
+        /**
+         * 设置子项目的排序方式
+         * @param value {string} 排序方式
+         * @see egret.ChildrenSortMode
+         * @version Egret 5.2.19
+         * @platform Native
+         * @language en_US
+         */
+        DisplayObjectContainer.prototype.setChildrenSortMode = function (value) {
+            if (egret.nativeRender && this.$nativeDisplayObject.setChildrenSortMode) {
+                this.$nativeDisplayObject.setChildrenSortMode(value);
+            }
+        };
+        /**
          * Adds a child DisplayObject instance to this DisplayObjectContainer instance. The child is added to the front
          * (top) of all other children in this DisplayObjectContainer instance. (To add a child to a specific index position,
          * use the addChildAt() method.)If you add a child object that already has a different display object container
@@ -5105,6 +5271,32 @@ var egret;
                 return this;
             }
             return _super.prototype.$hitTest.call(this, stageX, stageY);
+        };
+        DisplayObjectContainer.prototype._sortChildrenFunc = function (a, b) {
+            if (a.zIndex === b.zIndex) {
+                return a.$lastSortedIndex - b.$lastSortedIndex;
+            }
+            return a.zIndex - b.zIndex;
+        };
+        DisplayObjectContainer.prototype.sortChildren = function () {
+            //关掉脏的标记
+            _super.prototype.sortChildren.call(this);
+            this.$sortDirty = false;
+            //准备重新排序
+            var sortRequired = false;
+            var children = this.$children;
+            var child = null;
+            for (var i = 0, j = children.length; i < j; ++i) {
+                child = children[i];
+                child.$lastSortedIndex = i;
+                if (!sortRequired && child.zIndex !== 0) {
+                    sortRequired = true;
+                }
+            }
+            if (sortRequired && children.length > 1) {
+                //开始排
+                children.sort(this._sortChildrenFunc);
+            }
         };
         /**
          * @private
@@ -7261,6 +7453,90 @@ var egret;
 var egret;
 (function (egret) {
     /**
+     * The ChildrenSortMode class defines a pattern enumeration for children sort mode of egret.DisplayObjectContainer.
+     * @version Egret 5.2.19
+     * @platform Native
+     * @language en_US
+     */
+    /**
+     * BitmapFillMode 类定义egret.DisplayObjectContainer的子项目排序方式。
+     * @version Egret 5.2.19
+     * @platform Native
+     * @language zh_CN
+     */
+    egret.ChildrenSortMode = {
+        /**
+         * Default mode.
+         * @version Egret 5.2.19
+         * @platform Native
+         * @language en_US
+         */
+        /**
+         * 默认方式。
+         * @version Egret 5.2.19
+         * @platform Native
+         * @language zh_CN
+         */
+        DEFAULT: "default",
+        /**
+         * Y increase mode. Automatic sorted ascending by y coordinates.
+         * @version Egret 5.2.19
+         * @platform Native
+         * @language en_US
+         */
+        /**
+         * Y递增模式。自动按y坐标升序排序。
+         * @version Egret 5.2.19
+         * @platform Native
+         * @language en_US
+         */
+        INCREASE_Y: "increaseY",
+        /**
+         * Y decrease mode. Automatic sorted descending by y coordinates.
+         * @version Egret 5.2.19
+         * @platform Native
+         * @language en_US
+         */
+        /**
+         * Y递减模式。自动按y坐标降序排序。
+         * @version Egret 5.2.19
+         * @platform Native
+         * @language en_US
+         */
+        DECREASE_Y: "decreaseY"
+    };
+})(egret || (egret = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-present, Egret Technology.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var egret;
+(function (egret) {
+    /**
      * The CapsStyle class is an enumeration of constant values that specify the caps style to use in drawing lines.
      * The constants are provided for use as values in the caps parameter of the egret.Graphics.lineStyle() method.
      * @see egret.Graphics#lineStyle()
@@ -7425,6 +7701,24 @@ var egret;
                 }
             }
             */
+        };
+        /**
+         * inspired by pixi.js
+         */
+        WebGLUtils.premultiplyTint = function (tint, alpha) {
+            if (alpha === 1.0) {
+                return (alpha * 255 << 24) + tint;
+            }
+            if (alpha === 0.0) {
+                return 0;
+            }
+            var R = ((tint >> 16) & 0xFF);
+            var G = ((tint >> 8) & 0xFF);
+            var B = (tint & 0xFF);
+            R = ((R * alpha) + 0.5) | 0;
+            G = ((G * alpha) + 0.5) | 0;
+            B = ((B * alpha) + 0.5) | 0;
+            return (alpha * 255 << 24) + (R << 16) + (G << 8) + B;
         };
         return WebGLUtils;
     }());
@@ -8651,6 +8945,7 @@ var egret;
     egret.engine_default_empty_texture = 'engine_default_empty_texture';
     egret.is_compressed_texture = 'is_compressed_texture';
     egret.glContext = 'glContext';
+    egret.UNPACK_PREMULTIPLY_ALPHA_WEBGL = 'UNPACK_PREMULTIPLY_ALPHA_WEBGL';
     /**
      * A BitmapData object contains an array of pixel data. This data can represent either a fully opaque bitmap or a
      * transparent bitmap that contains alpha channel data. Either type of BitmapData object is stored as a buffer of 32-bit
@@ -8901,9 +9196,6 @@ var egret;
             delete BitmapData._displayList[hashCode];
         };
         BitmapData.prototype._getCompressedTextureData = function (level, face) {
-            if (true) {
-                //level face is valid?
-            }
             var levelData = this.compressedTextureData[level];
             return levelData ? levelData[face] : null;
         };
@@ -13921,34 +14213,6 @@ var egret;
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-present, Egret Technology.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
 var egret;
 (function (egret) {
     /** !!!!!!!!inspired by Babylon.js!!!!!!!!!!!!!
@@ -14079,6 +14343,40 @@ var egret;
     }());
     egret.KTXContainer = KTXContainer;
     __reflect(KTXContainer.prototype, "egret.KTXContainer");
+})(egret || (egret = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-present, Egret Technology.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var egret;
+(function (egret) {
+    var sys;
+    (function (sys) {
+    })(sys = egret.sys || (egret.sys = {}));
 })(egret || (egret = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -14448,13 +14746,21 @@ var egret;
         }
         sys.getContext2d = getContext2d;
         /**
-        * 重新设置主canvas的大小
+        * 仅通过bitmapData创建纹理
         */
         function createTexture(renderContext, bitmapData) {
             console.error("empty sys.createTexture = " + bitmapData);
             return null;
         }
         sys.createTexture = createTexture;
+        /**
+        * 通过 width, height, data创建纹理
+        */
+        function _createTexture(renderContext, width, height, data) {
+            console.error("empty sys._createTexture = " + width + ", " + height + ", " + data);
+            return null;
+        }
+        sys._createTexture = _createTexture;
         /**
          * 画texture
          **/
@@ -14463,6 +14769,39 @@ var egret;
             return 0;
         }
         sys.drawTextureElements = drawTextureElements;
+        /**
+         * 测量文本的宽度
+         * @param context
+         * @param text
+         */
+        function measureTextWith(context, text) {
+            console.error("empty sys.measureTextWith = " + context + ", " + text);
+            return 0;
+        }
+        sys.measureTextWith = measureTextWith;
+        /**
+         * 为CanvasRenderBuffer创建一个canvas
+         * @param defaultFunc
+         * @param width
+         * @param height
+         * @param root
+         */
+        function createCanvasRenderBufferSurface(defaultFunc, width, height, root) {
+            console.error("empty sys.createCanvasRenderBufferSurface = " + width + ", " + height);
+            return null;
+        }
+        sys.createCanvasRenderBufferSurface = createCanvasRenderBufferSurface;
+        /**
+         * 改变渲染缓冲的大小并清空缓冲区
+         * @param renderContext
+         * @param width
+         * @param height
+         * @param useMaxSize
+         */
+        function resizeCanvasRenderBuffer(renderContext, width, height, useMaxSize) {
+            console.error("empty sys.resizeContext = " + renderContext + ", " + width + ", " + height + ", " + useMaxSize);
+        }
+        sys.resizeCanvasRenderBuffer = resizeCanvasRenderBuffer;
     })(sys = egret.sys || (egret.sys = {}));
 })(egret || (egret = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -17488,6 +17827,19 @@ var egret;
          */
         RuntimeType.RUNTIME2 = "runtime2";
         /**
+         * Running on Alipay
+         * @version Egret 5.2.23
+         * @platform All
+         * @language en_US
+         */
+        /**
+         * 运行在支付宝小游戏上
+         * @version Egret 5.2.26
+         * @platform All
+         * @language zh_CN
+         */
+        RuntimeType.MYGAME = "mygame";
+        /**
          * Running on WeChat mini game
          * @version Egret 5.1.5
          * @platform All
@@ -17527,12 +17879,44 @@ var egret;
          */
         RuntimeType.QGAME = "qgame";
         /**
+         * Running on OPPO mini game
+         * @version Egret 5.2.14
+         * @platform All
+         * @language en_US
+         */
+        /**
          * 运行在 Oppo 小游戏上
          * @version Egret 5.2.14
          * @platform All
          * @language zh_CN
          */
         RuntimeType.OPPOGAME = "oppogame";
+        /**
+        * Running on QQ mini game
+        * @version Egret 5.2.25
+        * @platform All
+        * @language en_US
+        */
+        /**
+        * 运行在 QQ 小游戏上
+        * @version Egret 5.2.25
+        * @platform All
+        * @language zh_CN
+        */
+        RuntimeType.QQGAME = "qqgame";
+        /**
+         * Running on vivo mini game
+         * @version Egret 5.2.23
+         * @platform All
+         * @language en_US
+         */
+        /**
+        * 运行在 vivo 小游戏上
+        * @version Egret 5.2.23
+        * @platform All
+        * @language zh_CN
+        */
+        RuntimeType.VIVOGAME = "vivogame";
     })(RuntimeType = egret.RuntimeType || (egret.RuntimeType = {}));
     /**
      * The Capabilities class provides properties that describe the system and runtime that are hosting the application.
@@ -17649,7 +18033,7 @@ var egret;
          * @platform Web,Native
          * @language zh_CN
          */
-        Capabilities.engineVersion = "5.2.20";
+        Capabilities.engineVersion = "5.2.25";
         /***
          * current render mode.
          * @type {string}
@@ -24216,6 +24600,18 @@ var egret;
             }
             return egret_cos_map[value];
         };
+        NumberUtils.convertStringToHashCode = function (str) {
+            if (str.length === 0) {
+                return 0;
+            }
+            var hash = 0;
+            for (var i = 0, length_9 = str.length; i < length_9; ++i) {
+                var chr = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + chr;
+                hash |= 0; // Convert to 32bit integer
+            }
+            return hash;
+        };
         return NumberUtils;
     }());
     egret.NumberUtils = NumberUtils;
@@ -25447,9 +25843,3 @@ var egret;
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
-var egret;
-(function (egret) {
-    var sys;
-    (function (sys) {
-    })(sys = egret.sys || (egret.sys = {}));
-})(egret || (egret = {}));

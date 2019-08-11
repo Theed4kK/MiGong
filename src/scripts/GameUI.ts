@@ -6,8 +6,8 @@ class GameUI extends eui.Component implements eui.UIComponent {
 
 	public static manageCells: ManageCells;
 	public static manageRenders: ManageRenders;
-	private list: eui.List;
-	private list_bg: eui.List;
+	private list_wall: eui.List;
+	private list_cell: eui.List;
 
 	private btn_scale: eui.Button;
 	private btn_gen: eui.Button;
@@ -24,20 +24,17 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	private gameControl: GameControl;
 
 	private scroller: eui.Scroller;
-	private img_mapBg: eui.Image;
+	// private img_mapBg: eui.Image;
 	private img_Bg: eui.Image;
 	private img_role: eui.Image;
+	private img_mask: eui.Image;
 	private mapTexture: egret.Bitmap = new egret.Bitmap();
 
 	private group_light: eui.Group;
 
+
 	private stepNum: number = 0;
 	private virt: VirtualRocker = new VirtualRocker();;
-
-	protected partAdded(partName: string, instance: any): void {
-		super.partAdded(partName, instance);
-	}
-
 
 	protected childrenCreated(): void {
 		super.childrenCreated();
@@ -52,14 +49,13 @@ class GameUI extends eui.Component implements eui.UIComponent {
 
 	/**初始化迷宫墙和地面贴图 */
 	private InitManageRenders(cells: Cell[]): void {
-		GameUI.manageRenders = new ManageRenders(this.list, this.list_bg);
+		GameUI.manageRenders = new ManageRenders(this.list_wall, this.list_cell);
 		GameUI.manageRenders.InitRenders(cells);
 	}
 
 	private AddListener(): void {
 		this.btn_scale.addEventListener(egret.TouchEvent.TOUCH_TAP, this.SetListScale, this);
 		this.btn_gen.addEventListener(egret.TouchEvent.TOUCH_TAP, this.GenMiGong, this);
-		this.btn_swapMode.addEventListener(egret.TouchEvent.TOUCH_TAP, this.GenMapTextrue, this);
 		this.btn_return.addEventListener(egret.TouchEvent.TOUCH_TAP, this.ReturnSignCell, this);
 		this.btn_test.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
 			this.gameControl.maskLight.setLightValue(100);
@@ -124,7 +120,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		this.gameControl.direction = null;
 		this.gameControl.RoleMoveState(1);	//停止移动
 		this.virt.stop();
-		egret.log("停止触摸");
+		// egret.log("停止触摸");
 	}
 
 	private BeginTouch(e: egret.TouchEvent): void {
@@ -133,7 +129,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		this.virt.y = e.stageY;
 		this.virt.start();
 		this.gameControl.RoleMoveState(0);	//开始移动
-		egret.log("开始触摸");
+		// egret.log("开始触摸");
 	}
 
 	private ModifySpeed(): void {
@@ -144,29 +140,34 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	private GenMiGong(): void {
 		let row: number = 15;
 		let col: number = Number(this.input_col.text);
-		this.txt_stepNum.text = "已探索：0";
+		let self: GameUI = this;
+		self.txt_stepNum.text = "已探索：0";
 		GameUI.manageCells = new ManageCells(GenCells.GetCells(row, col));
-		this.InitManageRenders(GameUI.manageCells.cells);
-		this.GenMapTextrue();
-		this.img_mapBg.width = this.list.width;
-		this.group_light.width = this.list.width;
-		this.gameControl = new GameControl(this.img_role, this.group_light, Number(this.input_speed.text))
-		this.PlayStartAni();
+		self.InitManageRenders(GameUI.manageCells.cells);
+		self.InitMask();
+
+		//初始化角色控制器和光照效果
+		self.gameControl = new GameControl(this.img_role, this.group_light, Number(this.input_speed.text))
+
+		self.PlayStartAni();
 		egret.log("迷宫生成完成");
 	}
 
-	/**生成地图底图 */
-	private GenMapTextrue(): void {
-		let group: eui.Group = <eui.Group>this.scroller.viewport;
-		let mapTexture = this.mapTexture;
-		if (mapTexture.parent == group) { group.removeChild(mapTexture); }
-		var rt: egret.RenderTexture = new egret.RenderTexture();
-		rt.drawToTexture(this.list);
-		mapTexture.texture = rt;
-		group.addChildAt(mapTexture, group.getChildIndex(this.list_bg) - 1);
-		this.list.visible = false;
-		egret.log("地图底图生成完成");
+	/**处理遮罩 需要地图生成完成后调用 */
+	private InitMask() {
+		let self: GameUI = this;
+		// self.img_mapBg.width = self.list.width;
+		self.img_mask.x = WallRender.vWallwidth;
+		self.img_mask.y = WallRender.hWallHeight;
+		self.img_mask.width = self.list_wall.width - WallRender.vWallwidth * 2;
+		self.img_mask.height = self.list_wall.height - WallRender.hWallHeight * 2;
+		self.group_light.x = WallRender.vWallwidth;
+		self.group_light.y = WallRender.hWallHeight;
+		self.group_light.width = self.list_wall.width - WallRender.vWallwidth * 2;
+		self.group_light.height = self.list_wall.height - WallRender.hWallHeight * 2;
 	}
+
+
 
 	/**播放开始动画 */
 	private PlayStartAni(): void {

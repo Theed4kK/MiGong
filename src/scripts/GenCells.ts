@@ -20,35 +20,26 @@ class GenCells {
 			cells.push(cell);
 		}
 
-		let t: number = 0;
 		for (var i: number = 0; i < row; i++) {
 			for (var j: number = 0; j < col; j++) {
 				let c: Cell = cells[i][j];
 				c.upCell = (i == 0 ? null : cells[i - 1][j]);
-				if (c.upWall == null) {
-					c.upWall = new Wall();
-					c.upWall.id = t;
-					t++;
-					c.upWall.cell1Id = c.upCell != null ? c.upCell.id : null;
+				if (c.upCell != null) {
+					c.upWall.cell1Id = c.upCell.id;
 					c.upWall.cell2Id = c.id;
-					if (c.upCell != null) {
-						c.upCell.downWall = c.upWall;
-					}
+					c.upCell.downWall = c.upCell.walls[1] = c.upWall;
 				}
 				c.downCell = (i == row - 1 ? null : cells[i + 1][j]);
 
 				c.leftCell = (j == 0 ? null : cells[i][j - 1]);
-				if (c.leftWall == null) {
-					c.leftWall = new Wall();
-					c.leftWall.id = t;
-					t++;
-					c.leftWall.cell1Id = c.leftCell != null ? c.leftCell.id : null;
+				if (c.leftCell != null) {
+					c.leftWall.cell1Id = c.leftCell.id;
 					c.leftWall.cell2Id = c.id;
-					if (c.leftCell != null) {
-						c.leftCell.rightWall = c.leftWall;
-					}
+					c.leftCell.rightWall = c.leftCell.walls[3] = c.leftWall;
 				}
 				c.rightCell = (j == col - 1 ? null : cells[i][j + 1]);
+				c.nearCells = [c.upCell, c.downCell, c.leftCell, c.rightCell];
+				c.walls = [c.upWall, c.downWall, c.leftWall, c.rightWall];
 			}
 		}
 

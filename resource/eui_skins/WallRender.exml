@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin class="WallRenderSkin" width="60" height="60" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" >
 	<w:Config id="16b367ba8b3" ></w:Config>
-	<e:Image id="img_upWall" top="-8" anchorOffsetX="0" source="wall2_png" fillMode="repeat" left="-5" right="-5" touchEnabled="false"/>
+	<e:Image id="img_upWall" top="-8" anchorOffsetX="0" source="wall2_png" fillMode="repeat" left="-5" right="-5" touchEnabled="false" height="16"/>
 
-	<e:Image id="img_rightWall" anchorOffsetX="0" right="-5" fillMode="repeat" source="wall1_png" top="-8" bottom="0" touchEnabled="false"/>
-	<e:Image id="img_leftWall" anchorOffsetX="0" source="wall1_png" left="-5" fillMode="repeat" top="-5" bottom="0" touchEnabled="false"/>
+	<e:Image id="img_rightWall" anchorOffsetX="0" right="-5" fillMode="repeat" touchEnabled="false" top="-8" bottom="0" source="wall1_png" width="10"/>
+	<e:Image id="img_leftWall" source="wall1_png" left="-5" fillMode="repeat" top="0" touchEnabled="false" bottom="0"/>
 
 
 
-	<e:Image id="img_downWall" bottom="-8" anchorOffsetY="0" source="wall2_png" fillMode="repeat" anchorOffsetX="0" left="-5" right="-5" touchEnabled="false"/>
+	<e:Image id="img_downWall" bottom="-8" anchorOffsetY="0" fillMode="repeat" anchorOffsetX="0" left="-5" right="-5" touchEnabled="false" source="wall2_png" height="16"/>
 </e:Skin>

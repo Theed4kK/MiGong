@@ -16,6 +16,7 @@ class GameControl extends eui.Component implements eui.UIComponent {
 	public maskLight: LightMask = new LightMask();
 	private lightBitMap: egret.Bitmap = new egret.Bitmap();
 
+	/**初始化光照 */
 	private InitLight() {
 		let maskLight = this.maskLight;
 		let group_light = this.group_light;
@@ -27,14 +28,15 @@ class GameControl extends eui.Component implements eui.UIComponent {
 		maskLight.y = 0;
 	}
 
-	private DrawLightTexture(){
+	private DrawLightTexture() {
 		let render: egret.RenderTexture = new egret.RenderTexture();
 		render.drawToTexture(this.maskLight);
 		this.lightBitMap.texture = render;
 	}
 
 	private RefreshLight() {
-		this.maskLight.setLightPos(this.img_role.x, this.img_role.y);
+		let role = this.img_role;
+		this.maskLight.setLightPos(role.x + role.width / 2, role.y + role.height / 2);
 		this.DrawLightTexture();
 	}
 
@@ -66,7 +68,7 @@ class GameControl extends eui.Component implements eui.UIComponent {
 		} else {
 			index = path[0] + 0.5;
 		}
-		this.direction = Math.atan2(index * WallRender.h - this.img_role.y, index * WallRender.w - this.img_role.x);
+		this.direction = Math.atan2(index * WallRender.height - this.img_role.y, index * WallRender.width - this.img_role.x);
 		this.RoleMove(2);
 	}
 
@@ -76,20 +78,21 @@ class GameControl extends eui.Component implements eui.UIComponent {
 	/**角色移动,type:1为手动引动  2为自动移动 */
 	private RoleMove(type: number = 1): void {
 		if (this.direction == null) { return; }
+
+		// let startTimer: number = egret.getTimer();
+
 		let speedX = Math.cos(this.direction) * this.speed * type;
 		let speedY = Math.sin(this.direction) * this.speed * type;
 		let cell: Cell = GameUI.manageCells.currentCell;
-		let hasWall: boolean = false;
-		let isEdge: boolean = false;
 		let obj: egret.DisplayObject = GameUI.manageRenders.currentRender;
 		let move: number = 0;
 		let img_role = this.img_role;
+		let isEdge: boolean = false;
 
 		let nearCell: Cell = speedX < 0 ? cell.leftCell : cell.rightCell;
 		let nearWall: Wall = speedX < 0 ? cell.leftWall : cell.rightWall;
-		hasWall = (nearCell == null || !nearWall.isOpen);
 		isEdge = this.IsEdge(0);
-		if (hasWall || isEdge) {
+		if (!nearWall.isOpen || isEdge) {
 			let width: number = WallRender.vWallwidth * 0.5 + img_role.width * 0.5;
 			let distance: number = Math.abs(obj.x + (speedX < 0 ? 0 : 1) * obj.width / type - img_role.x) - width;
 			move = speedX < 0 ? Math.max(-distance, speedX) : Math.min(distance, speedX);
@@ -101,9 +104,8 @@ class GameControl extends eui.Component implements eui.UIComponent {
 
 		nearCell = speedY < 0 ? cell.upCell : cell.downCell;
 		nearWall = speedY < 0 ? cell.upWall : cell.downWall;
-		hasWall = (nearCell == null || !nearWall.isOpen);
 		isEdge = this.IsEdge(1);
-		if (hasWall || isEdge) {
+		if (!nearWall.isOpen || isEdge) {
 			let height: number = WallRender.hWallHeight * 0.5 + img_role.height * 0.5;
 			let distance: number = Math.abs(obj.y + (speedY < 0 ? 0 : 1) * obj.height / type - img_role.y) - height;
 			move = speedY < 0 ? Math.max(-distance, speedY) : Math.min(distance, speedY);
@@ -116,6 +118,7 @@ class GameControl extends eui.Component implements eui.UIComponent {
 		this.dispatchEventWith(MyEvent.moveScroll, false, { x: img_role.x, speed: speedX })
 		GameUI.manageCells.SetIndex(img_role.x, img_role.y);
 		this.RefreshLight();
+		// egret.log(egret.getTimer() - startTimer + "ms");
 	}
 
 	private IsEdge(type: number): boolean {

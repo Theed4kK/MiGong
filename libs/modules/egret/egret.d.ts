@@ -1291,6 +1291,67 @@ declare namespace egret {
          * @platform Web,Native
          */
         willTrigger(type: string): boolean;
+        /**
+         * inspired by pixi.js
+         */
+        private _tint;
+        /**
+         * @private
+         */
+        $tintRGB: number;
+        /**
+         * Set a tint color for the current object
+         * @version Egret 5.2.24
+         * @platform Web,Native
+         * @language en_US
+         */
+        /**
+         * 给当前对象设置填充色
+         * @version Egret 5.2.24
+         * @platform Web,Native
+         * @language zh_CN
+         */
+        tint: number;
+        /**
+         * @private
+         * inspired by pixi.js
+         */
+        $sortDirty: boolean;
+        sortChildren(): void;
+        /**
+         * @private
+         */
+        private _zIndex;
+        /**
+         * the z-order (front-to-back order) of the object
+         * @version Egret 5.2.24
+         * @platform Web,Native
+         * @language en_US
+         */
+        /**
+         * 设置对象的 Z 轴顺序（前后顺序）
+         * @version Egret 5.2.24
+         * @platform Web,Native
+         * @language zh_CN
+         */
+        zIndex: number;
+        /**
+         * @private
+         */
+        $lastSortedIndex: number;
+        /**
+         * Allow objects to use zIndex sorting
+         * @version Egret 5.2.24
+         * @platform Web,Native
+         * @language en_US
+         */
+        /**
+         * 允许对象使用 zIndex 排序
+         * @version Egret 5.2.24
+         * @platform Web,Native
+         * @language zh_CN
+         */
+        sortableChildren: boolean;
     }
 }
 declare namespace egret {
@@ -1433,6 +1494,10 @@ declare namespace egret {
         /**
          * @private
          */
+        $ktxData: ArrayBuffer;
+        /**
+         * @private
+         */
         $rotated: boolean;
         /**
          * The BitmapData object being referenced.
@@ -1460,6 +1525,32 @@ declare namespace egret {
          * @language zh_CN
          */
         _setBitmapData(value: BitmapData): void;
+        /**
+         * The KTX object being referenced.
+        * @version Egret 5.2.21
+        * @platform Web,Native
+        * @language en_US
+        */
+        /**
+         * 被引用的 KTXData 对象。
+         * @version Egret 5.2.21
+         * @platform Web,Native
+         * @language zh_CN
+         */
+        ktxData: ArrayBuffer;
+        /**
+        * Set the KTXData object.
+        * @version Egret 3.2.1
+        * @platform Web,Native
+        * @language en_US
+        */
+        /**
+         * 设置 KTXData 对象。
+         * @version Egret 3.2.1
+         * @platform Web,Native
+         * @language zh_CN
+         */
+        _setKtxData(value: ArrayBuffer): void;
         /**
          * @private
          * 设置Texture数据
@@ -2616,6 +2707,23 @@ declare namespace egret {
          */
         readonly numChildren: number;
         /**
+         * Set children sort mode.
+         * @param value {string} The sort mode
+         * @see egret.ChildrenSortMode
+         * @version Egret 5.2.19
+         * @platform Native
+         * @language en_US
+         */
+        /**
+         * 设置子项目的排序方式
+         * @param value {string} 排序方式
+         * @see egret.ChildrenSortMode
+         * @version Egret 5.2.19
+         * @platform Native
+         * @language en_US
+         */
+        setChildrenSortMode(value: string): void;
+        /**
          * Adds a child DisplayObject instance to this DisplayObjectContainer instance. The child is added to the front
          * (top) of all other children in this DisplayObjectContainer instance. (To add a child to a specific index position,
          * use the addChildAt() method.)If you add a child object that already has a different display object container
@@ -2941,6 +3049,8 @@ declare namespace egret {
          * @private
          */
         $hitTest(stageX: number, stageY: number): DisplayObject;
+        private _sortChildrenFunc(a, b);
+        sortChildren(): void;
     }
 }
 declare namespace egret {
@@ -3666,6 +3776,7 @@ declare namespace egret_native {
     class NativeDisplayObject {
         id: number;
         constructor(type: number);
+        setChildrenSortMode(mode: string): void;
         addChildAt(childId: number, index: number): void;
         removeChild(childId: number): void;
         swapChild(index1: number, index2: number): void;
@@ -4302,6 +4413,25 @@ declare namespace egret.sys {
 }
 declare namespace egret {
     /**
+     * The ChildrenSortMode class defines a pattern enumeration for children sort mode of egret.DisplayObjectContainer.
+     * @version Egret 5.2.19
+     * @platform Native
+     * @language en_US
+     */
+    /**
+     * BitmapFillMode 类定义egret.DisplayObjectContainer的子项目排序方式。
+     * @version Egret 5.2.19
+     * @platform Native
+     * @language zh_CN
+     */
+    const ChildrenSortMode: {
+        DEFAULT: string;
+        INCREASE_Y: string;
+        DECREASE_Y: string;
+    };
+}
+declare namespace egret {
+    /**
      * The CapsStyle class is an enumeration of constant values that specify the caps style to use in drawing lines.
      * The constants are provided for use as values in the caps parameter of the egret.Graphics.lineStyle() method.
      * @see egret.Graphics#lineStyle()
@@ -4334,6 +4464,10 @@ declare namespace egret {
         private static canUseWebGL;
         static checkCanUseWebGL(): boolean;
         static deleteWebGLTexture(webglTexture: WebGLTexture): void;
+        /**
+         * inspired by pixi.js
+         */
+        static premultiplyTint(tint: number, alpha: number): number;
     }
 }
 declare namespace egret {
@@ -5576,6 +5710,7 @@ declare namespace egret {
     const engine_default_empty_texture = "engine_default_empty_texture";
     const is_compressed_texture = "is_compressed_texture";
     const glContext = "glContext";
+    const UNPACK_PREMULTIPLY_ALPHA_WEBGL = "UNPACK_PREMULTIPLY_ALPHA_WEBGL";
     /**
      * A BitmapData object contains an array of pixel data. This data can represent either a fully opaque bitmap or a
      * transparent bitmap that contains alpha channel data. Either type of BitmapData object is stored as a buffer of 32-bit
@@ -9216,59 +9351,6 @@ declare module egret {
      */
     var nativeRender: boolean;
 }
-/**
- * @private
- */
-interface PlayerOption {
-    /**
-     * 入口类完整类名
-     */
-    entryClassName?: string;
-    /**
-     * 默认帧率
-     */
-    frameRate?: number;
-    /**
-     * 屏幕适配模式
-     */
-    scaleMode?: string;
-    /**
-     * 初始内容宽度
-     */
-    contentWidth?: number;
-    /**
-     * 初始内容高度
-     */
-    contentHeight?: number;
-    /**
-     * 屏幕方向
-     */
-    orientation?: string;
-    /**
-     * 显示FPS
-     */
-    showFPS?: boolean;
-    /**
-     *
-     */
-    fpsStyles?: Object;
-    /**
-     * 显示日志
-     */
-    showLog?: boolean;
-    /**
-     * 过滤日志的正则表达式
-     */
-    logFilter?: string;
-    /**
-     *
-     */
-    maxTouches?: number;
-    /**
-     *
-     */
-    textureScaleFactor?: number;
-}
 declare namespace egret {
     /** !!!!!!!!inspired by Babylon.js!!!!!!!!!!!!!
      * for description see https://www.khronos.org/opengles/sdk/tools/KTX/
@@ -9355,6 +9437,93 @@ declare namespace egret {
         uploadLevels(bitmapData: egret.BitmapData, loadMipmaps: boolean): void;
         private _upload2DCompressedLevels(bitmapData, loadMipmaps);
     }
+}
+declare namespace egret.sys {
+    /**
+     * @private
+     * 共享的用于碰撞检测的渲染缓冲
+     */
+    let customHitTestBuffer: sys.RenderBuffer;
+    /**
+     * @private
+     * 共享的用于canvas碰撞检测的渲染缓冲
+     */
+    let canvasHitTestBuffer: sys.RenderBuffer;
+    /**
+     * @private
+     * 渲染缓冲
+     */
+    interface RenderBuffer {
+        /**
+         * 呈现最终绘图结果的画布。
+         * @readOnly
+         */
+        surface: any;
+        /**
+         * 渲染上下文。
+         * @readOnly
+         */
+        context: any;
+        /**
+         * 渲染缓冲的宽度，以像素为单位。
+         * @readOnly
+         */
+        width: number;
+        /**
+         * 渲染缓冲的高度，以像素为单位。
+         * @readOnly
+         */
+        height: number;
+        /**
+         * 改变渲染缓冲的大小并清空缓冲区
+         * @param width 改变后的宽
+         * @param height 改变后的高
+         * @param useMaxSize 若传入true，则将改变后的尺寸与已有尺寸对比，保留较大的尺寸。
+         */
+        resize(width: number, height: number, useMaxSize?: boolean): void;
+        /**
+         * 获取指定区域的像素
+         */
+        getPixels(x: number, y: number, width?: number, height?: number): number[];
+        /**
+         * 转换成base64字符串，如果图片（或者包含的图片）跨域，则返回null
+         * @param type 转换的类型，如: "image/png","image/jpeg"
+         */
+        toDataURL(type?: string, ...args: any[]): string;
+        /**
+         * 清空缓冲区数据
+         */
+        clear(): void;
+        /**
+         * 销毁渲染缓冲
+         */
+        destroy(): void;
+    }
+    /**
+     * @private
+     */
+    let RenderBuffer: {
+        /**
+         * 创建一个RenderTarget。
+         * 注意：若内存不足或创建缓冲区失败，将会抛出错误异常。
+         * @param width 渲染缓冲的初始宽
+         * @param height 渲染缓冲的初始高
+         * @param root 是否为舞台buffer
+         */
+        new (width?: number, height?: number, root?: boolean): RenderBuffer;
+    };
+    /**
+     * @private
+     */
+    let CanvasRenderBuffer: {
+        /**
+         * 创建一个CanvasRenderBuffer。
+         * 注意：若内存不足或创建缓冲区失败，将会抛出错误异常。
+         * @param width 渲染缓冲的初始宽
+         * @param height 渲染缓冲的初始高
+         */
+        new (width?: number, height?: number): RenderBuffer;
+    };
 }
 declare namespace egret.sys {
     /**
@@ -9607,13 +9776,39 @@ declare namespace egret.sys {
     function getContextWebGL(surface: HTMLCanvasElement): WebGLRenderingContext;
     function getContext2d(surface: HTMLCanvasElement): CanvasRenderingContext2D;
     /**
-    * 重新设置主canvas的大小
+    * 仅通过bitmapData创建纹理
     */
     function createTexture(renderContext: RenderContext, bitmapData: BitmapData | HTMLCanvasElement): WebGLTexture;
+    /**
+    * 通过 width, height, data创建纹理
+    */
+    function _createTexture(renderContext: RenderContext, width: number, height: number, data: any): WebGLTexture;
     /**
      * 画texture
      **/
     function drawTextureElements(renderContext: RenderContext, data: any, offset: number): number;
+    /**
+     * 测量文本的宽度
+     * @param context
+     * @param text
+     */
+    function measureTextWith(context: CanvasRenderingContext2D, text: string): number;
+    /**
+     * 为CanvasRenderBuffer创建一个canvas
+     * @param defaultFunc
+     * @param width
+     * @param height
+     * @param root
+     */
+    function createCanvasRenderBufferSurface(defaultFunc: (width?: number, height?: number) => HTMLCanvasElement, width?: number, height?: number, root?: boolean): HTMLCanvasElement;
+    /**
+     * 改变渲染缓冲的大小并清空缓冲区
+     * @param renderContext
+     * @param width
+     * @param height
+     * @param useMaxSize
+     */
+    function resizeCanvasRenderBuffer(renderContext: RenderContext, width: number, height: number, useMaxSize?: boolean): void;
 }
 declare namespace egret.sys {
     /**
@@ -10764,6 +10959,19 @@ declare namespace egret {
          */
         const RUNTIME2 = "runtime2";
         /**
+         * Running on Alipay
+         * @version Egret 5.2.23
+         * @platform All
+         * @language en_US
+         */
+        /**
+         * 运行在支付宝小游戏上
+         * @version Egret 5.2.26
+         * @platform All
+         * @language zh_CN
+         */
+        const MYGAME = "mygame";
+        /**
          * Running on WeChat mini game
          * @version Egret 5.1.5
          * @platform All
@@ -10803,12 +11011,44 @@ declare namespace egret {
          */
         const QGAME = "qgame";
         /**
+         * Running on OPPO mini game
+         * @version Egret 5.2.14
+         * @platform All
+         * @language en_US
+         */
+        /**
          * 运行在 Oppo 小游戏上
          * @version Egret 5.2.14
          * @platform All
          * @language zh_CN
          */
         const OPPOGAME = "oppogame";
+        /**
+        * Running on QQ mini game
+        * @version Egret 5.2.25
+        * @platform All
+        * @language en_US
+        */
+        /**
+        * 运行在 QQ 小游戏上
+        * @version Egret 5.2.25
+        * @platform All
+        * @language zh_CN
+        */
+        const QQGAME = "qqgame";
+        /**
+         * Running on vivo mini game
+         * @version Egret 5.2.23
+         * @platform All
+         * @language en_US
+         */
+        /**
+        * 运行在 vivo 小游戏上
+        * @version Egret 5.2.23
+        * @platform All
+        * @language zh_CN
+        */
+        const VIVOGAME = "vivogame";
     }
     interface SupportedCompressedTexture {
         pvrtc: boolean;
@@ -14345,6 +14585,7 @@ declare namespace egret {
          * @returns
          */
         private static cosInt(value);
+        static convertStringToHashCode(str: string): number;
     }
 }
 /**
@@ -15068,90 +15309,56 @@ declare namespace egret {
      */
     function toColorString(value: number): string;
 }
-declare namespace egret.sys {
+/**
+ * @private
+ */
+interface PlayerOption {
     /**
-     * @private
-     * 共享的用于碰撞检测的渲染缓冲
+     * 入口类完整类名
      */
-    let customHitTestBuffer: sys.RenderBuffer;
+    entryClassName?: string;
     /**
-     * @private
-     * 共享的用于canvas碰撞检测的渲染缓冲
+     * 默认帧率
      */
-    let canvasHitTestBuffer: sys.RenderBuffer;
+    frameRate?: number;
     /**
-     * @private
-     * 渲染缓冲
+     * 屏幕适配模式
      */
-    interface RenderBuffer {
-        /**
-         * 呈现最终绘图结果的画布。
-         * @readOnly
-         */
-        surface: any;
-        /**
-         * 渲染上下文。
-         * @readOnly
-         */
-        context: any;
-        /**
-         * 渲染缓冲的宽度，以像素为单位。
-         * @readOnly
-         */
-        width: number;
-        /**
-         * 渲染缓冲的高度，以像素为单位。
-         * @readOnly
-         */
-        height: number;
-        /**
-         * 改变渲染缓冲的大小并清空缓冲区
-         * @param width 改变后的宽
-         * @param height 改变后的高
-         * @param useMaxSize 若传入true，则将改变后的尺寸与已有尺寸对比，保留较大的尺寸。
-         */
-        resize(width: number, height: number, useMaxSize?: boolean): void;
-        /**
-         * 获取指定区域的像素
-         */
-        getPixels(x: number, y: number, width?: number, height?: number): number[];
-        /**
-         * 转换成base64字符串，如果图片（或者包含的图片）跨域，则返回null
-         * @param type 转换的类型，如: "image/png","image/jpeg"
-         */
-        toDataURL(type?: string, ...args: any[]): string;
-        /**
-         * 清空缓冲区数据
-         */
-        clear(): void;
-        /**
-         * 销毁渲染缓冲
-         */
-        destroy(): void;
-    }
+    scaleMode?: string;
     /**
-     * @private
+     * 初始内容宽度
      */
-    let RenderBuffer: {
-        /**
-         * 创建一个RenderTarget。
-         * 注意：若内存不足或创建缓冲区失败，将会抛出错误异常。
-         * @param width 渲染缓冲的初始宽
-         * @param height 渲染缓冲的初始高
-         * @param root 是否为舞台buffer
-         */
-        new (width?: number, height?: number, root?: boolean): RenderBuffer;
-    };
+    contentWidth?: number;
     /**
-     * @private
+     * 初始内容高度
      */
-    let CanvasRenderBuffer: {
-        /**
-         * 创建一个CanvasRenderBuffer。
-         * 注意：若内存不足或创建缓冲区失败，将会抛出错误异常。
-         * @param width 渲染缓冲的初始宽
-         * @param height 渲染缓冲的初始高
-         */
-        new (width?: number, height?: number): RenderBuffer;
-    };
+    contentHeight?: number;
+    /**
+     * 屏幕方向
+     */
+    orientation?: string;
+    /**
+     * 显示FPS
+     */
+    showFPS?: boolean;
+    /**
+     *
+     */
+    fpsStyles?: Object;
+    /**
+     * 显示日志
+     */
+    showLog?: boolean;
+    /**
+     * 过滤日志的正则表达式
+     */
+    logFilter?: string;
+    /**
+     *
+     */
+    maxTouches?: number;
+    /**
+     *
+     */
+    textureScaleFactor?: number;
 }

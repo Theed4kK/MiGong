@@ -5,12 +5,7 @@ class LightMask extends egret.Sprite {
 
 	public constructor() {
 		super();
-		let self = this;
-		// self.blendMode = egret.BlendMode.ERASE;
-		// self.graphics.beginFill(0xcc00cc);
-		// self.graphics.drawRect(0, 0, 500, 500);
-		// self.graphics.endFill();
-
+		let self: LightMask = this;
 		self.lightMatrix = new egret.Matrix();
 
 		self.cirleLight = new egret.Shape();

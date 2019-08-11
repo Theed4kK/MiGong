@@ -3,11 +3,6 @@ class CellBgRender extends eui.ItemRenderer {
 		super();
 	}
 
-	protected partAdded(partName: string, instance: any): void {
-		super.partAdded(partName, instance);
-	}
-
-
 	protected childrenCreated(): void {
 		super.childrenCreated();
 	}
@@ -20,50 +15,15 @@ class CellBgRender extends eui.ItemRenderer {
 	protected dataChanged(): void {
 		let cell: Cell = this.data;
 		if (cell.id == 0) {
+			this.img_bg.visible = true;
+		}
+		else {
 			this.img_bg.visible = false;
-			cell.isPassed = true;
-			return;
-		}
-		// this.img_bg.visible = false;
-		if (cell.id == 1 && !cell.leftWall.isOpen) {
-			this.img_bg.left = WallRender.vWallwidth / 2;
-		}
-		if (cell.upCell != null && cell.upCell.id == 0 && !cell.upWall.isOpen) {
-			this.img_bg.top = WallRender.hWallHeight / 2;
-		}
-		//最右下角的出口标志
-		if (cell.rightCell == null && cell.downCell == null) {
-			this.img_exitSign.visible = true;
-		}
-		//左边边界格子
-		if (cell.leftCell == null) {
-			this.img_bg.left = WallRender.vWallwidth / 2;
-		}
-		//右边边界格子
-		if (cell.rightCell == null) {
-			this.img_bg.right = WallRender.vWallwidth / 2;
-		}
-		//上边边界格子
-		if (cell.upCell == null) {
-			this.img_bg.top = WallRender.hWallHeight / 2;
-		}
-		//下边边界格子
-		if (cell.downCell == null) {
-			this.img_bg.bottom = WallRender.hWallHeight / 2;
 		}
 	}
 
 	public LightenUp(): void {
-		egret.Tween.get(this.img_bg).to({ alpha: 0 }, 200);
-	}
-
-	public RefreshBg(type: number): void {
-		switch (type) {
-			case 0: egret.Tween.get(this.img_bg).to({ right: WallRender.vWallwidth / 2 }, 500); break;
-			case 1: egret.Tween.get(this.img_bg).to({ left: WallRender.vWallwidth / 2 }, 500); break;
-			case 2: egret.Tween.get(this.img_bg).to({ bottom: WallRender.hWallHeight / 2 }, 500); break;
-			case 3: egret.Tween.get(this.img_bg).to({ top: WallRender.hWallHeight / 2 }, 500); break;
-		}
+		this.img_bg.visible = true;
 	}
 
 	public SetReturnSign(): void {

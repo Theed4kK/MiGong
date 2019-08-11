@@ -1,22 +1,22 @@
 class Cell {
 	public constructor() {
-		this.isPassed = false;
-		this.isSigned = false;
-		this.upCell = this.downCell = this.leftCell = this.rightCell = null;
 	}
 
-	public upWall: Wall;
-	public downWall: Wall;
-	public leftWall: Wall;
-	public rightWall: Wall;
+	/**0:上墙 1:下墙 2:左墙 3:右墙 */
+	public upWall: Wall = new Wall();
+	public downWall: Wall = new Wall();;
+	public leftWall: Wall = new Wall();;
+	public rightWall: Wall = new Wall();;
+	public walls: Wall[] = [];
 
-	public upCell: Cell;
-	public downCell: Cell;
-	public leftCell: Cell;
-	public rightCell: Cell;
+	public upCell: Cell = null;;
+	public downCell: Cell = null;;
+	public leftCell: Cell = null;;
+	public rightCell: Cell = null;;
+	public nearCells: Cell[] = [];
 
-	public isSigned: boolean;
-	public isPassed: boolean;
+	public isSigned: boolean = false;
+	public isPassed: boolean = false;;
 	public id: number;
 
 }

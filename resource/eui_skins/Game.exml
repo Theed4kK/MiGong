@@ -4,22 +4,25 @@
 	<w:Config id="16b364587c8"></w:Config>
 	<e:Image id="img_Bg" horizontalCenter="0" verticalCenter="0" source="loading_jpg" x="0" y="0" scaleX="1" scaleY="1"
 	         touchEnabled="false" />
-	<e:Group height="916" top="56" left="15" right="15" touchThrough="false" touchEnabled="false" touchChildren="false">
+	<e:Group height="916" top="56" left="0" right="0" touchThrough="false" touchEnabled="false" touchChildren="false">
 		<e:Image scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0" source="map2_box5_png" scale9Grid="10,10,67,67"/>
 		<e:Scroller id="scroller" touchEnabled="false" touchChildren="false" bounces="false" scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0">
-			<e:Group id="map" scaleX="1" scaleY="1" touchThrough="true">
-			<e:Image id="img_mapBg" top="1" fillMode="repeat" scaleX="1" scaleY="1" left="2" right="8" bottom="15" width="600" height="900" x="5" y="5" anchorOffsetX="0" includeInLayout="false" source="cell_bg_02_jpg"/>
-			<e:List id="list" scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0">
-				<e:layout>
-				<e:TileLayout horizontalGap="0" verticalGap="0" requestedRowCount="15" paddingLeft="5" paddingRight="5" paddingTop="8" paddingBottom="8"/>
-				</e:layout>
-			</e:List>
-			<e:List id="list_bg" scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0" includeInLayout="false">
+			<e:Group id="map" scaleX="1" scaleY="1" touchThrough="false" touchChildren="false" touchEnabled="false">
+
+				<e:Image id="img_mask" top="8" fillMode="repeat" scaleX="1" scaleY="1" left="5" right="5" bottom="8" width="600" height="900" anchorOffsetX="0" includeInLayout="false" x="10" y="16" source="rect_png"/>
+				<e:Image id="img_mapBg" top="8" fillMode="repeat" scaleX="1" scaleY="1" left="5" right="5" bottom="8" width="600" height="900" anchorOffsetX="0" includeInLayout="false" source="cell_bg_02_jpg" visible="false"/>
+
+			<e:List id="list_cell" scaleX="1" scaleY="1" includeInLayout="false">
 				<e:layout>
 				<e:TileLayout horizontalGap="0" verticalGap="0" requestedRowCount="15" paddingTop="8" paddingBottom="8" paddingLeft="5" paddingRight="5"/>
 				</e:layout>
 			</e:List>
-				<e:Group id="group_light" width="600" height="900" x="5" y="5" includeInLayout="false"/>
+				<e:List id="list_wall" scaleX="1" scaleY="1">
+					<e:layout>
+					<e:TileLayout horizontalGap="0" verticalGap="0" requestedRowCount="15" paddingLeft="5" paddingRight="5" paddingTop="8" paddingBottom="8"/>
+					</e:layout>
+				</e:List>
+				<e:Group id="group_light" includeInLayout="false" y="16" height="900" x="10"/>
 				<e:Image id="img_role" width="20" height="20" x="-9" scaleX="1" scaleY="1" horizontalCenter="0" source="roundthumb_png" includeInLayout="false" verticalCenter="0"/>
 
 
