@@ -47,7 +47,6 @@ class WallRender extends eui.ItemRenderer {
 	public LightingUp() {
 		if (this.isPassed) { return; }
 		let cell: Cell = this.data;
-		this.SetWallSize(cell);
 		this.img_list.forEach((v, i) => {
 			let nearCell = cell.nearCells[i];
 			if (nearCell != null && !nearCell.isPassed) {
@@ -58,25 +57,13 @@ class WallRender extends eui.ItemRenderer {
 	}
 
 	private SetWallSize(cell: Cell) {
-		if (cell.leftCell == null && cell.upCell == null) {
-			this.img_leftWall.top = -WallRender.hWallHeight / 2;
+		if (cell.upCell == null) {
+			this.img_leftWall.top = WallRender.hWallHeight / 2
+			this.img_rightWall.top = WallRender.hWallHeight / 2
 		}
-		else {
-			if (cell.upCell == null) {
-				this.img_leftWall.top = WallRender.hWallHeight / 2;
-			}
-		}
-		if (cell.rightCell == null && cell.upCell == null) {
-			this.img_rightWall.top = -WallRender.hWallHeight / 2;
-		}
-		else {
-			if (cell.upCell == null) {
-				this.img_rightWall.top = WallRender.hWallHeight / 2;
-			}
-		}
-		if (cell.leftCell != null && cell.leftCell.isPassed) {
-			this.img_upWall.left = this.img_downWall.left = WallRender.vWallwidth / 2;
-
+		if (cell.downCell == null) {
+			this.img_leftWall.bottom = WallRender.hWallHeight / 2
+			this.img_rightWall.bottom = WallRender.hWallHeight / 2
 		}
 	}
 
