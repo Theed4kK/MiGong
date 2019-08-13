@@ -3,5 +3,5 @@
 	<w:Config id="16b70ad5af4" ></w:Config>
 	<e:Image id="img_bg" left="-5" right="-5" top="-8" bottom="-8" fillMode="scale" alpha="1" source="cell_bg_02_jpg"/>
 
-	<e:Image id="img_exitSign" left="10" right="10" top="10" bottom="10" source="100_png"/>
+	<e:Image id="img_exitSign" left="10" right="10" top="10" bottom="10" source=""/>
 </e:Skin>

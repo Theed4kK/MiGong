@@ -17,11 +17,12 @@ class CellBgRender extends eui.ItemRenderer {
 
 		if (cell.item != 0) {
 			let item = ItemLib.configs[cell.item];
-			this.img_exitSign.texture = RES.getRes(item.pic)
+			this.img_exitSign.source = item.pic;
 		}
 		else {
 			if (cell.isSpecial) {
-				this.img_exitSign.texture = RES.getRes("532_png")
+				this.img_exitSign.source = RES.getRes("532_png")
+				egret.log("特殊地面ID--->" + cell.id);
 			}
 			else {
 				this.img_exitSign.visible = false;
@@ -36,12 +37,13 @@ class CellBgRender extends eui.ItemRenderer {
 		if (cell.downCell == null && cell.rightCell == null) {
 			this.visible = true;
 			this.img_bg.visible = false;
-			this.img_exitSign.texture = RES.getRes("100_png")
+			this.img_exitSign.source = RES.getRes("100_png")
 		}
 	}
 
 	public LightenUp(): void {
 		this.visible = true;
+		
 	}
 
 	public SetReturnSign(): void {
