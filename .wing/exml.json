@@ -5,7 +5,7 @@
     "parentPath": ""
   },
   "global": {
-    "globalAutoLayerMarkEnable": false
+    "globalAutoLayerMarkEnable": true
   },
   "16b56b6b06d": {
     "path": "scripts\\MapScroller.ts",
@@ -20,6 +20,11 @@
   "16b78c6ee92": {
     "path": "scripts\\VirtualRocker.ts",
     "class": "VirtualRocker",
+    "parentPath": ""
+  },
+  "16c6b5bfcd8": {
+    "path": "scripts\\ItemUI.ts",
+    "class": "ItemUI",
     "parentPath": ""
   }
 }

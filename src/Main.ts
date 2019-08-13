@@ -74,6 +74,7 @@ class Main extends eui.UILayer {
             this.stage.addChild(loadingView);
             await RES.loadGroup("preload", 0, loadingView);
             Config.InitCofing();
+            
             this.stage.removeChild(loadingView);
         }
         catch (e) {

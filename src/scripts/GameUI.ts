@@ -144,7 +144,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		let col: number = Number(this.input_col.text);
 		let self: GameUI = this;
 		self.txt_stepNum.text = "已探索：0";
-		GameUI.manageCells = new ManageCells(GenCells.GetCells(row, col));
+		GameUI.manageCells = new ManageCells(GenCells.GetCells());
 		self.InitManageRenders(GameUI.manageCells.cells);
 		self.InitMask();
 

@@ -8,6 +8,7 @@ class ItemLib {
 	public need_point:number;
 	public weight:number;
 	public des: string;
+	public pic:string;
 	public need_item: string;
 	public need_num: string;
 

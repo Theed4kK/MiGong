@@ -5,7 +5,7 @@
 			"name": "loading"
 		},
 		{
-			"keys": "wall2_png,wall2_1_png,wall1_png,loading_jpg,cell_bg_03_jpg,cell_bg_02_jpg,cell_bg_01_jpg,common_json,padIcon_png,padIcon_01_png,rect_png,item_json",
+			"keys": "wall2_png,wall2_1_png,wall1_png,loading_jpg,cell_bg_03_jpg,cell_bg_02_jpg,cell_bg_01_jpg,common_json,padIcon_png,padIcon_01_png,rect_png,item_json,map_json",
 			"name": "preload"
 		}
 	],
@@ -10400,6 +10400,11 @@
 			"name": "item_json",
 			"type": "json",
 			"url": "gameConfig/item.json"
+		},
+		{
+			"name": "map_json",
+			"type": "json",
+			"url": "gameConfig/map.json"
 		}
 	]
 }

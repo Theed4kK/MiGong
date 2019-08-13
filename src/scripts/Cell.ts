@@ -15,8 +15,15 @@ class Cell {
 	public rightCell: Cell = null;;
 	public nearCells: Cell[] = [];
 
+	/**生成时用来标记是否已经被处理过 */
 	public isSigned: boolean = false;
+
+	/**行走时用来标记格子是否已经通过 */
 	public isPassed: boolean = false;;
+
 	public id: number;
+
+	public item: number = 0;
+	public isSpecial: boolean;
 
 }

@@ -3,9 +3,12 @@ class GenCells {
 	}
 
 	/**根据行和列返回格子列表 */
-	public static GetCells(row: number, col: number): Cell[] {
+	public static GetCells(): Cell[] {
 		let cells: Cell[][] = [];
 		let allCell: Cell[] = [];
+		let map: MapLib = MapLib.configs[1];
+		let row = 15;
+		let col = map.size;
 
 		let tmp: number = 0;
 		for (var i: number = 0; i < row; i++) {
@@ -20,6 +23,7 @@ class GenCells {
 			cells.push(cell);
 		}
 
+		//初始化格子/墙的id和关联
 		for (var i: number = 0; i < row; i++) {
 			for (var j: number = 0; j < col; j++) {
 				let c: Cell = cells[i][j];
@@ -43,6 +47,39 @@ class GenCells {
 			}
 		}
 
+		allCell = GenCells.SetCellDrop(allCell, map);
+
+		allCell = GenCells.SetWallOpen(allCell);
+		return allCell;
+	}
+
+	private static SetCellDrop(allCell: Cell[], map: MapLib) {
+		let drop_item: number[] = <number[]>Common.ParseField(map.drop_item);
+		let drop_num: number[] = <number[]>Common.ParseField(map.drop_num);
+		let allItems: number[] = [];
+		drop_num.forEach((num, index) => {
+			for (let i = 0; i < num; i++) {
+				allItems.push(drop_item[index]);
+			}
+		})
+		allItems.sort((a, b) => { return Math.random() > .5 ? -1 : 1; })
+		allCell.forEach((v, index, arr) => {
+			if (v.id != 0 && v.id != arr.length - 1) {
+				let itemNum = allItems.length;
+				let cellNum = allCell.length - 2;
+				if (itemNum != 0 && (itemNum / cellNum) > Math.random()) {
+					v.item = allItems[0];
+					allItems.splice(0, 1);
+				}
+				else {
+					v.isSpecial = (map.special_chance / 10000) > Math.random()
+				}
+			}
+		})
+		return allCell;
+	}
+
+	private static SetWallOpen(allCell: Cell[]) {
 		allCell[0].isSigned = true;
 		let signedCell: Cell[] = [];
 		let designedCell: Cell[] = [];

@@ -9,7 +9,7 @@
     "des": "这是物品1",
     "need_item": "1,2",
     "need_num": "3,2",
-    "pic": ""
+    "pic": "gold_1_png"
   },
   {
     "id": 2,
@@ -21,7 +21,7 @@
     "des": "这是物品2",
     "need_item": "2,3",
     "need_num": "3,2",
-    "pic": ""
+    "pic": "gold_2_png"
   },
   {
     "id": 3,
@@ -33,7 +33,7 @@
     "des": "这是物品3",
     "need_item": "1,2",
     "need_num": "3,2",
-    "pic": ""
+    "pic": "gold_3_png"
   },
   {
     "id": 4,
@@ -45,7 +45,7 @@
     "des": "这是物品4",
     "need_item": "1,2",
     "need_num": "3,2",
-    "pic": ""
+    "pic": "gold_4_png"
   },
   {
     "id": 5,
@@ -57,6 +57,6 @@
     "des": "这是物品5",
     "need_item": "",
     "need_num": "",
-    "pic": ""
+    "pic": "gold_5_png"
   }
 ]

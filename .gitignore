@@ -12,8 +12,8 @@ bin-debug/scripts/Cell.js
 bin-debug/scripts/Cell.js.map
 bin-debug/scripts/CellBgRender.js
 bin-debug/scripts/CellBgRender.js.map
-bin-debug/scripts/CellRender.js
-bin-debug/scripts/CellRender.js.map
+bin-debug/scripts/WallRender.js
+bin-debug/scripts/WallRender.js.map
 bin-debug/scripts/Common.js
 bin-debug/scripts/Common.js.map
 bin-debug/scripts/GameControl.js

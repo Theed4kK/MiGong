@@ -5,6 +5,6 @@ class Config extends eui.UILayer {
 
 	public static InitCofing() {
 		ItemLib.Init(RES.getRes('item_json'));
-		ItemManage.LoadData();
+		MapLib.Init(RES.getRes('map_json'));
 	}
 }

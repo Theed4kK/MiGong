@@ -9,7 +9,7 @@
 		"libs/modules/promise/promise.js"
 	],
 	"game": [
-		"bin-debug/scripts/GenCells.js",
+		"bin-debug/scripts/ItemUI.js",
 		"bin-debug/AssetAdapter.js",
 		"bin-debug/Main.js",
 		"bin-debug/Platform.js",
@@ -20,16 +20,18 @@
 		"bin-debug/scripts/Config.js",
 		"bin-debug/scripts/GameControl.js",
 		"bin-debug/scripts/GameUI.js",
+		"bin-debug/scripts/GenCells.js",
 		"bin-debug/LoadingUI.js",
-		"bin-debug/scripts/ItemLib.js",
-		"bin-debug/scripts/ItemManage.js",
-		"bin-debug/scripts/ItemUI.js",
 		"bin-debug/scripts/LightMask.js",
 		"bin-debug/scripts/ManageCells.js",
 		"bin-debug/scripts/ManageRenders.js",
 		"bin-debug/scripts/MyEvent.js",
 		"bin-debug/scripts/VirtualRocker.js",
 		"bin-debug/scripts/Wall.js",
-		"bin-debug/scripts/WallRender.js"
+		"bin-debug/scripts/WallRender.js",
+		"bin-debug/scripts/Cofing/ItemLib.js",
+		"bin-debug/scripts/Cofing/MapLib.js",
+		"bin-debug/scripts/PlayerData/ItemManage.js",
+		"bin-debug/scripts/PlayerData/PlayerData.js"
 	]
 }
