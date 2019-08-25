@@ -47,12 +47,21 @@ class GenCells {
 			}
 		}
 
-		allCell = GenCells.SetCellDrop(allCell, map);
+		GenCells.SetCellDrop(allCell, map);
+		GenCells.SetWallOpen(allCell);
+		GenCells.SetWallSize(allCell);
 
-		allCell = GenCells.SetWallOpen(allCell);
 		return allCell;
 	}
 
+	private static SetWallSize(allCell: Cell[]) {
+		allCell.forEach(v => {
+			
+
+		})
+	}
+
+	/**掉落和特殊地面生成 */
 	private static SetCellDrop(allCell: Cell[], map: MapLib) {
 		let drop_item: number[] = <number[]>Common.ParseField(map.drop_item);
 		let drop_num: number[] = <number[]>Common.ParseField(map.drop_num);
@@ -76,9 +85,9 @@ class GenCells {
 				}
 			}
 		})
-		return allCell;
 	}
 
+	/**生成迷宫核心逻辑,设置通道(移除两个格子之间的墙) */
 	private static SetWallOpen(allCell: Cell[]) {
 		allCell[0].isSigned = true;
 		let signedCell: Cell[] = [];
@@ -107,7 +116,6 @@ class GenCells {
 				signingCell = signedCell[num - 1];
 			}
 		}
-		return allCell;
 	}
 
 	/**获取周围未访问的格子集合 */

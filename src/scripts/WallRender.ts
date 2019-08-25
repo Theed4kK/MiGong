@@ -8,7 +8,6 @@ class WallRender extends eui.ItemRenderer {
 	private img_rightWall: eui.Image;
 	private img_upWall: eui.Image;
 	private img_downWall: eui.Image;
-	private img_list: eui.Image[] = [];
 
 	private isPassed: boolean = false;
 
@@ -34,11 +33,12 @@ class WallRender extends eui.ItemRenderer {
 
 	protected dataChanged(): void {
 		let cell: Cell = this.data;
-		this.img_list = [this.img_upWall, this.img_downWall, this.img_leftWall, this.img_rightWall];
 		this.SetWallSize(cell);
-		this.img_list.forEach((v, i) => {
-			v.visible = cell.nearCells[i] == null;
-		})
+		this.img_leftWall.visible = !cell.leftWall.isOpen;
+		this.img_upWall.visible = !cell.upWall.isOpen;
+		this.img_downWall.visible = !cell.downWall.isOpen;
+		this.img_rightWall.visible = !cell.rightWall.isOpen;
+		this.visible = cell.id == 0
 	}
 
 	/**
@@ -47,24 +47,19 @@ class WallRender extends eui.ItemRenderer {
 	public LightingUp() {
 		if (this.isPassed) { return; }
 		let cell: Cell = this.data;
-		this.img_list.forEach((v, i) => {
-			let nearCell = cell.nearCells[i];
-			if (nearCell != null && !nearCell.isPassed) {
-				v.visible = !cell.walls[i].isOpen;
-			}
-		})
+		this.visible = true;
 		this.isPassed = true;
 	}
 
 	private SetWallSize(cell: Cell) {
-		if (cell.upCell == null) {
-			this.img_leftWall.top = WallRender.hWallHeight / 2
-			this.img_rightWall.top = WallRender.hWallHeight / 2
-		}
-		if (cell.downCell == null) {
-			this.img_leftWall.bottom = WallRender.hWallHeight / 2
-			this.img_rightWall.bottom = WallRender.hWallHeight / 2
-		}
+		this.img_leftWall.top = cell.leftWall.top * WallRender.hWallHeight * 0.5
+		this.img_leftWall.bottom = cell.leftWall.bottom * WallRender.hWallHeight * 0.5
+		this.img_rightWall.top = cell.rightWall.top * WallRender.hWallHeight * 0.5
+		this.img_rightWall.bottom = cell.rightWall.bottom * WallRender.hWallHeight * 0.5
+		this.img_upWall.left = cell.upWall.left * WallRender.vWallwidth * 0.5;
+		this.img_upWall.right = cell.upWall.right * WallRender.vWallwidth * 0.5;
+		this.img_downWall.left = cell.downWall.left * WallRender.vWallwidth * 0.5;
+		this.img_downWall.right = cell.downWall.right * WallRender.vWallwidth * 0.5;
 	}
 
 	public StartAni(wait: number): number {
