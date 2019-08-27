@@ -138,6 +138,7 @@ var Main = (function (_super) {
                         return [4 /*yield*/, RES.loadGroup("preload", 0, loadingView)];
                     case 4:
                         _a.sent();
+                        Config.InitCofing();
                         this.stage.removeChild(loadingView);
                         return [3 /*break*/, 6];
                     case 5:

@@ -1,89 +1,16 @@
 var __reflect = (this && this.__reflect) || function (p, c, t) {
     p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
 };
-var __extends = this && this.__extends || function __extends(t, e) { 
- function r() { 
- this.constructor = t;
-}
-for (var i in e) e.hasOwnProperty(i) && (t[i] = e[i]);
-r.prototype = e.prototype, t.prototype = new r();
-};
-var GenCells = (function (_super) {
-    __extends(GenCells, _super);
+var GenCells = (function () {
     function GenCells() {
-        var _this = _super.call(this) || this;
-        _this.lastIndex = 0;
-        _this.cells = [];
-        _this.returnPath = [0];
-        _this.returnCell = null;
-        return _this;
     }
-    GenCells.prototype.SetIndex = function (roleX, roleY) {
-        var h = Math.floor(roleX / CellRender.w);
-        var v = Math.floor(roleY / CellRender.h);
-        var index = v * this.col + h;
-        egret.log("编号-----》" + this.index);
-        if (this.index != index) {
-            this.index = index;
-            this.SetReturnPath();
-        }
-    };
-    GenCells.prototype.SetReturnPath = function () {
-        if (this.GetOpenWallNum(this.cells[this.index]) == 3 && (this.returnCell == null || this.returnPath.length > 5)) {
-            this.returnPath = [];
-            if (this.returnCell != null) {
-                this.returnCell.HideReturnSign();
-            }
-            this.returnCell = this.cellList.getElementAt(this.index);
-            this.returnCell.SetReturnSign();
-        }
-        if (this.returnCell != null && this.returnPath.indexOf(this.index) == -1) {
-            this.returnPath.push(this.index);
-        }
-    };
-    GenCells.prototype.GetOpenWallNum = function (cell) {
-        var num = cell.downCell != null && cell.downCell.upWall.isExit ? 1 : 0;
-        num += cell.upCell != null && cell.upWall.isExit ? 1 : 0;
-        num += cell.leftCell != null && cell.leftWall.isExit ? 1 : 0;
-        num += cell.rightCell != null && cell.leftCell.leftWall.isExit ? 1 : 0;
-        return num;
-    };
-    GenCells.prototype.RefreshCell = function (dir, speed) {
-        if (!this.cells[this.index].isPassed) {
-            this.dispatchEvent(new MyEvent(MyEvent.updateStepNum));
-            var cellBgRender = this.cellList.getElementAt(this.index);
-            cellBgRender.LightenUp(dir, speed);
-            // this.RefreshAroundCells();
-            this.cells[this.index].isPassed = true;
-        }
-    };
-    GenCells.prototype.RefreshAroundCells = function () {
-        var cell = this.cells[this.index];
-        var leftCell = this.cells[this.index].leftCell;
-        if (leftCell != null && !cell.leftWall.isExit && !leftCell.isPassed) {
-            var cellBgRender = this.cellList.getElementAt(this.index - 1);
-            cellBgRender.RefreshBg(0);
-        }
-        var rightCell = this.cells[this.index].rightCell;
-        if (rightCell != null && !rightCell.leftWall.isExit && !rightCell.isPassed) {
-            var cellBgRender = this.cellList.getElementAt(this.index + 1);
-            cellBgRender.RefreshBg(1);
-        }
-        var upCell = this.cells[this.index].upCell;
-        if (upCell != null && !cell.upWall.isExit && !upCell.isPassed) {
-            var cellBgRender = this.cellList.getElementAt(this.index - this.col);
-            cellBgRender.RefreshBg(2);
-        }
-        var downCell = this.cells[this.index].downCell;
-        if (downCell != null && !downCell.upWall.isExit && !downCell.isPassed) {
-            var cellBgRender = this.cellList.getElementAt(this.index + this.col);
-            cellBgRender.RefreshBg(3);
-        }
-    };
-    GenCells.prototype.GetCells = function (row, col) {
-        this.col = col;
+    /**根据行和列返回格子列表 */
+    GenCells.GetCells = function () {
         var cells = [];
         var allCell = [];
+        var map = MapLib.configs[1];
+        var row = 15;
+        var col = map.size;
         var tmp = 0;
         for (var i = 0; i < row; i++) {
             var cell = [];
@@ -96,36 +23,64 @@ var GenCells = (function (_super) {
             }
             cells.push(cell);
         }
-        var t = 0;
+        //初始化格子/墙的id和关联
         for (var i = 0; i < row; i++) {
             for (var j = 0; j < col; j++) {
                 var c = cells[i][j];
                 c.upCell = (i == 0 ? null : cells[i - 1][j]);
-                if (c.upWall == null) {
-                    c.upWall = new Wall();
-                    c.upWall.id = t;
-                    t++;
-                    c.upWall.cell1Id = c.upCell != null ? c.upCell.id : null;
+                if (c.upCell != null) {
+                    c.upWall.cell1Id = c.upCell.id;
                     c.upWall.cell2Id = c.id;
-                    if (c.upCell != null) {
-                        c.upCell.downWall = c.upWall;
-                    }
+                    c.upCell.downWall = c.upCell.walls[1] = c.upWall;
                 }
                 c.downCell = (i == row - 1 ? null : cells[i + 1][j]);
                 c.leftCell = (j == 0 ? null : cells[i][j - 1]);
-                if (c.leftWall == null) {
-                    c.leftWall = new Wall();
-                    c.leftWall.id = t;
-                    t++;
-                    c.leftWall.cell1Id = c.leftCell != null ? c.leftCell.id : null;
+                if (c.leftCell != null) {
+                    c.leftWall.cell1Id = c.leftCell.id;
                     c.leftWall.cell2Id = c.id;
-                    if (c.leftCell != null) {
-                        c.leftCell.rightWall = c.leftWall;
-                    }
+                    c.leftCell.rightWall = c.leftCell.walls[3] = c.leftWall;
                 }
                 c.rightCell = (j == col - 1 ? null : cells[i][j + 1]);
+                c.nearCells = [c.upCell, c.downCell, c.leftCell, c.rightCell];
+                c.walls = [c.upWall, c.downWall, c.leftWall, c.rightWall];
             }
         }
+        GenCells.SetCellDrop(allCell, map);
+        GenCells.SetWallOpen(allCell);
+        // GenCells.SetWallSize(allCell);
+        return allCell;
+    };
+    GenCells.SetWallSize = function (allCell) {
+        allCell.forEach(function (v) {
+        });
+    };
+    /**掉落和特殊地面生成 */
+    GenCells.SetCellDrop = function (allCell, map) {
+        var drop_item = Common.ParseField(map.drop_item);
+        var drop_num = Common.ParseField(map.drop_num);
+        var allItems = [];
+        drop_num.forEach(function (num, index) {
+            for (var i = 0; i < num; i++) {
+                allItems.push(drop_item[index]);
+            }
+        });
+        allItems.sort(function (a, b) { return Math.random() > .5 ? -1 : 1; });
+        allCell.forEach(function (v, index, arr) {
+            if (v.id != 0 && v.id != arr.length - 1) {
+                var itemNum = allItems.length;
+                var cellNum = allCell.length - 2;
+                if (itemNum != 0 && (itemNum / cellNum) > Math.random()) {
+                    v.item = allItems[0];
+                    allItems.splice(0, 1);
+                }
+                else {
+                    v.isSpecial = (map.special_chance / 10000) > Math.random();
+                }
+            }
+        });
+    };
+    /**生成迷宫核心逻辑,设置通道(移除两个格子之间的墙) */
+    GenCells.SetWallOpen = function (allCell) {
         allCell[0].isSigned = true;
         var signedCell = [];
         var designedCell = [];
@@ -138,10 +93,10 @@ var GenCells = (function (_super) {
         signedCell.push(allCell[0]);
         while (designedCell.length > 0) {
             var cs = [];
-            cs = GenCells.GetDesignedCell(signingCell); //周围未访问的格子集合
+            cs = GenCells.GetDesignedCell(signingCell);
             if (cs.length > 0) {
                 var num = Common.getRandomInt(1, cs.length);
-                GenCells.GetSharedWall(signingCell, cs[num - 1]).isExit = true; //获得中间的墙并设置开放
+                GenCells.GetSharedWall(signingCell, cs[num - 1]).isOpen = true;
                 signingCell = cs[num - 1];
                 signingCell.isSigned = true;
                 signedCell.push(signingCell);
@@ -152,9 +107,8 @@ var GenCells = (function (_super) {
                 signingCell = signedCell[num - 1];
             }
         }
-        this.cells = allCell;
-        return allCell;
     };
+    /**获取周围未访问的格子集合 */
     GenCells.GetDesignedCell = function (cell) {
         var cs = [];
         if (cell.upCell != null && !cell.upCell.isSigned) {
@@ -171,6 +125,7 @@ var GenCells = (function (_super) {
         }
         return cs;
     };
+    /**获得两个格子中间的墙 */
     GenCells.GetSharedWall = function (cell1, cell2) {
         var w;
         if (cell1.leftWall == cell2.rightWall) {
@@ -188,6 +143,6 @@ var GenCells = (function (_super) {
         return w;
     };
     return GenCells;
-}(eui.Component));
-__reflect(GenCells.prototype, "GenCells", ["eui.UIComponent", "egret.DisplayObject"]);
+}());
+__reflect(GenCells.prototype, "GenCells");
 //# sourceMappingURL=GenCells.js.map

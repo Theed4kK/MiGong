@@ -49,7 +49,7 @@ class GenCells {
 
 		GenCells.SetCellDrop(allCell, map);
 		GenCells.SetWallOpen(allCell);
-		GenCells.SetWallSize(allCell);
+		// GenCells.SetWallSize(allCell);
 
 		return allCell;
 	}

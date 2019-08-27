@@ -21,7 +21,7 @@ class GameControl extends eui.Component implements eui.UIComponent {
 		let maskLight = this.maskLight;
 		let group_light = this.group_light;
 		maskLight.setMaskSize(group_light.width, group_light.height);
-		maskLight.setLightValue(300);
+		maskLight.setLightValue(200);
 		this.DrawLightTexture();
 		group_light.addChild(this.lightBitMap);
 		maskLight.x = 0;

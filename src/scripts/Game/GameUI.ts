@@ -9,10 +9,6 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	private list_wall: eui.List;
 	private list_cell: eui.List;
 
-	private btn_scale: eui.Button;
-	private btn_gen: eui.Button;
-	private btn_swapMode: eui.Button;
-	private btn_test: eui.Button;
 	private btn_return: eui.Image;
 
 	private input_col: eui.TextInput;
@@ -56,12 +52,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	}
 
 	private AddListener(): void {
-		this.btn_scale.addEventListener(egret.TouchEvent.TOUCH_TAP, this.SetListScale, this);
-		this.btn_gen.addEventListener(egret.TouchEvent.TOUCH_TAP, this.GenMiGong, this);
 		this.btn_return.addEventListener(egret.TouchEvent.TOUCH_TAP, this.ReturnSignCell, this);
-		this.btn_test.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
-			this.gameControl.maskLight.setLightValue(100);
-		}, this);
 
 		this.input_speed.addEventListener(egret.Event.CHANGE, this.ModifySpeed, this)
 		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.BeginTouch, this);
@@ -94,16 +85,11 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	}
 
 	private UpdateIndex(e: egret.Event): void {
-		if (!GameUI.manageCells.currentCell.isPassed) {
 			this.stepNum++
 			this.txt_stepNum.text = "已探索：" + this.stepNum.toString();
-		}
 	}
 
 	private RemoveListener(): void {
-		this.btn_scale.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.SetListScale, this);
-		this.btn_gen.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.GenMiGong, this);
-		this.btn_swapMode.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.GenMiGong, this);
 		this.input_speed.removeEventListener(egret.Event.CHANGE, this.ModifySpeed, this)
 		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.BeginTouch, this);
 		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.Move, this);

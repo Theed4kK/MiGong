@@ -33,7 +33,7 @@ class WallRender extends eui.ItemRenderer {
 
 	protected dataChanged(): void {
 		let cell: Cell = this.data;
-		this.SetWallSize(cell);
+		// this.SetWallSize(cell);
 		this.img_leftWall.visible = !cell.leftWall.isOpen;
 		this.img_upWall.visible = !cell.upWall.isOpen;
 		this.img_downWall.visible = !cell.downWall.isOpen;

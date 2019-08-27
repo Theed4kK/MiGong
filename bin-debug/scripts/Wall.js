@@ -3,10 +3,13 @@ var __reflect = (this && this.__reflect) || function (p, c, t) {
 };
 var Wall = (function () {
     function Wall() {
-        this.isExit = false;
+        /**为true时表明没有墙 */
+        this.isOpen = false;
+        this.left = 0;
+        this.right = 0;
+        this.top = 0;
+        this.bottom = 0;
     }
-    Wall.hWalls = [];
-    Wall.wWalls = [];
     return Wall;
 }());
 __reflect(Wall.prototype, "Wall");

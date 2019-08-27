@@ -13,67 +13,41 @@ var CellBgRender = (function (_super) {
     function CellBgRender() {
         return _super.call(this) || this;
     }
-    CellBgRender.prototype.partAdded = function (partName, instance) {
-        _super.prototype.partAdded.call(this, partName, instance);
-    };
     CellBgRender.prototype.childrenCreated = function () {
         _super.prototype.childrenCreated.call(this);
     };
     CellBgRender.prototype.dataChanged = function () {
         var cell = this.data;
+        if (cell.item != 0) {
+            var item = ItemLib.configs[cell.item];
+            this.img_exitSign.source = item.pic;
+        }
+        else {
+            if (cell.isSpecial) {
+                this.img_exitSign.source = RES.getRes("532_png");
+                egret.log("特殊地面ID--->" + cell.id);
+            }
+            else {
+                this.img_exitSign.visible = false;
+            }
+        }
         if (cell.id == 0) {
+            this.visible = true;
+        }
+        else {
+            this.visible = false;
+        }
+        if (cell.downCell == null && cell.rightCell == null) {
+            this.visible = true;
             this.img_bg.visible = false;
-            cell.isPassed = true;
-            return;
-        }
-        if (cell.id == 1 && !cell.leftWall.isExit) {
-            this.img_bg.left = CellRender.vWallwidth / 2;
-        }
-        if (cell.upCell != null && cell.upCell.id == 0 && !cell.upWall.isExit) {
-            this.img_bg.top = CellRender.hWallHeight / 2;
-        }
-        //最右下角的出口标志
-        if (cell.rightCell == null && cell.downCell == null) {
-            this.img_exitSign.visible = true;
-        }
-        //左边边界格子
-        if (cell.leftCell == null) {
-            this.img_bg.left = CellRender.vWallwidth / 2;
-        }
-        //右边边界格子
-        if (cell.rightCell == null) {
-            this.img_bg.right = CellRender.vWallwidth / 2;
-        }
-        //上边边界格子
-        if (cell.upCell == null) {
-            this.img_bg.top = CellRender.hWallHeight / 2;
-        }
-        //下边边界格子
-        if (cell.downCell == null) {
-            this.img_bg.bottom = CellRender.hWallHeight / 2;
+            this.img_exitSign.source = RES.getRes("100_png");
         }
     };
-    CellBgRender.prototype.LightenUp = function (dir, speed) {
-        egret.Tween.get(this.img_bg).to({ alpha: 0 }, 1000);
-    };
-    CellBgRender.prototype.RefreshBg = function (type) {
-        switch (type) {
-            case 0:
-                egret.Tween.get(this.img_bg).to({ right: CellRender.vWallwidth / 2 }, 500);
-                break;
-            case 1:
-                egret.Tween.get(this.img_bg).to({ left: CellRender.vWallwidth / 2 }, 500);
-                break;
-            case 2:
-                egret.Tween.get(this.img_bg).to({ bottom: CellRender.hWallHeight / 2 }, 500);
-                break;
-            case 3:
-                egret.Tween.get(this.img_bg).to({ top: CellRender.hWallHeight / 2 }, 500);
-                break;
-        }
+    CellBgRender.prototype.LightenUp = function () {
+        this.visible = true;
     };
     CellBgRender.prototype.SetReturnSign = function () {
-        this.img_exitSign.visible = true;
+        // this.img_exitSign.visible = true;
     };
     CellBgRender.prototype.HideReturnSign = function () {
         this.img_exitSign.visible = false;
