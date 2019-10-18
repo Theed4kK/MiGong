@@ -1,0 +1,11 @@
+E:\Workspace\MiGong\Server\MiGong\MiGong\bin\Debug\netcoreapp2.1\MiGong.deps.json
+E:\Workspace\MiGong\Server\MiGong\MiGong\bin\Debug\netcoreapp2.1\MiGong.runtimeconfig.json
+E:\Workspace\MiGong\Server\MiGong\MiGong\bin\Debug\netcoreapp2.1\MiGong.runtimeconfig.dev.json
+E:\Workspace\MiGong\Server\MiGong\MiGong\bin\Debug\netcoreapp2.1\MiGong.dll
+E:\Workspace\MiGong\Server\MiGong\MiGong\bin\Debug\netcoreapp2.1\MiGong.pdb
+E:\Workspace\MiGong\Server\MiGong\MiGong\obj\Debug\netcoreapp2.1\MiGong.csproj.CoreCompileInputs.cache
+E:\Workspace\MiGong\Server\MiGong\MiGong\obj\Debug\netcoreapp2.1\MiGong.AssemblyInfoInputs.cache
+E:\Workspace\MiGong\Server\MiGong\MiGong\obj\Debug\netcoreapp2.1\MiGong.AssemblyInfo.cs
+E:\Workspace\MiGong\Server\MiGong\MiGong\obj\Debug\netcoreapp2.1\MiGong.dll
+E:\Workspace\MiGong\Server\MiGong\MiGong\obj\Debug\netcoreapp2.1\MiGong.pdb
+E:\Workspace\MiGong\Server\MiGong\MiGong\obj\Debug\netcoreapp2.1\MiGong.csprojAssemblyReference.cache
