@@ -1,3 +1,5 @@
+const key_itemData: string = "item";
+
 class ItemManage implements PlayerData {
 	private constructor() {
 	}
@@ -19,14 +21,15 @@ class ItemManage implements PlayerData {
 	 * 默认合成1个
 	 * 返回:1成功 -1材料数量不足 -2物品无合成配置或错误*/
 	public ComposeItem(id: number, num: number = 1) {
-		if (ItemLib.configs[id].need_item == "") {
+		let configs = Config.GetInstance().configs_item;
+		if (configs[id].need_item == "") {
 			return -2;
 		}
-		let need_items = ItemLib.configs[id].need_item.split(",");
-		let need_nums = ItemLib.configs[id].need_num.split(",");
+		let need_items = configs[id].need_item.split(",");
+		let need_nums = configs[id].need_num.split(",");
 		need_items.forEach((v, i) => {
 			let id = Number(v);
-			if (ItemLib.configs[id]) {
+			if (configs[id]) {
 				if (this.data[id] < Number(need_nums[i])) {
 					return -1;
 				}

@@ -6,7 +6,7 @@ class GenCells {
 	public static GetCells(): Cell[] {
 		let cells: Cell[][] = [];
 		let allCell: Cell[] = [];
-		let map: MapLib = MapLib.configs[1];
+		let map: MapLib = Config.GetInstance().configs_map[1];
 		let row = 15;
 		let col = map.size;
 

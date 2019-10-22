@@ -16,7 +16,7 @@ class CellBgRender extends eui.ItemRenderer {
 		let cell: Cell = this.data;
 
 		if (cell.item != 0) {
-			let item = ItemLib.configs[cell.item];
+			let item = Config.GetInstance().configs_item[cell.item];
 			this.img_exitSign.source = item.pic;
 		}
 		else {

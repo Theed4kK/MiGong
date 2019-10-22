@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "name": "迷宫1",
+    "point": 20,
+    "weight_bearing": 10,
+    "map_choose": 1
+  },
+  {
+    "id": 2,
+    "name": "迷宫2",
+    "point": 30,
+    "weight_bearing": 20,
+    "map_choose": 2
+  },
+  {
+    "id": 3,
+    "name": "迷宫3",
+    "point": 40,
+    "weight_bearing": 30,
+    "map_choose": 3
+  },
+  {
+    "id": 4,
+    "name": "迷宫4",
+    "point": 50,
+    "weight_bearing": 40,
+    "map_choose": 4
+  },
+  {
+    "id": 5,
+    "name": "迷宫5",
+    "point": 60,
+    "weight_bearing": 50,
+    "map_choose": 5
+  }
+]

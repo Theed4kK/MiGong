@@ -73,7 +73,7 @@ class Main extends eui.UILayer {
             const loadingView = new LoadingUI();
             this.stage.addChild(loadingView);
             await RES.loadGroup("preload", 0, loadingView);
-            Config.InitCofing();
+            Config.GetInstance().InitCofing();
 
             this.stage.removeChild(loadingView);
         }
@@ -94,7 +94,7 @@ class Main extends eui.UILayer {
         })
     }
 
-    private webSocket:egret.WebSocket;
+    private webSocket: egret.WebSocket;
     private textfield: egret.TextField;
     /**
      * 创建场景界面
@@ -103,20 +103,5 @@ class Main extends eui.UILayer {
     protected createGameScene(): void {
         let gameUI: GameUI = new GameUI();
         this.stage.addChild(gameUI);
-
-        this.webSocket = new egret.WebSocket();
-        this.webSocket.addEventListener(egret.ProgressEvent.SOCKET_DATA, this.onReceiveMessage, this);
-        this.webSocket.addEventListener(egret.Event.CONNECT, this.onSocketOpen, this);
-        this.webSocket.connect("127.0.0.1", 8989);
-    }
-
-    private onSocketOpen(): void {
-        var cmd = "Hello Egret WebSocket";
-        console.log("连接成功，发送数据：" + cmd);
-        this.webSocket.writeUTF(cmd);
-    }
-    private onReceiveMessage(e: egret.Event): void {
-        var msg = this.webSocket.readUTF();
-        console.log("收到数据：" + msg);
     }
 }

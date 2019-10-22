@@ -1,0 +1,47 @@
+[
+  {
+    "id": 1,
+    "name": "迷宫1",
+    "size": 20,
+    "drop_item": "1,2,3",
+    "drop_num": "5,11,15",
+    "special_chance": 100,
+    "des": ""
+  },
+  {
+    "id": 2,
+    "name": "迷宫2",
+    "size": 30,
+    "drop_item": "1,2,3",
+    "drop_num": "5,11,15",
+    "special_chance": 200,
+    "des": ""
+  },
+  {
+    "id": 3,
+    "name": "迷宫3",
+    "size": 40,
+    "drop_item": "1,2,3",
+    "drop_num": "5,11,15",
+    "special_chance": 300,
+    "des": ""
+  },
+  {
+    "id": 4,
+    "name": "迷宫4",
+    "size": 50,
+    "drop_item": "1,2,3",
+    "drop_num": "5,11,15",
+    "special_chance": 400,
+    "des": ""
+  },
+  {
+    "id": 5,
+    "name": "迷宫5",
+    "size": 60,
+    "drop_item": "1,2,3",
+    "drop_num": "5,11,15",
+    "special_chance": 500,
+    "des": ""
+  }
+]

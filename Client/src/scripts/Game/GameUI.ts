@@ -10,6 +10,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	private list_cell: eui.List;
 
 	private btn_return: eui.Image;
+	private btn_test:eui.Button;
 
 	private input_col: eui.TextInput;
 	private input_speed: eui.TextInput;
@@ -53,6 +54,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 
 	private AddListener(): void {
 		this.btn_return.addEventListener(egret.TouchEvent.TOUCH_TAP, this.ReturnSignCell, this);
+		this.btn_test.addEventListener(egret.TouchEvent.TOUCH_TAP, this.TestDb, this);
 		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.BeginTouch, this);
 		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.Move, this);
 		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_END, this.CancelTouch, this);
@@ -61,6 +63,9 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		this.gameControl.addEventListener(MyEvent.moveScroll, this.MoveScroll, this);
 	}
 
+	private TestDb(){
+		ItemManage.GetInstance().GetItem(1,1);
+	}
 
 	private ReturnSignCell(): void {
 		this.gameControl.RoleMoveState(2);
@@ -88,6 +93,8 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	}
 
 	private RemoveListener(): void {
+		this.btn_return.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.TestDb, this);
+		this.btn_test.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.TestDb, this);
 		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.BeginTouch, this);
 		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.Move, this);
 		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_END, this.CancelTouch, this);
