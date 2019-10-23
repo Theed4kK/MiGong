@@ -3,26 +3,14 @@
 	"setting": {
 		"urlCheck": true,
 		"es6": true,
-		"enhance": false,
 		"postcss": true,
 		"minified": true,
-		"newFeature": true,
-		"nodeModules": true,
-		"autoAudits": false,
-		"uglifyFileName": true,
-		"checkInvalidKey": true,
-		"checkSiteMap": true,
-		"uploadWithSourceMap": true,
-		"babelSetting": {
-			"ignore": [],
-			"disablePlugins": [],
-			"outputPath": ""
-		}
+		"newFeature": true
 	},
 	"compileType": "game",
-	"libVersion": "2.0.4",
+	"libVersion": "2.8.0",
 	"appid": "wx22cd8ca3db58d654",
-	"projectname": "MiGong",
+	"projectname": "apiDemo",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
 	"cloudfunctionRoot": "cloudfunction/",

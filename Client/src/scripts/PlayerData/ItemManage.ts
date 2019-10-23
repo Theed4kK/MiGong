@@ -1,4 +1,3 @@
-const key_itemData: string = "item";
 
 class ItemManage implements PlayerData {
 	private constructor() {
@@ -13,7 +12,12 @@ class ItemManage implements PlayerData {
 	public data: { [id: number]: number } = {};
 
 	public async GetItem(id: number, num: number = 1) {
-		this.data[id] += num;
+		if (this.data[id]) {
+			this.data[id] += num;
+		}
+		else{
+			this.data[id] = num;
+		}
 		await this.SaveData();
 	}
 
@@ -46,10 +50,11 @@ class ItemManage implements PlayerData {
 	}
 
 	public LoadData() {
-		this.data = Common.LoadData(key_itemData);
+		this.data = Common.LoadData(data_key_item);
 	}
 
 	public SaveData() {
-		Common.SaveData(key_itemData, this.data);
+		console.log(this.data);
+		Common.SaveData(data_key_item, this.data);
 	}
 }

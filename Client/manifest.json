@@ -5,7 +5,6 @@
 		"libs/modules/eui/eui.js",
 		"libs/modules/assetsmanager/assetsmanager.js",
 		"libs/modules/tween/tween.js",
-		"libs/modules/socket/socket.js",
 		"libs/modules/promise/promise.js",
 		"libs/WXCloudApi/WXCloudApi.js",
 		"libs/egretmgobe/egretmgobe.js"

@@ -26,6 +26,7 @@ class Common {
 	public static SaveData(form: string, data: any) {
 		// let dataStr = JSON.stringify(data);
 		// egret.localStorage.setItem(key, dataStr);
+
 		wx.cloud.callFunction({
 			name: "addLog",
 			data: {
@@ -46,9 +47,9 @@ class Common {
 		// let dataStr = egret.localStorage.getItem(key);
 		// let data = JSON.parse(dataStr);
 		const db = wx.cloud.database()
-		db.collection('logs').doc(form).get().then(res => {
-			console.log('获取数据', res.data[form])
-			return res.data[form];
+		db.collection(form).get().then(res => {
+			console.log('获取数据', res.data)
+			return res.data;
 		})
 	}
 }

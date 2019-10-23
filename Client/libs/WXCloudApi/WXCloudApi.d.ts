@@ -8,7 +8,7 @@ declare namespace egret {
             onError: (error: DBError) => {};
         }): WXDBListener;
         stopWatch(listener: WXDBListener): void;
-        private init;
+        private init(name);
     }
     class WXDBListener {
         private _listener;
@@ -36,72 +36,6 @@ declare namespace egret {
         errCode: number;
         errMsg: string;
     }
-}
-interface AuthConfig {
-    persistence: "local" | "session" | "none";
-}
-interface Config {
-    env?: string;
-    token?: string;
-    timeout?: number;
-    proxy?: string;
-    persistence?: string;
-}
-declare class TCBCache {
-    storageClass: any;
-    constructor(persistence: string);
-    setStore(key: string, value: any, version?: any): void;
-    getStore(key: string, version?: string): any;
-    removeStore(key: any): void;
-}
-declare class Base {
-    httpRequest: Request;
-    cache: TCBCache;
-    accessTokenKey: string;
-    accessTokenExpireKey: string;
-    refreshTokenKey: string;
-    constructor(config: Config);
-    setRefreshToken(refreshToken: any): void;
-    getJwt(appid?: string, loginType?: string, code?: string): any;
-}
-declare class WeixinAuthProvider extends Base {
-    config: Config;
-    private scope;
-    private state;
-    private loginMode;
-    private appid;
-    constructor(config: Config, appid: string, scope: string, loginMode?: string, state?: string);
-    signIn(callback?: any): any;
-    redirect(): void;
-}
-declare class AuthProvider {
-    httpRequest: Request;
-    cache: Cache;
-    accessTokenKey: string;
-    accessTokenExpireKey: string;
-    refreshTokenKey: string;
-    constructor(config: Config);
-    setRefreshToken(refreshToken: any): void;
-    getJwt(appid?: string, loginType?: string, code?: string): any;
-}
-declare class Auth extends AuthProvider {
-    httpRequest: Request;
-    config: Config;
-    customAuthProvider: AuthProvider;
-    _shouldRefreshAccessToken: Function;
-    constructor(config: Config);
-    weixinAuthProvider({ appid, scope, loginMode, state }: {
-        appid: any;
-        scope: any;
-        loginMode?: any;
-        state?: any;
-    }): WeixinAuthProvider;
-    signOut(): Promise<any>;
-    getAccessToken(): Promise<{}>;
-    onLoginStateExpire(callback: Function): void;
-    signInWithTicket(ticket: string): Promise<void>;
-    shouldRefreshAccessToken(hook: any): void;
-    getUserInfo(): Promise<any>;
 }
 declare namespace egret.wxCloud.DB {
     /**
@@ -153,8 +87,8 @@ declare namespace egret.wxCloud.DB {
         count(options: OQ<ICountDocumentOptions>): void;
         count(options: RQ<ICountDocumentOptions>): Promise<ICountResult>;
         watch(callback: {
-            onChange: (snapshot: any) => {};
-            onError: (e: any) => {};
+            onChange: (snapshot) => {};
+            onError: (e) => {};
         }): any;
     }
     interface DatabaseCommand {
@@ -451,16 +385,13 @@ declare class InternalSymbol {
 }
 declare namespace egret.wxCloud {
     class cloud {
-        private static _webTcb;
         static init(config?: ICloudConfig): void;
         static database(config?: ICloudConfig): egret.wxCloud.DB.Database;
         static callFunction(param: {
             name: string;
             data: any;
-            success?: (res: any) => {};
-            fail?: (err: any) => {};
+            success?: (res) => {};
+            fail?: (err) => {};
         }): void;
-        static auth(config: AuthConfig): Auth;
     }
 }
-declare function isWXPlatform(): boolean;

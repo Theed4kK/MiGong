@@ -94,7 +94,6 @@ class Main extends eui.UILayer {
         })
     }
 
-    private webSocket: egret.WebSocket;
     private textfield: egret.TextField;
     /**
      * 创建场景界面
@@ -103,5 +102,7 @@ class Main extends eui.UILayer {
     protected createGameScene(): void {
         let gameUI: GameUI = new GameUI();
         this.stage.addChild(gameUI);
+        wx.cloud.init();
     }
+
 }

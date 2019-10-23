@@ -10,7 +10,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	private list_cell: eui.List;
 
 	private btn_return: eui.Image;
-	private btn_test:eui.Button;
+	private btn_test: eui.Button;
 
 	private input_col: eui.TextInput;
 	private input_speed: eui.TextInput;
@@ -63,8 +63,22 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		this.gameControl.addEventListener(MyEvent.moveScroll, this.MoveScroll, this);
 	}
 
-	private TestDb(){
-		ItemManage.GetInstance().GetItem(1,1);
+	private TestDb() {
+		// Common.LoadData("item");
+		wx.cloud.callFunction({
+			name: "addLog",
+			data: {
+				value: ItemManage.GetInstance().data,
+				form: "item"
+			},
+			success: function (res): any {
+				console.log("添加成功", res)
+			},
+			fail: function (err): any {
+				console.log("err", err)
+			}
+		})
+		// ItemManage.GetInstance().GetItem(Common.getRandomInt(1,3),1);
 	}
 
 	private ReturnSignCell(): void {
@@ -88,8 +102,8 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	}
 
 	private UpdateIndex(e: egret.Event): void {
-			this.stepNum++
-			this.txt_stepNum.text = "已探索：" + this.stepNum.toString();
+		this.stepNum++
+		this.txt_stepNum.text = "已探索：" + this.stepNum.toString();
 	}
 
 	private RemoveListener(): void {

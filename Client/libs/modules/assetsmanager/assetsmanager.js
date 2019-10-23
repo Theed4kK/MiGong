@@ -2266,8 +2266,6 @@ var RES;
                 });
             },
             onRemoveStart: function (host, resource) {
-                var sound = host.get(resource);
-                sound.close();
             }
         };
         /**
