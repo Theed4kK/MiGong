@@ -27,19 +27,61 @@ class Common {
 		// let dataStr = JSON.stringify(data);
 		// egret.localStorage.setItem(key, dataStr);
 
+		// wx.cloud.callFunction({
+		// 	name: "addLog",
+		// 	data: {
+		// 		value: data,
+		// 		form: form
+		// 	},
+		// 	success: function (res): any {
+		// 		console.log("添加成功", res.result)
+		// 	},
+		// 	fail: function (err): any {
+		// 		console.log("itemdata", data)
+		// 		console.log("err", err)
+		// 	}
+		// })
+		let OPENID: string;
 		wx.cloud.callFunction({
 			name: "addLog",
-			data: {
-				value: data,
-				form: form
-			},
+			data: {},
 			success: function (res): any {
-				console.log("添加成功", res.result)
+				OPENID = res.OPENID
 			},
 			fail: function (err): any {
 				console.log("err", err)
 			}
 		})
+		const db = wx.cloud.database();
+		let _id;
+		let value = db.collection(form).where({
+			_openid: OPENID
+		});
+
+		value.count().then(res => {
+			if (res.total == 0) {
+				db.collection(form).add({
+					data: data,
+					success: res => {
+						console.log("添加成功", res)
+					}
+				})
+			}
+			else {
+				value.get().then(res => {
+					_id = res.data[0]._id;
+					db.collection(form).doc(_id).update({
+						data: data,
+						success: res => {
+							console.log("更新成功", res)
+						}
+					})
+				})
+
+			}
+		})
+
+
 
 	}
 

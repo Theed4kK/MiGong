@@ -64,21 +64,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	}
 
 	private TestDb() {
-		// Common.LoadData("item");
-		wx.cloud.callFunction({
-			name: "addLog",
-			data: {
-				value: ItemManage.GetInstance().data,
-				form: "item"
-			},
-			success: function (res): any {
-				console.log("添加成功", res)
-			},
-			fail: function (err): any {
-				console.log("err", err)
-			}
-		})
-		// ItemManage.GetInstance().GetItem(Common.getRandomInt(1,3),1);
+		ItemManage.GetInstance().GetItem(Common.getRandomInt(1,3),1);
 	}
 
 	private ReturnSignCell(): void {
