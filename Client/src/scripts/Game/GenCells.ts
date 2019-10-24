@@ -31,7 +31,7 @@ class GenCells {
 				if (c.upCell != null) {
 					c.upWall.cell1Id = c.upCell.id;
 					c.upWall.cell2Id = c.id;
-					c.upCell.downWall = c.upCell.walls[1] = c.upWall;
+					c.upCell.downWall = c.upWall;
 				}
 				c.downCell = (i == row - 1 ? null : cells[i + 1][j]);
 
@@ -39,11 +39,9 @@ class GenCells {
 				if (c.leftCell != null) {
 					c.leftWall.cell1Id = c.leftCell.id;
 					c.leftWall.cell2Id = c.id;
-					c.leftCell.rightWall = c.leftCell.walls[3] = c.leftWall;
+					c.leftCell.rightWall = c.leftWall;
 				}
 				c.rightCell = (j == col - 1 ? null : cells[i][j + 1]);
-				c.nearCells = [c.upCell, c.downCell, c.leftCell, c.rightCell];
-				c.walls = [c.upWall, c.downWall, c.leftWall, c.rightWall];
 			}
 		}
 

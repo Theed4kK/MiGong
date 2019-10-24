@@ -29,7 +29,7 @@ class GameControl extends eui.Component implements eui.UIComponent {
 	}
 
 
-	private async DrawLightTexture() {
+	private DrawLightTexture() {
 		let render: egret.RenderTexture = new egret.RenderTexture();
 		render.drawToTexture(this.maskLight);
 		this.lightBitMap.texture = render;
@@ -39,7 +39,7 @@ class GameControl extends eui.Component implements eui.UIComponent {
 	private RefreshLight() {
 		if (egret.getTimer() - this.lightRefreshTime < 50) { return; }
 		let role = this.img_role;
-		this.maskLight.setLightPos(role.x - role.width / 2, role.y - role.height / 2);
+		this.maskLight.setLightPos(role.x, role.y);
 		this.DrawLightTexture();
 		this.lightRefreshTime = egret.getTimer();
 	}

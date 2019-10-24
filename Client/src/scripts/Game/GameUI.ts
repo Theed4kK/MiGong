@@ -146,7 +146,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	private InitMask() {
 		let self: GameUI = this;
 		// self.img_mapBg.width = self.list.width;
-		self.group_wallBg.width = self.list_wall.width;
+		// self.group_wallBg.width = self.list_wall.width;
 		self.img_mask.x = WallRender.vWallwidth;
 		self.img_mask.y = WallRender.hWallHeight;
 		self.img_mask.width = self.list_wall.width - WallRender.vWallwidth * 2;

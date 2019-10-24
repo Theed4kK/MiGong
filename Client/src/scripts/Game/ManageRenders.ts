@@ -25,11 +25,9 @@ class ManageRenders extends eui.Component implements eui.UIComponent {
 		self.RefreshRender(new egret.Event("", false, false, 0));
 	}
 
-	public RefreshRender(e: egret.Event): void {
+	private RefreshRender(e: egret.Event): void {
 		this.currentRender = <WallRender>this.wallList.getElementAt(e.data);
 		this.currentBgRender = <CellBgRender>this.cellList.getElementAt(e.data);
-		this.currentBgRender.LightenUp();
-		this.currentRender.LightingUp();
 	}
 
 	// 	/**生成地图底图 需要地图生成完成后调用*/
@@ -44,6 +42,4 @@ class ManageRenders extends eui.Component implements eui.UIComponent {
 	// 	this.list.visible = false;
 	// 	egret.log("地图底图生成完成");
 	// }
-
-
 }

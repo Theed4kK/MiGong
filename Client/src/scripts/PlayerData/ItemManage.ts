@@ -15,7 +15,7 @@ class ItemManage implements PlayerData {
 		if (this.data[id]) {
 			this.data[id] += num;
 		}
-		else{
+		else {
 			this.data[id] = num;
 		}
 		await this.SaveData();
@@ -54,7 +54,6 @@ class ItemManage implements PlayerData {
 	}
 
 	public SaveData() {
-		console.log(this.data);
-		Common.SaveData(data_key_item, this.data);
+		Common.SaveData(data_key_item, { ownItems: this.data });
 	}
 }

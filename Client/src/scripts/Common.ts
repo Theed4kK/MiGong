@@ -24,26 +24,9 @@ class Common {
 	}
 
 	public static SaveData(form: string, data: any) {
-		// let dataStr = JSON.stringify(data);
-		// egret.localStorage.setItem(key, dataStr);
-
-		// wx.cloud.callFunction({
-		// 	name: "addLog",
-		// 	data: {
-		// 		value: data,
-		// 		form: form
-		// 	},
-		// 	success: function (res): any {
-		// 		console.log("添加成功", res.result)
-		// 	},
-		// 	fail: function (err): any {
-		// 		console.log("itemdata", data)
-		// 		console.log("err", err)
-		// 	}
-		// })
 		let OPENID: string;
 		wx.cloud.callFunction({
-			name: "addLog",
+			name: "GetOpenId",
 			data: {},
 			success: function (res): any {
 				OPENID = res.OPENID

@@ -28,22 +28,11 @@ class CellBgRender extends eui.ItemRenderer {
 				this.img_exitSign.visible = false;
 			}
 		}
-		if (cell.id == 0) {
-			this.visible = true;
-		}
-		else {
-			this.visible = false;
-		}
 		if (cell.downCell == null && cell.rightCell == null) {
 			this.visible = true;
 			this.img_bg.visible = false;
 			this.img_exitSign.source = RES.getRes("100_png")
 		}
-	}
-
-	public LightenUp(): void {
-		this.visible = true;
-		
 	}
 
 	public SetReturnSign(): void {

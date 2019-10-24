@@ -1,7 +1,7 @@
 class LightMask extends egret.Sprite {
 	private cirleLight: egret.Shape;
 	private lightMatrix: egret.Matrix;
-	private circle: eui.Image;
+	// private circle: eui.Image;
 
 	public constructor() {
 		super();
@@ -9,7 +9,10 @@ class LightMask extends egret.Sprite {
 		self.lightMatrix = new egret.Matrix();
 
 		self.cirleLight = new egret.Shape();
+		this.blendMode =egret.BlendMode.ERASE;
 		self.cirleLight.blendMode = egret.BlendMode.ERASE;
+		self.cirleLight.anchorOffsetX = self.cirleLight.width/2;
+		self.cirleLight.anchorOffsetY = self.cirleLight.height/2;
 		self.addChild(self.cirleLight);
 	}
 
@@ -21,7 +24,7 @@ class LightMask extends egret.Sprite {
 	//设置背景框的大小
 	public setMaskSize(maskW: number, maskH: number) {
 		this.graphics.clear();
-		this.graphics.beginFill(0x000000, 0.7);
+		this.graphics.beginFill(0x000000, 0.8);
 		this.graphics.drawRect(0, 0, maskW, maskH);
 		this.graphics.endFill();
 	}
@@ -34,7 +37,7 @@ class LightMask extends egret.Sprite {
 		let alphasGroup: number[] = [1, 0.9, 0.2, 0];
 		let colorNumGroup: number[] = [0, 50, 180, 255];
 		cirleLight.graphics.beginGradientFill(egret.GradientType.RADIAL, colorGroup, alphasGroup, colorNumGroup, this.lightMatrix);//这个渐变的参数是自己调的，可能不太理想，谁有好的参数可以留言，谢谢啦。
-		cirleLight.graphics.drawCircle(0, 0, light);
+		cirleLight.graphics.drawRect(0, 0, light,light);
 		cirleLight.graphics.endFill();
 	}
 

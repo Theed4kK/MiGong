@@ -7,7 +7,6 @@ class Cell {
 	public downWall: Wall = new Wall();;
 	public leftWall: Wall = new Wall();;
 	public rightWall: Wall = new Wall();;
-	public walls: Wall[] = [];
 
 	public upCell: Cell = null;;
 	public downCell: Cell = null;;
@@ -19,7 +18,7 @@ class Cell {
 	public isSigned: boolean = false;
 
 	/**行走时用来标记格子是否已经通过 */
-	public isPassed: boolean = false;;
+	public isPassed: boolean = false;
 
 	public id: number;
 
