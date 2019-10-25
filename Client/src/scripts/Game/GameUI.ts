@@ -24,7 +24,6 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	// private img_mapBg: eui.Image;
 	private img_Bg: eui.Image;
 	private img_role: eui.Image;
-	private img_mask: eui.Image;
 	private mapTexture: egret.Bitmap = new egret.Bitmap();
 
 	private group_light: eui.Group;
@@ -147,10 +146,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		let self: GameUI = this;
 		// self.img_mapBg.width = self.list.width;
 		// self.group_wallBg.width = self.list_wall.width;
-		self.img_mask.x = WallRender.vWallwidth;
-		self.img_mask.y = WallRender.hWallHeight;
-		self.img_mask.width = self.list_wall.width - WallRender.vWallwidth * 2;
-		self.img_mask.height = self.list_wall.height - WallRender.hWallHeight * 2;
+		WallRender.hWallHeight * 2;
 		self.group_light.x = WallRender.vWallwidth;
 		self.group_light.y = WallRender.hWallHeight;
 		self.group_light.width = self.list_wall.width - WallRender.vWallwidth * 2;

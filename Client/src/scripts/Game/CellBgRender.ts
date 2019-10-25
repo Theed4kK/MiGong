@@ -1,10 +1,22 @@
 class CellBgRender extends eui.ItemRenderer {
 	public constructor() {
 		super();
+		this.addEventListener(egret.Event.ADDED, this.GetCellSize, this);
 	}
 
 	protected childrenCreated(): void {
 		super.childrenCreated();
+	}
+
+	public static _width: number = 0;
+	public static _height: number = 0;
+	private GetCellSize() {
+		if (CellBgRender._width == 0) {
+			CellBgRender._width = this.width;
+		}
+		if (CellBgRender._height == 0) {
+			CellBgRender._height = this.height;
+		}
 	}
 
 	private img_bg: eui.Image;

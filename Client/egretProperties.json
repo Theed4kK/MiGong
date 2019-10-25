@@ -3,7 +3,7 @@
   "compilerVersion": "5.2.26",
   "template": {},
   "target": {
-    "current": "wxgame"
+    "current": "web"
   },
   "modules": [
     {
