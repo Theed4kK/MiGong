@@ -1,13 +1,6 @@
 class LightMask extends egret.Sprite {
 	private cirleLight: egret.Shape = new egret.Shape();
-	private mask_1: egret.Sprite = new egret.Sprite();
-	private mask_2: egret.Sprite = new egret.Sprite();
-	private mask_3: egret.Sprite = new egret.Sprite();
 	private mask_shape: egret.Shape = new egret.Shape();
-	private mask_shape_erase: egret.Shape = new egret.Shape();
-	private mask_bg: egret.Bitmap = new egret.Bitmap();
-	private mask_bg_tmp: egret.Bitmap = new egret.Bitmap();
-	private mask_bg_tmp_2: egret.Bitmap = new egret.Bitmap();
 	private lightMatrix: egret.Matrix = new egret.Matrix();
 
 	private light_size: number;
@@ -15,47 +8,26 @@ class LightMask extends egret.Sprite {
 		super();
 		let self: LightMask = this;
 
-		self.mask_bg.blendMode = egret.BlendMode.ERASE;
 		self.cirleLight.blendMode = egret.BlendMode.ERASE;
-		self.mask_shape_erase.blendMode = egret.BlendMode.ERASE;
+		self.mask_shape.blendMode = egret.BlendMode.ERASE;
 
-		self.mask_1.addChild(self.mask_bg_tmp);
-		self.mask_1.addChild(self.mask_shape);
-		// self.mask_1.addChild(self.mask_shape_erase);
+		self.mask_shape.alpha = 0.3;
 
-		self.mask_2.addChild(self.mask_bg_tmp_2);
-		// self.mask_2.addChild(self.cirleLight);
-
-		self.addChild(self.mask_bg);
+		self.addChild(self.mask_shape);
+		self.addChild(self.cirleLight);
 	}
 
 	//设置光圈的位置
 	public setLightPos(posx: number, posy: number) {
 		this.cirleLight.x = posx;
 		this.cirleLight.y = posy;
-		this.mask_shape.x = posx;
-		this.mask_shape.y = posy;
 
-		this.mask_1.addChild(this.mask_shape_erase);
-		this.mask_shape_erase.x = posx;
-		this.mask_shape_erase.y = posy;
-		this.mask_bg_tmp.texture = this.SetTexture(this.mask_1);
-		this.mask_1.removeChild(this.mask_shape_erase);
-
-		
-		this.mask_bg_tmp.texture = this.SetTexture(this.mask_1);
-		this.mask_bg_tmp_2.texture = this.SetTexture(this.mask_1);
-
-		this.mask_bg.texture = this.SetTexture(this.mask_2);
-
-		this.mask_shape.visible = true;
+		let light = this.light_size;
+		this.mask_shape.graphics.beginFill(0x000000, 1);
+		this.mask_shape.graphics.drawCircle(-light + posx, -light + posy, light * 2);
+		this.mask_shape.graphics.endFill();
 	}
 
-	private SetTexture(obj: egret.DisplayObject) {
-		let render = new egret.RenderTexture();
-		render.drawToTexture(obj);
-		return render;
-	}
 	//设置背景框的大小
 	public setMaskSize(maskW: number, maskH: number) {
 		this.graphics.clear();
@@ -66,7 +38,7 @@ class LightMask extends egret.Sprite {
 	//设置光圈的大小
 	public setLightValue(light: number) {
 		this.lightMatrix.createGradientBox(light * 2, light * 2, 0, -light, -light);
-		this.light_size = light * 2;
+		this.light_size = light;
 		let cirleLight = this.cirleLight;
 		cirleLight.graphics.clear();
 		let colorGroup: number[] = [0xffffff, 0xd3d3d3, 0x888888, 0x000000];
@@ -78,20 +50,10 @@ class LightMask extends egret.Sprite {
 		cirleLight.graphics.drawRect(-light, -light, light * 2, light * 2);
 		cirleLight.graphics.endFill();
 
-		this.mask_shape_erase.graphics.beginFill(0xffffff, 1);
-		this.mask_shape_erase.graphics.drawRect(-light, -light, light * 2, light * 2);
-		this.mask_shape_erase.graphics.endFill();
-
-		this.mask_shape.graphics.beginFill(0x000000, 0.2);
+		this.mask_shape.graphics.beginFill(0x000000, 1);
 		this.mask_shape.graphics.drawRect(-light, -light, light * 2, light * 2);
 		this.mask_shape.graphics.endFill();
-
-		let render = this.SetTexture(this.mask_1);
-		this.mask_bg_tmp.texture = render;
-		this.mask_bg_tmp_2.texture = render;
-
-		this.mask_bg.texture = this.SetTexture(this.mask_2);
-
+		
 	}
 
 }
