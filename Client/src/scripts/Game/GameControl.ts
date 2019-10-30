@@ -21,7 +21,7 @@ class GameControl extends eui.Component implements eui.UIComponent {
 		let maskLight = this.maskLight;
 		let group_light = this.group_light;
 		maskLight.setMaskSize(group_light.width, group_light.height);
-		maskLight.setLightValue(CellBgRender._width);
+		maskLight.setLightValue(300);
 		this.DrawLightTexture();
 		group_light.addChild(this.lightBitMap);
 		maskLight.x = 0;
@@ -40,7 +40,6 @@ class GameControl extends eui.Component implements eui.UIComponent {
 		if (egret.getTimer() - this.lightRefreshTime < 50) { return; }
 		let role = this.img_role;
 		this.maskLight.setLightPos(role.x, role.y);
-		this.maskLight.setLightValue(60);
 		this.DrawLightTexture();
 		this.lightRefreshTime = egret.getTimer();
 	}
