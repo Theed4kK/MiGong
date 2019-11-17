@@ -21,7 +21,7 @@ class GameControl extends eui.Component implements eui.UIComponent {
 		let maskLight = this.maskLight;
 		let group_light = this.group_light;
 		maskLight.setMaskSize(group_light.width, group_light.height);
-		maskLight.setLightValue(300);
+		maskLight.setLightValue(this.img_role.x,this.img_role.y);
 		this.DrawLightTexture();
 		group_light.addChild(this.lightBitMap);
 		maskLight.x = 0;
@@ -39,7 +39,7 @@ class GameControl extends eui.Component implements eui.UIComponent {
 	private RefreshLight() {
 		if (egret.getTimer() - this.lightRefreshTime < 50) { return; }
 		let role = this.img_role;
-		this.maskLight.setLightPos(role.x, role.y);
+		this.maskLight.setLightValue(role.x, role.y);
 		this.DrawLightTexture();
 		this.lightRefreshTime = egret.getTimer();
 	}
@@ -87,7 +87,7 @@ class GameControl extends eui.Component implements eui.UIComponent {
 		let speedX = Number((Math.cos(this.direction) * this.speed * type).toFixed(2));
 		let speedY = Number((Math.sin(this.direction) * this.speed * type).toFixed(2));
 		let cell: Cell = GameUI.manageCells.currentCell;
-		let obj: egret.DisplayObject = GameUI.manageRenders.currentRender;
+		let obj: egret.DisplayObject = GameUI.manageRenders.currentWallRender;
 		let move: number = 0;
 		let img_role = this.img_role;
 
@@ -115,16 +115,15 @@ class GameControl extends eui.Component implements eui.UIComponent {
 		}
 		img_role.y += move;
 
-		this.dispatchEventWith(MyEvent.moveScroll, false, { x: img_role.x, speed: speedX })
+		this.dispatchEventWith("moveScroll", false, { x: img_role.x, speed: speedX })
 		GameUI.manageCells.SetIndex(img_role.x, img_role.y);
-		let [left, right, top, bottom] = [1, 1, 1, 1];
 		this.RefreshLight();
 	}
 
 	private IsEdge(type: number): boolean {
 		let isEdge: boolean = true;
 		let img_role: eui.Image = this.img_role;
-		let obj: egret.DisplayObject = GameUI.manageRenders.currentRender;
+		let obj: egret.DisplayObject = GameUI.manageRenders.currentWallRender;
 		switch (type) {
 			case 0:
 				isEdge = (Math.abs(img_role.y - obj.y)) < ((img_role.height / 2) + WallRender.hWallHeight * 0.5);
@@ -137,4 +136,6 @@ class GameControl extends eui.Component implements eui.UIComponent {
 		}
 		return isEdge;
 	}
+
+	
 }

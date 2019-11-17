@@ -29,7 +29,6 @@
 		"bin-debug/scripts/Game/LightMask.js",
 		"bin-debug/scripts/Game/ManageCells.js",
 		"bin-debug/scripts/Game/ManageRenders.js",
-		"bin-debug/scripts/Game/MyEvent.js",
 		"bin-debug/scripts/Game/VirtualRocker.js",
 		"bin-debug/scripts/Game/Wall.js",
 		"bin-debug/scripts/Game/WallRender.js",
