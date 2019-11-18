@@ -41,6 +41,8 @@ class WallRender extends eui.ItemRenderer {
 	}
 
 	private SetWallSize(cell: Cell) {
+		// if(cell.wallState)
+
 		if (cell.upCell != null) {
 			if (!cell.leftWall.isOpen && cell.upCell.leftWall) {
 				this.img_leftWall.top = 0;

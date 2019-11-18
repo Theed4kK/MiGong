@@ -2,6 +2,8 @@ class Cell {
 	public constructor() {
 	}
 
+	public wallState: number;
+	public cellState: number;
 	/**0:上墙 1:下墙 2:左墙 3:右墙 */
 	public upWall: Wall = new Wall();
 	public downWall: Wall = new Wall();;

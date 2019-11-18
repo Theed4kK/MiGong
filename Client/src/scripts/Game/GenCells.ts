@@ -104,6 +104,7 @@ class GenCells {
 			if (cs.length > 0) {
 				let num: number = Common.getRandomInt(1, cs.length);
 				GenCells.GetSharedWall(signingCell, cs[num - 1]).isOpen = true;
+
 				signingCell = cs[num - 1];
 				signingCell.isSigned = true;
 				signedCell.push(signingCell);
@@ -139,15 +140,23 @@ class GenCells {
 		let w: Wall;
 		if (cell1.leftWall == cell2.rightWall) {
 			w = cell1.leftWall;
+			cell1.wallState += 1;
+			cell2.wallState += 4;
 		}
 		else if (cell1.rightWall == cell2.leftWall) {
 			w = cell1.rightWall;
+			cell1.wallState += 4;
+			cell2.wallState += 1;
 		}
 		else if (cell1.upWall == cell2.downWall) {
 			w = cell1.upWall;
+			cell1.wallState += 2;
+			cell2.wallState += 8;
 		}
 		else if (cell1.downWall == cell2.upWall) {
 			w = cell1.downWall;
+			cell1.wallState += 8;
+			cell2.wallState += 2;
 		}
 		return w;
 	}

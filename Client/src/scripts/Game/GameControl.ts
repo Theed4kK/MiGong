@@ -91,24 +91,24 @@ class GameControl extends eui.Component implements eui.UIComponent {
 		let move: number = 0;
 		let img_role = this.img_role;
 
-		let isPlus = speedX > 0;
-		let nearWall: Wall = isPlus ? cell.rightWall : cell.leftWall;
+		let moveRight = speedX > 0;
+		let nearWall: Wall = moveRight ? cell.rightWall : cell.leftWall;
 		if (!nearWall.isOpen || this.IsEdge(0)) {
 			let width: number = WallRender.vWallwidth * 0.5 + img_role.width * 0.5;
-			let distance: number = Math.abs(obj.x + (isPlus ? 1 : 0) * obj.width / type - img_role.x) - width;
-			move = isPlus ? Math.min(distance, speedX) : Math.max(-distance, speedX);
+			let distance: number = Math.abs(obj.x + (moveRight ? 1 : 0) * obj.width / type - img_role.x) - width;
+			move = moveRight ? Math.min(distance, speedX) : Math.max(-distance, speedX);
 		}
 		else {
 			move = speedX;
 		}
 		img_role.x += move;
 
-		isPlus = speedY < 0;
-		nearWall = isPlus ? cell.upWall : cell.downWall;
+		moveRight = speedY < 0;
+		nearWall = moveRight ? cell.upWall : cell.downWall;
 		if (!nearWall.isOpen || this.IsEdge(1)) {
 			let height: number = WallRender.hWallHeight * 0.5 + img_role.height * 0.5;
-			let distance: number = Math.abs(obj.y + (isPlus ? 0 : 1) * obj.height / type - img_role.y) - height;
-			move = isPlus ? Math.max(-distance, speedY) : Math.min(distance, speedY);
+			let distance: number = Math.abs(obj.y + (moveRight ? 0 : 1) * obj.height / type - img_role.y) - height;
+			move = moveRight ? Math.max(-distance, speedY) : Math.min(distance, speedY);
 		}
 		else {
 			move = speedY;
