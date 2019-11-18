@@ -146,6 +146,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		let self: GameUI = this;
 		// self.img_mapBg.width = self.list.width;
 		// self.group_wallBg.width = self.list_wall.width;
+		WallRender.hWallHeight * 2;
 		self.group_light.x = WallRender.vWallwidth;
 		self.group_light.y = WallRender.hWallHeight;
 		self.group_light.width = self.list_wall.width - WallRender.vWallwidth * 2;

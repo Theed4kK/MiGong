@@ -1,7 +1,5 @@
 class LightMask extends egret.Sprite {
-	/**竖墙 */
 	private cirleLight_h: egret.Shape = new egret.Shape();
-	/**横墙 */
 	private cirleLight_w: egret.Shape = new egret.Shape();
 	private cirleLight: egret.Sprite = new egret.Sprite();
 	private mask_sprite: egret.Sprite = new egret.Sprite();
@@ -35,19 +33,14 @@ class LightMask extends egret.Sprite {
 	private lastTime: number;
 	//设置光圈的位置
 	public setLightPos(posx: number, posy: number) {
-		let cell = GameUI.manageCells.currentCell;
-		let cellRender = GameUI.manageRenders.currentBgRender;
-		this.cirleLight_h.x = cellRender.x;
-		this.cirleLight_h.y = cell.upWall.isOpen ? posy - CellBgRender._height : cellRender.y;
-		this.cirleLight_h.height = (cell.upWall.isOpen ? CellBgRender._height : posy - cellRender.y) +
-			(cell.downWall.isOpen ? CellBgRender._height : cellRender.y - posy + CellBgRender._height);
-
-			this.cirleLight_w.y = cellRender.y;
-		this.cirleLight_w.x = cell.leftWall.isOpen ? posx - CellBgRender._width : cellRender.x;
-		this.cirleLight_w.height = (cell.leftWall.isOpen ? CellBgRender._width : posx - cellRender.x) +
-			(cell.rightWall.isOpen ? CellBgRender._width : cellRender.x - posx + CellBgRender._width);
-
-		
+		this.cirleLight_h.x = posx;
+		this.cirleLight_h.y = posy;
+		this.cirleLight_w.x = posx;
+		this.cirleLight_w.y = posy;
+		this.mask_shape_h.x = posx;
+		this.mask_shape_h.y = posy;
+		this.mask_shape_w.x = posx;
+		this.mask_shape_w.y = posy;
 
 		this.lastTime = egret.getTimer();
 		let render = new egret.RenderTexture();
@@ -66,38 +59,32 @@ class LightMask extends egret.Sprite {
 	}
 	//设置光圈的大小
 	public setLightValue(light: number) {
-		let lightMatrix_h = new egret.Matrix();
-		let lightMatrix_w = new egret.Matrix();
-		lightMatrix_h.createGradientBox(CellBgRender._width, CellBgRender._height * 2, 0, -CellBgRender._width / 2, -CellBgRender._height);
-		lightMatrix_w.createGradientBox(CellBgRender._width * 2, CellBgRender._height, 0, -CellBgRender._width, -CellBgRender._height / 2);
+		let lightMatrix_h = new egret.Matrix(); 
+		let lightMatrix_w = new egret.Matrix(); 
+		lightMatrix_h.createGradientBox(light * 2, CellBgRender._height * 2, 0, -light, -CellBgRender._height);
+		lightMatrix_w.createGradientBox(CellBgRender._width * 2, light * 2, 0, -CellBgRender._width, -light);
+		this.light_size = light;
 		let cirleLight_h = this.cirleLight_h;
 		let cirleLight_w = this.cirleLight_w;
 		let mask_shape_h = this.mask_shape_h;
 		let mask_shape_w = this.mask_shape_w;
 		cirleLight_h.graphics.clear();
 		let colorGroup: number[] = [0xffffff, 0xd3d3d3, 0x888888];
-		let alphasGroup: number[] = [1, 0.9, 0.4];
-		let colorNumGroup: number[] = [0, 150, 255];
-		// cirleLight_h.graphics.beginGradientFill(egret.GradientType.RADIAL, colorGroup, alphasGroup, colorNumGroup, lightMatrix_h);//这个渐变的参数是自己调的，可能不太理想，谁有好的参数可以留言，谢谢啦。
-
-		cirleLight_h.graphics.beginFill(0xffffff, 1);
-		cirleLight_h.graphics.drawRect(0, 0, CellBgRender._width, CellBgRender._height * 2);
+		let alphasGroup: number[] = [1, 0.9, 0.2];
+		let colorNumGroup: number[] = [0, 50, 255];
+		cirleLight_h.graphics.beginGradientFill(egret.GradientType.RADIAL, colorGroup, alphasGroup, colorNumGroup, lightMatrix_h);//这个渐变的参数是自己调的，可能不太理想，谁有好的参数可以留言，谢谢啦。
+		cirleLight_h.graphics.drawRect(-light, -CellBgRender._height, light * 2, CellBgRender._height * 2);
 		cirleLight_h.graphics.endFill();
 		// cirleLight_w.graphics.beginGradientFill(egret.GradientType.RADIAL, colorGroup, alphasGroup, colorNumGroup, lightMatrix_w);//这个渐变的参数是自己调的，可能不太理想，谁有好的参数可以留言，谢谢啦。
+		// cirleLight_w.graphics.drawRect(-light, -light, CellBgRender._width * 2, light * 2);
+		// cirleLight_w.graphics.endFill();
 
-		cirleLight_w.graphics.beginFill(0xffffff, 1);
-		cirleLight_w.graphics.drawRect(0, 0, CellBgRender._width * 2, CellBgRender._height);
-		cirleLight_w.graphics.endFill();
-
-
-		mask_shape_h.graphics.beginFill(0xffffff, 1);
-		mask_shape_h.graphics.drawRect(-CellBgRender._width / 2, -CellBgRender._height, CellBgRender._width, CellBgRender._height * 2);
-		mask_shape_h.graphics.endFill();
-		mask_shape_w.graphics.beginFill(0xffffff, 1);
-		mask_shape_w.graphics.drawRect(-CellBgRender._width, - CellBgRender._height / 2, CellBgRender._width * 2, CellBgRender._height);
-		mask_shape_w.graphics.endFill();
-
-		this.setLightPos(CellBgRender._width / 2, CellBgRender._height / 2);
+		// mask_shape_h.graphics.beginFill(0xffffff, 1);
+		// mask_shape_h.graphics.drawRect(-light, -light, light * 2, CellBgRender._height * 2);
+		// mask_shape_h.graphics.endFill();
+		// mask_shape_w.graphics.beginFill(0xffffff, 1);
+		// mask_shape_w.graphics.drawRect(-light, -light, CellBgRender._width * 2, light * 2);
+		// mask_shape_w.graphics.endFill();
 	}
 
 }
