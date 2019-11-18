@@ -59,18 +59,18 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_END, this.CancelTouch, this);
 		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_CANCEL, this.CancelTouch, this);
 		GameUI.manageCells.addEventListener("RefreshCurRender", this.UpdateIndex, this);
-		this.gameControl.addEventListener(MyEvent.moveScroll, this.MoveScroll, this);
+		this.gameControl.addEventListener("moveScroll", this.MoveScroll, this);
 	}
 
 	private TestDb() {
-		ItemManage.GetInstance().GetItem(Common.getRandomInt(1,3),1);
+		ItemManage.GetInstance().GetItem(Common.getRandomInt(1, 3), 1);
 	}
 
 	private ReturnSignCell(): void {
 		this.gameControl.RoleMoveState(2);
 	}
 
-	private MoveScroll(e: MyEvent): void {
+	private MoveScroll(e: egret.Event): void {
 		let scrollH = this.scroller.viewport.scrollH;
 		let data: any = e.data;
 		if (data.speed < 0) {
@@ -155,14 +155,14 @@ class GameUI extends eui.Component implements eui.UIComponent {
 
 	/**播放开始动画 */
 	private PlayStartAni(): void {
-		let obj: WallRender = GameUI.manageRenders.currentRender;
+		let obj: WallRender = GameUI.manageRenders.currentWallRender;
 		this.img_role.x = obj.x;
 		this.img_role.y = obj.y + (obj.height / 2);
 		egret.Tween.get(this.scroller.viewport).to({ scrollH: 0 }, this.scroller.viewport.scrollH / 0.5);
 		egret.Tween.get(this.img_role).wait(this.scroller.viewport.scrollH / 0.5).to({ x: obj.x + (obj.width / 2) }, 1000).call(() => {
 			this.img_Bg.touchEnabled = true;
 		});
-		obj.StartAni(1000);
+		// obj.StartAni(1000);
 		egret.log("开始动画播放完成");
 	}
 

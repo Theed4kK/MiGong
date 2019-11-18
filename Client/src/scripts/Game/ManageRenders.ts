@@ -6,10 +6,10 @@ class ManageRenders extends eui.Component implements eui.UIComponent {
 		GameUI.manageCells.addEventListener("RefreshCurRender", this.RefreshRender, this);
 	}
 
-	public wallList: eui.List;
-	public cellList: eui.List;
+	private wallList: eui.List;
+	private cellList: eui.List;
 	public currentBgRender: CellBgRender;
-	public currentRender: WallRender;
+	public currentWallRender: WallRender;
 
 	/**初始化背景和墙格子 */
 	public InitRenders(cells: Cell[]): void {
@@ -26,8 +26,9 @@ class ManageRenders extends eui.Component implements eui.UIComponent {
 	}
 
 	private RefreshRender(e: egret.Event): void {
-		this.currentRender = <WallRender>this.wallList.getElementAt(e.data);
+		this.currentWallRender = <WallRender>this.wallList.getElementAt(e.data);
 		this.currentBgRender = <CellBgRender>this.cellList.getElementAt(e.data);
+		this.currentWallRender.ShowWall();
 	}
 
 	// 	/**生成地图底图 需要地图生成完成后调用*/
