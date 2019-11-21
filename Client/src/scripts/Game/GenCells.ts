@@ -24,24 +24,26 @@ class GenCells {
 		}
 
 		//初始化格子/墙的id和关联
+		let edgeCell: Cell = new Cell();
+		edgeCell.isSigned = true;
 		for (var i: number = 0; i < row; i++) {
 			for (var j: number = 0; j < col; j++) {
 				let c: Cell = cells[i][j];
-				c.upCell = (i == 0 ? null : cells[i - 1][j]);
-				if (c.upCell != null) {
+				c.upCell = (i == 0 ? edgeCell : cells[i - 1][j]);
+				if (c.upCell != edgeCell) {
 					c.upWall.cell1Id = c.upCell.id;
 					c.upWall.cell2Id = c.id;
 					c.upCell.downWall = c.upWall;
 				}
-				c.downCell = (i == row - 1 ? null : cells[i + 1][j]);
+				c.downCell = (i == row - 1 ? edgeCell : cells[i + 1][j]);
 
-				c.leftCell = (j == 0 ? null : cells[i][j - 1]);
-				if (c.leftCell != null) {
+				c.leftCell = (j == 0 ? edgeCell : cells[i][j - 1]);
+				if (c.leftCell != edgeCell) {
 					c.leftWall.cell1Id = c.leftCell.id;
 					c.leftWall.cell2Id = c.id;
 					c.leftCell.rightWall = c.leftWall;
 				}
-				c.rightCell = (j == col - 1 ? null : cells[i][j + 1]);
+				c.rightCell = (j == col - 1 ? edgeCell : cells[i][j + 1]);
 			}
 		}
 
@@ -54,7 +56,7 @@ class GenCells {
 
 	private static SetWallSize(allCell: Cell[]) {
 		allCell.forEach(v => {
-			
+
 
 		})
 	}
@@ -120,16 +122,16 @@ class GenCells {
 	/**获取周围未访问的格子集合 */
 	private static GetDesignedCell(cell: Cell): Cell[] {
 		let cs: Cell[] = [];
-		if (cell.upCell != null && !cell.upCell.isSigned) {
+		if (!cell.upCell.isSigned) {
 			cs.push(cell.upCell);
 		}
-		if (cell.downCell != null && !cell.downCell.isSigned) {
+		if (!cell.downCell.isSigned) {
 			cs.push(cell.downCell);
 		}
-		if (cell.leftCell != null && !cell.leftCell.isSigned) {
+		if (!cell.leftCell.isSigned) {
 			cs.push(cell.leftCell);
 		}
-		if (cell.rightCell != null && !cell.rightCell.isSigned) {
+		if (!cell.rightCell.isSigned) {
 			cs.push(cell.rightCell);
 		}
 		return cs;
@@ -140,23 +142,23 @@ class GenCells {
 		let w: Wall;
 		if (cell1.leftWall == cell2.rightWall) {
 			w = cell1.leftWall;
-			cell1.wallState += 1;
-			cell2.wallState += 4;
+			cell1.wallState -= 1;
+			cell2.wallState -= 4;
 		}
 		else if (cell1.rightWall == cell2.leftWall) {
 			w = cell1.rightWall;
-			cell1.wallState += 4;
-			cell2.wallState += 1;
+			cell1.wallState -= 4;
+			cell2.wallState -= 1;
 		}
 		else if (cell1.upWall == cell2.downWall) {
 			w = cell1.upWall;
-			cell1.wallState += 2;
-			cell2.wallState += 8;
+			cell1.wallState -= 2;
+			cell2.wallState -= 8;
 		}
 		else if (cell1.downWall == cell2.upWall) {
 			w = cell1.downWall;
-			cell1.wallState += 8;
-			cell2.wallState += 2;
+			cell1.wallState -= 8;
+			cell2.wallState -= 2;
 		}
 		return w;
 	}

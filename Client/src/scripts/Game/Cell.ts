@@ -2,7 +2,7 @@ class Cell {
 	public constructor() {
 	}
 
-	public wallState: number;
+	public wallState: number = 15;
 	public cellState: number;
 	/**0:上墙 1:下墙 2:左墙 3:右墙 */
 	public upWall: Wall = new Wall();
@@ -14,7 +14,6 @@ class Cell {
 	public downCell: Cell = null;;
 	public leftCell: Cell = null;;
 	public rightCell: Cell = null;;
-	public nearCells: Cell[] = [];
 
 	/**生成时用来标记是否已经被处理过 */
 	public isSigned: boolean = false;

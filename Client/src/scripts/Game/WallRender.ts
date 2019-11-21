@@ -34,47 +34,49 @@ class WallRender extends eui.ItemRenderer {
 	protected dataChanged(): void {
 		let cell: Cell = this.data;
 		this.SetWallSize(cell);
-		this.img_leftWall.visible = false || cell.leftCell == null;
-		this.img_upWall.visible = false || cell.upCell == null;
-		this.img_downWall.visible = false || cell.downCell == null;
-		this.img_rightWall.visible = false || cell.rightCell == null;
+		this.img_leftWall.visible = false || cell.leftCell.leftCell == null;
+		this.img_upWall.visible = false || cell.upCell.upCell == null;
+		this.img_downWall.visible = false || cell.downCell.downCell == null;
+		this.img_rightWall.visible = false || cell.rightCell.rightCell == null;
 	}
 
 	private SetWallSize(cell: Cell) {
-		// if(cell.wallState)
+		//左墙顶高
+		if ((cell.wallState & 3) === 1 && cell.leftCell.upWall.isOpen && cell.upCell.leftWall.isOpen) {
+			this.img_leftWall.top = 0;
+		}
+		//左墙顶底
+		if ((cell.wallState & 9) === 1 && cell.leftCell.downWall.isOpen && cell.downCell.leftWall.isOpen) {
+			this.img_leftWall.bottom = 0;
+		}
 
-		if (cell.upCell != null) {
-			if (!cell.leftWall.isOpen && cell.upCell.leftWall) {
-				this.img_leftWall.top = 0;
-			}
-			if (!cell.rightWall.isOpen && cell.upCell.rightWall) {
-				this.img_rightWall.top = 0;
-			}
+		//右墙顶高
+		if ((cell.wallState & 6) === 4 && cell.rightCell.upWall.isOpen && cell.upCell.rightWall.isOpen) {
+			this.img_rightWall.top = 0;
 		}
-		if (cell.downCell != null) {
-			if (!cell.leftWall.isOpen && cell.downCell.leftWall) {
-				this.img_leftWall.bottom = 0;
-			}
-			if (!cell.rightWall.isOpen && cell.downCell.rightWall) {
-				this.img_rightWall.bottom = 0;
-			}
+		//右墙顶底
+		if ((cell.wallState & 12) === 4 && cell.rightCell.downWall.isOpen && cell.downCell.rightWall.isOpen) {
+			this.img_leftWall.bottom = 0;
 		}
-		if (cell.leftCell != null) {
-			if (!cell.upWall.isOpen && cell.leftCell.upWall) {
-				this.img_upWall.left = 0;
-			}
-			if (!cell.downWall.isOpen && cell.leftCell.downWall) {
-				this.img_downWall.left = 0;
-			}
+
+		//上墙顶左
+		if ((cell.wallState & 3) === 2 && cell.leftCell.upWall.isOpen && cell.upCell.leftWall.isOpen) {
+			this.img_upWall.left = 0;
 		}
-		if (cell.rightCell != null) {
-			if (!cell.upWall.isOpen && cell.rightCell.upWall) {
-				this.img_upWall.right = 0;
-			}
-			if (!cell.downWall.isOpen && cell.rightCell.downWall) {
-				this.img_downWall.right = 0;
-			}
+		//上墙顶右
+		if ((cell.wallState & 6) === 2 && cell.rightCell.upWall.isOpen && cell.upCell.rightWall.isOpen) {
+			this.img_upWall.right = 0;
 		}
+
+		//下墙顶左
+		if ((cell.wallState & 9) === 8 && cell.leftCell.downWall.isOpen && cell.downCell.leftWall.isOpen) {
+			this.img_downWall.left = 0;
+		}
+		//下墙顶右
+		if ((cell.wallState & 12) === 8 && cell.rightCell.downWall.isOpen && cell.downCell.rightWall.isOpen) {
+			this.img_downWall.right = 0;
+		}
+
 	}
 
 	public ShowWall() {
