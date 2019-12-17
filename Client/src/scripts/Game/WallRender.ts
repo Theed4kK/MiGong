@@ -1,7 +1,7 @@
 class WallRender extends eui.ItemRenderer {
 	public constructor() {
 		super()
-		this.addEventListener(egret.Event.ADDED, this.GetWallSize, this);
+		// this.addEventListener(egret.Event.ADDED, this.GetWallSize, this);
 	}
 
 	private img_leftWall: eui.Image;
@@ -11,10 +11,10 @@ class WallRender extends eui.ItemRenderer {
 
 	private isPassed: boolean = false;
 
-	public static hWallHeight: number = 0;
-	public static vWallwidth: number = 0;
-	public static height: number = 0;
-	public static width: number = 0;
+	public static hWallHeight: number = 16;
+	public static vWallwidth: number = 10;
+	public static height: number = 100;
+	public static width: number = 100;
 
 	private GetWallSize(): void {
 		if (WallRender.hWallHeight == 0) {
@@ -34,10 +34,15 @@ class WallRender extends eui.ItemRenderer {
 	protected dataChanged(): void {
 		let cell: Cell = this.data;
 		this.SetWallSize(cell);
-		this.img_leftWall.visible = false || cell.leftCell.leftCell == null;
-		this.img_upWall.visible = false || cell.upCell.upCell == null;
-		this.img_downWall.visible = false || cell.downCell.downCell == null;
-		this.img_rightWall.visible = false || cell.rightCell.rightCell == null;
+		// this.img_leftWall.visible = false || cell.leftCell.leftCell == null;
+		// this.img_upWall.visible = false || cell.upCell.upCell == null;
+		// this.img_downWall.visible = false || cell.downCell.downCell == null;
+		// this.img_rightWall.visible = false || cell.rightCell.rightCell == null;
+
+		this.img_leftWall.visible = !cell.leftWall.isOpen;
+		this.img_upWall.visible = !cell.upWall.isOpen;
+		this.img_downWall.visible = !cell.downWall.isOpen;
+		this.img_rightWall.visible = !cell.rightWall.isOpen;
 	}
 
 	private SetWallSize(cell: Cell) {
@@ -56,7 +61,7 @@ class WallRender extends eui.ItemRenderer {
 		}
 		//右墙顶底
 		if ((cell.wallState & 12) === 4 && cell.rightCell.downWall.isOpen && cell.downCell.rightWall.isOpen) {
-			this.img_leftWall.bottom = 0;
+			this.img_rightWall.bottom = 0;
 		}
 
 		//上墙顶左
@@ -80,10 +85,10 @@ class WallRender extends eui.ItemRenderer {
 	}
 
 	public ShowWall() {
-		let cell: Cell = this.data;
-		this.img_leftWall.visible = !cell.leftWall.isOpen;
-		this.img_upWall.visible = !cell.upWall.isOpen;
-		this.img_downWall.visible = !cell.downWall.isOpen;
-		this.img_rightWall.visible = !cell.rightWall.isOpen;
+		// let cell: Cell = this.data;
+		// this.img_leftWall.visible = !cell.leftWall.isOpen;
+		// this.img_upWall.visible = !cell.upWall.isOpen;
+		// this.img_downWall.visible = !cell.downWall.isOpen;
+		// this.img_rightWall.visible = !cell.rightWall.isOpen;
 	}
 }

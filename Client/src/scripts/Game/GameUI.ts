@@ -27,8 +27,6 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	private mapTexture: egret.Bitmap = new egret.Bitmap();
 
 	private group_light: eui.Group;
-	private group_wallBg: eui.Group;
-
 
 	private stepNum: number = 0;
 	private virt: VirtualRocker = new VirtualRocker();
@@ -40,6 +38,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		this.virt.visible = false;
 		this.scroller.horizontalScrollBar.autoVisibility = false;
 		this.scroller.horizontalScrollBar.visible = false;
+		this.scroller.$hitTest = ()=>{return null;};
 		this.GenMiGong();
 		this.AddListener();
 		egret.log("childrenCreated");
@@ -98,6 +97,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.Move, this);
 		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_END, this.CancelTouch, this);
 		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_CANCEL, this.CancelTouch, this);
+		GameUI.manageCells.removeEventListener("RefreshCurRender", this.UpdateIndex, this);
 	}
 
 	/**触屏手指移动 */

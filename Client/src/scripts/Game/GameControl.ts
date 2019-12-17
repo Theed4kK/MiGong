@@ -39,7 +39,7 @@ class GameControl extends eui.Component implements eui.UIComponent {
 	private RefreshLight() {
 		if (egret.getTimer() - this.lightRefreshTime < 50) { return; }
 		let role = this.img_role;
-		this.maskLight.setLightValue(role.x, role.y);
+		this.maskLight.MoveLight(role.x, role.y);
 		this.DrawLightTexture();
 		this.lightRefreshTime = egret.getTimer();
 	}

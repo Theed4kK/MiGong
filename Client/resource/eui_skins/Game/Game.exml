@@ -3,7 +3,7 @@
         xmlns:ns1="*">
 	<w:Config id="16b364587c8"></w:Config>
 	<e:Image id="img_Bg" horizontalCenter="0" verticalCenter="0" source="loading_jpg" x="0" y="0" scaleX="1" scaleY="1"
-	         touchEnabled="false" />
+	         touchEnabled="true" />
 	<e:Image id="btn_return" x="482" y="1019" anchorOffsetX="0" anchorOffsetY="0" source="" width="104" height="50"/>
 	<e:Group height="916" top="0" left="0" right="0" touchThrough="false" touchEnabled="false" touchChildren="false">
 
@@ -45,11 +45,11 @@
 
 
 
-	<e:Group left="0" right="0" top="0" bottom="0" touchThrough="true" touchEnabled="false" touchChildren="true">
+	<e:Group left="0" right="0" top="908" bottom="0" touchThrough="true" touchEnabled="false" touchChildren="true" anchorOffsetY="0">
 
 
 
-		<e:Group anchorOffsetX="0" left="0" right="0" anchorOffsetY="0" touchChildren="true" touchEnabled="false" touchThrough="true" height="74" top="907">
+		<e:Group anchorOffsetX="0" left="0" right="0" anchorOffsetY="0" touchChildren="true" touchEnabled="false" touchThrough="true" height="74" bottom="155">
 			<e:Button id="btn_test" label="test" x="283" y="24" skinName="skins.ButtonSkin"/>
 
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin class="WallRenderSkin" width="60" height="60" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" >
+<e:Skin class="WallRenderSkin" width="100" height="100" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" >
 	<w:Config id="16b367ba8b3" ></w:Config>
 	<e:Image id="img_upWall" top="-8" anchorOffsetX="0" source="wall2_png" fillMode="repeat" left="-5" right="-5" touchEnabled="false" height="16"/>
 	<e:Image id="img_leftWall" source="wall1_png" left="-5" fillMode="repeat" top="-8" touchEnabled="false" bottom="-8"/>
