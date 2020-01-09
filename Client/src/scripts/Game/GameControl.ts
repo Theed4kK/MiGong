@@ -22,7 +22,7 @@ class GameControl extends eui.Component implements eui.UIComponent {
 		let group_light = this.group_light;
 		this.lightBitMap.texture = new egret.Texture();
 		maskLight.setMaskSize(group_light.width, group_light.height);
-		maskLight.setLightValue(this.img_role.x, this.img_role.y);
+		maskLight.setLightValue(CellBgRender._width / 2, CellBgRender._height / 2);
 		group_light.addChild(this.maskLight);
 		maskLight.x = 0;
 		maskLight.y = 0;

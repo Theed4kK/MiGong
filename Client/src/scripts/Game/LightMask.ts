@@ -49,6 +49,7 @@ class LightMask extends egret.Sprite {
 		this.radius = CellBgRender._height + WallRender.hWallHeight / 2;
 	}
 
+
 	//设置光圈的大小
 	public setLightValue(posx: number, posy: number) {
 		let self: LightMask = this;
@@ -61,25 +62,29 @@ class LightMask extends egret.Sprite {
 			y1: cellRender.y - WallRender.hWallHeight / 2,
 			y2: cellRender.y + WallRender.hWallHeight / 2 + CellBgRender._height,
 		}
-		self.cirleLight_shape.graphics.clear();
-		self.cirleLight_shape.graphics.lineStyle(3, 0xffffff);
 
-		for (let angle = 0; angle < 360; angle += 2) {
-			let vertex = { x: posx + radius * Math.cos(Math.PI * angle / 180), y: posy - radius * Math.sin(Math.PI * angle / 180) };
-			let boundary_x = vertex.x >= cellPos.x2 ? cellPos.x2 : (vertex.x < cellPos.x1 ? cellPos.x1 : -1);
-			let boundary_y = vertex.y >= cellPos.y2 ? cellPos.y2 : (vertex.y < cellPos.y1 ? cellPos.y1 : -1);
+		let pos_group: egret.Point[] = [];
+
+		let test: { x: number, y: number, angle: number, dis_group: number[] }[] = [];
+
+		for (let angle = 0; angle <= 360; angle += 1) {
+			let vertex = { x: posx + radius * Math.sin(Math.PI * angle / 180), y: posy - radius * Math.cos(Math.PI * angle / 180) };
+			let boundary_x = vertex.x >= cellPos.x2 ? cellPos.x2 : (vertex.x < cellPos.x1 ? cellPos.x1 : -999);
+			let boundary_y = vertex.y >= cellPos.y2 ? cellPos.y2 : (vertex.y < cellPos.y1 ? cellPos.y1 : -999);
+			let offset = { y: vertex.y > posy ? 5 : -5, x: vertex.x > posx ? 5 : -5, }
 			//竖边界交点
-			let res_v = this.GetIntersection(vertex, { x: posx, y: posy }, { x: boundary_x, y: posy }, { x: boundary_x, y: vertex.y })
+			let res_v = this.segmentsIntr(vertex, { x: posx, y: posy }, { x: boundary_x, y: posy + offset.y }, { x: boundary_x, y: vertex.y + offset.y })
 			//横边界交点
-			let res_h = this.GetIntersection(vertex, { x: posx, y: posy }, { x: posx, y: boundary_y }, { x: vertex.x, y: boundary_y })
-			let intersection = vertex;
+			let res_h = this.segmentsIntr(vertex, { x: posx, y: posy }, { x: posx + offset.x, y: boundary_y }, { x: vertex.x + offset.x, y: boundary_y })
+			let intersection;
 			let res_v_left = angle > 180;
 			let res_h_top = angle < 90 || angle > 270;
+			let dis_v, dis_h;
 			//同时与横竖边界相交
 			if (res_v && res_h) {
 				//距离两个交点的长度
-				let dis_v = egret.Point.distance(new egret.Point(posx, posy), new egret.Point(res_v.x, res_v.y));
-				let dis_h = egret.Point.distance(new egret.Point(posx, posy), new egret.Point(res_h.x, res_h.y));
+				dis_v = egret.Point.distance(new egret.Point(posx, posy), new egret.Point(res_v.x, res_v.y));
+				dis_h = egret.Point.distance(new egret.Point(posx, posy), new egret.Point(res_h.x, res_h.y));
 				//先与竖边界相交
 				if (dis_v < dis_h) {
 					//与右边界相交	
@@ -142,16 +147,26 @@ class LightMask extends egret.Sprite {
 					intersection = res_h;
 				}
 			}
-			self.cirleLight_shape.graphics.moveTo(posx, posy);
-			self.cirleLight_shape.graphics.lineTo(intersection.x, intersection.y);
-
+			if (!intersection) { intersection = vertex }
+			pos_group.push(new egret.Point(intersection.x, intersection.y));
+			test.push(
+				{ x: intersection.x, y: intersection.y, angle: angle, dis_group: [dis_v, dis_h] }
+			)
 		}
+		self.cirleLight_shape.graphics.clear();
+		self.cirleLight_shape.graphics.beginFill(0xffffff, 1);
+		self.cirleLight_shape.graphics.lineStyle(1, 0xffffff);
+		self.cirleLight_shape.graphics.moveTo(posx, posy);
+		pos_group.forEach(intersection => {
+			self.cirleLight_shape.graphics.lineTo(intersection.x, intersection.y);
+		})
+		self.cirleLight_shape.graphics.lineTo(posx, posy);
 		self.cirleLight_shape.graphics.endFill();
 	}
 
 
 	private GetIntersection(a: any, b: any, c: any, d: any): { x: number, y: number } {
-		if (c.x < 0 || c.y < 0) {
+		if (!c.x || !c.y || !d.x || !d.y) {
 			return null;
 		}
 
@@ -171,6 +186,46 @@ class LightMask extends egret.Sprite {
 		else {
 			// Debug.Print("线段相交于虚交点(" + intersection.x + "," + intersection.y + ")！");
 			return null; //'相交但不在线段上
+
 		}
+	}
+
+	segmentsIntr(a, b, c, d) {
+
+		if (c.x == -999 || c.y === -999 || d.x == -999 || d.y == -999) {
+			return null;
+		}
+
+		/** 1 解线性方程组, 求线段交点. **/
+		// 如果分母为0 则平行或共线, 不相交 
+		var denominator = (b.y - a.y) * (d.x - c.x) - (a.x - b.x) * (c.y - d.y);
+		if (denominator == 0) {
+			return null;
+		}
+
+		// 线段所在直线的交点坐标 (x , y) 
+		var x = ((b.x - a.x) * (d.x - c.x) * (c.y - a.y)
+			+ (b.y - a.y) * (d.x - c.x) * a.x
+			- (d.y - c.y) * (b.x - a.x) * c.x) / denominator;
+		var y = -((b.y - a.y) * (d.y - c.y) * (c.x - a.x)
+			+ (b.x - a.x) * (d.y - c.y) * a.y
+			- (d.x - c.x) * (b.y - a.y) * c.y) / denominator;
+
+		/** 2 判断交点是否在两条线段上 **/
+		if (
+			// 交点在线段1上 
+			(x - a.x) * (x - b.x) <= 0 && (y - a.y) * (y - b.y) <= 0
+			// 且交点也在线段2上 
+			&& (x - c.x) * (x - d.x) <= 0 && (y - c.y) * (y - d.y) <= 0
+		) {
+
+			// 返回交点p 
+			return {
+				x: x,
+				y: y
+			}
+		}
+		//否则不相交 
+		return null
 	}
 }
