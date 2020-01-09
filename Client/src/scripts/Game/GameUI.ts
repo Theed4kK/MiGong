@@ -27,6 +27,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	private mapTexture: egret.Bitmap = new egret.Bitmap();
 
 	private group_light: eui.Group;
+	private group_map:eui.Group;
 
 	private stepNum: number = 0;
 	private virt: VirtualRocker = new VirtualRocker();
@@ -135,7 +136,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		self.InitMask();
 
 		//初始化角色控制器和光照效果
-		self.gameControl = new GameControl(this.img_role, this.group_light, 10)
+		self.gameControl = new GameControl(this.img_role, this.group_map, 10)
 
 		self.PlayStartAni();
 		egret.log("迷宫生成完成");
@@ -147,10 +148,10 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		// self.img_mapBg.width = self.list.width;
 		// self.group_wallBg.width = self.list_wall.width;
 		WallRender.hWallHeight * 2;
-		self.group_light.x = WallRender.vWallwidth;
-		self.group_light.y = WallRender.hWallHeight;
-		self.group_light.width = self.list_wall.width - WallRender.vWallwidth * 2;
-		self.group_light.height = self.list_wall.height - WallRender.hWallHeight * 2;
+		self.group_light.x = 0;
+		self.group_light.y = 0;
+		self.group_light.width = self.group_map.width;
+		self.group_light.height = self.group_map.height;
 	}
 
 	/**播放开始动画 */

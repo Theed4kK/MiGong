@@ -14,48 +14,38 @@ class GameControl extends eui.Component implements eui.UIComponent {
 	private img_role: eui.Image;
 	private group_light: eui.Group;
 	public maskLight: LightMask = new LightMask();
-	private lightBitMap: egret.Bitmap = new egret.Bitmap();
+	private lightBitMap = new egret.Bitmap();
 
 	/**初始化光照 */
 	private InitLight() {
 		let maskLight = this.maskLight;
 		let group_light = this.group_light;
+		this.lightBitMap.texture = new egret.Texture();
 		maskLight.setMaskSize(group_light.width, group_light.height);
-		maskLight.setLightValue(this.img_role.x,this.img_role.y);
-		this.DrawLightTexture();
-		group_light.addChild(this.lightBitMap);
+		maskLight.setLightValue(this.img_role.x, this.img_role.y);
+		group_light.addChild(this.maskLight);
 		maskLight.x = 0;
 		maskLight.y = 0;
 	}
 
-
-	private DrawLightTexture() {
-		let render: egret.RenderTexture = new egret.RenderTexture();
-		render.drawToTexture(this.maskLight);
-		this.lightBitMap.texture = render;
-	}
-
-	private lightRefreshTime: number;
 	private RefreshLight() {
-		if (egret.getTimer() - this.lightRefreshTime < 50) { return; }
 		let role = this.img_role;
-		this.maskLight.MoveLight(role.x, role.y);
-		this.DrawLightTexture();
-		this.lightRefreshTime = egret.getTimer();
+		// this.maskLight.MoveLight(role.x, role.y);
+		this.maskLight.setLightValue(this.img_role.x, this.img_role.y);
 	}
 
 	public RoleMoveState(state: number, start: number = 0, target: number = 0): void {
 		switch (state) {
 			//操作移动
 			case 0:
-				this.addEventListener(egret.Event.ENTER_FRAME, this.PlayerMove, this, );
+				this.addEventListener(egret.Event.ENTER_FRAME, this.PlayerMove, this);
 				break;
 			//停止操作移动
 			case 1:
 				this.removeEventListener(egret.Event.ENTER_FRAME, this.PlayerMove, this);
 				break;
 			case 2:
-				this.addEventListener(egret.Event.ENTER_FRAME, this.RoleAutoMove, this, );
+				this.addEventListener(egret.Event.ENTER_FRAME, this.RoleAutoMove, this);
 				break;
 			case 3:
 				this.RoleAutoMove();
@@ -118,6 +108,7 @@ class GameControl extends eui.Component implements eui.UIComponent {
 		this.dispatchEventWith("moveScroll", false, { x: img_role.x, speed: speedX })
 		GameUI.manageCells.SetIndex(img_role.x, img_role.y);
 		this.RefreshLight();
+
 	}
 
 	private IsEdge(type: number): boolean {
@@ -137,5 +128,5 @@ class GameControl extends eui.Component implements eui.UIComponent {
 		return isEdge;
 	}
 
-	
+
 }

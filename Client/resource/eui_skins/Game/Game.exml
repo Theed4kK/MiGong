@@ -8,23 +8,23 @@
 	<e:Group height="916" top="0" left="0" right="0" touchThrough="false" touchEnabled="false" touchChildren="false">
 
 		<e:Scroller id="scroller" touchEnabled="false" touchChildren="false" bounces="false" scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0">
-			<e:Group id="map" scaleX="1" scaleY="1" touchThrough="false" touchChildren="false" touchEnabled="false">
+			<e:Group id="group_map" scaleX="1" scaleY="1" touchThrough="false" touchChildren="false" touchEnabled="false">
 
 
 				<e:Image id="img_mapBg" top="8" fillMode="repeat" scaleX="1" scaleY="1" left="5" right="5" bottom="8" width="600" height="900" anchorOffsetX="0" includeInLayout="false" source="cell_bg_02_jpg" visible="false"/>
 
 			<e:List id="list_cell" scaleX="1" scaleY="1" includeInLayout="false">
 				<e:layout>
-				<e:TileLayout horizontalGap="0" verticalGap="0" requestedRowCount="15" paddingTop="8" paddingBottom="8" paddingLeft="5" paddingRight="5"/>
+				<e:TileLayout horizontalGap="0" verticalGap="0" requestedRowCount="15" paddingTop="5" paddingBottom="5" paddingLeft="5" paddingRight="5"/>
 				</e:layout>
 			</e:List>
 				<e:List id="list_wall" scaleX="1" scaleY="1">
 					<e:layout>
-					<e:TileLayout horizontalGap="0" verticalGap="0" requestedRowCount="15" paddingLeft="5" paddingRight="5" paddingTop="8" paddingBottom="8"/>
+					<e:TileLayout horizontalGap="0" verticalGap="0" requestedRowCount="15" paddingLeft="5" paddingRight="5" paddingTop="5" paddingBottom="5"/>
 					</e:layout>
 				</e:List>
 
-				<e:Group id="group_light" includeInLayout="false" y="16" height="900" x="10">
+				<e:Group id="group_light" includeInLayout="false" y="16" height="900" x="10" blendMode="erase">
 
 				</e:Group>
 
