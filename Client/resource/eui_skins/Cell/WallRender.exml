@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin class="WallRenderSkin" width="100" height="100" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" >
 	<w:Config id="16b367ba8b3" ></w:Config>
-	<e:Image id="img_upWall" top="-5" anchorOffsetX="0" fillMode="repeat" left="-5" right="-5" touchEnabled="false" height="10" source="wall1_png"/>
+	<e:Image id="img_upWall" top="-5" anchorOffsetX="0" fillMode="repeat" touchEnabled="false" source="wall1_png" height="10" left="-5" right="-5"/>
 	<e:Image id="img_leftWall" source="wall1_png" left="-5" fillMode="repeat" top="-5" touchEnabled="false" bottom="-5"/>
 
 	<e:Image id="img_rightWall" anchorOffsetX="0" right="-5" fillMode="repeat" touchEnabled="false" top="-5" bottom="-5" width="10" source="wall1_png"/>

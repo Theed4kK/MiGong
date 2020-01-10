@@ -71,11 +71,11 @@ class LightMask extends egret.Sprite {
 			let vertex = { x: posx + radius * Math.sin(Math.PI * angle / 180), y: posy - radius * Math.cos(Math.PI * angle / 180) };
 			let boundary_x = vertex.x >= cellPos.x2 ? cellPos.x2 : (vertex.x < cellPos.x1 ? cellPos.x1 : -999);
 			let boundary_y = vertex.y >= cellPos.y2 ? cellPos.y2 : (vertex.y < cellPos.y1 ? cellPos.y1 : -999);
-			let offset = { y: vertex.y > posy ? 5 : -5, x: vertex.x > posx ? 5 : -5, }
+			let offset = { y: vertex.y > posy ? 1 : -1, x: vertex.x > posx ? 1 : -1, }
 			//竖边界交点
-			let res_v = this.segmentsIntr(vertex, { x: posx, y: posy }, { x: boundary_x, y: posy + offset.y }, { x: boundary_x, y: vertex.y + offset.y })
+			let res_v = this.segmentsIntr(vertex, { x: posx, y: posy }, { x: boundary_x, y: posy - offset.y }, { x: boundary_x, y: vertex.y + offset.y })
 			//横边界交点
-			let res_h = this.segmentsIntr(vertex, { x: posx, y: posy }, { x: posx + offset.x, y: boundary_y }, { x: vertex.x + offset.x, y: boundary_y })
+			let res_h = this.segmentsIntr(vertex, { x: posx, y: posy }, { x: posx - offset.x, y: boundary_y }, { x: vertex.x + offset.x, y: boundary_y })
 			let intersection;
 			let res_v_left = angle > 180;
 			let res_h_top = angle < 90 || angle > 270;
@@ -87,71 +87,70 @@ class LightMask extends egret.Sprite {
 				dis_h = egret.Point.distance(new egret.Point(posx, posy), new egret.Point(res_h.x, res_h.y));
 				//先与竖边界相交
 				if (dis_v < dis_h) {
-					//与右边界相交	
-					if (!res_v_left) {
-						//右墙存在
-						if (!cell.rightWall.isOpen) {
-							intersection = res_v;
-						}
-						//右墙不存在
-						else {
-							intersection = res_h_top ? (!cell.rightCell.upWall.isOpen ? res_h : vertex) : (!cell.rightCell.downWall.isOpen ? res_h : vertex);
-						}
+					//判断竖墙是本格的左或右
+					let wall_1 = !res_v_left ? cell.rightWall : cell.leftWall;
+					//判断横墙是本格的左或右
+					let _cell = !res_v_left ? cell.rightCell : cell.leftCell;
+					//判断交点是否在
+					let isEdge = res_h_top ? (res_v.y > cellPos.y1 && res_v.y < cellPos.y1 + WallRender.hWallHeight) : (res_v.y < cellPos.y2 && res_v.y > cellPos.y2 - WallRender.hWallHeight);
+					//竖墙存在（本格）
+					if (!wall_1.isOpen) {
+						intersection = res_v;
 					}
-					//与左边界相交
+					//竖墙不存在
 					else {
-						//左墙存在
-						if (!cell.leftWall.isOpen) {
-							intersection = res_v;
+						//相交的横墙是上还是下
+						let wall_2 = res_h_top ? _cell.upWall : _cell.downWall;
+						if (!wall_2.isOpen) {
+							intersection = res_h;
 						}
-						//左墙不存在
 						else {
-							intersection = res_h_top ? (!cell.leftCell.upWall.isOpen ? res_h : vertex) : (!cell.leftCell.downWall.isOpen ? res_h : vertex);
+							intersection = isEdge ? res_v : vertex;
 						}
 					}
 				}
+				//先与横边界相交
 				else {
-					//与下边界相交	
-					if (!res_h_top) {
-						//下墙存在
-						if (!cell.downWall.isOpen) {
-							intersection = res_h;
-						}
-						//下墙不存在
-						else {
-							intersection = res_v_left ? (!cell.downCell.leftWall.isOpen ? res_v : vertex) : (!cell.downCell.rightWall.isOpen ? res_v : vertex);
-						}
+					//判断横墙是本格的上或下
+					let wall_1 = res_h_top ? cell.upWall : cell.downWall;
+					//判断竖墙是本格的上或下
+					let _cell = res_h_top ? cell.upCell : cell.downCell;
+					//判断交点是在本格的左或右
+					let isEdge = res_v_left ? (res_h.x > cellPos.x1 && res_h.x < cellPos.x1 + WallRender.vWallwidth) : (res_h.x < cellPos.x2 && res_h.x > cellPos.x2 - WallRender.vWallwidth);
+					//横墙存在（本格）
+					if (!wall_1.isOpen) {
+						intersection = res_h;
 					}
-					//上左边界相交
+					//横墙不存在
 					else {
-						//上墙存在
-						if (!cell.upWall.isOpen) {
-							intersection = res_h;
+						//相交的竖墙是左还是右
+						let wall_2 = res_v_left ? _cell.leftWall : _cell.rightWall;
+						if (!wall_2.isOpen) {
+							intersection = res_v;
 						}
-						//上墙不存在
 						else {
-							intersection = res_v_left ? (!cell.downCell.leftWall.isOpen ? res_v : vertex) : (!cell.downCell.rightWall.isOpen ? res_h : vertex);
+							intersection = isEdge ? res_h : vertex;
 						}
 					}
 				}
 			}
-			//只与竖边界相交
+			//只与竖墙相交
 			else if (res_v) {
-				if ((res_v_left && !cell.leftWall.isOpen) || (!res_v_left && !cell.rightWall.isOpen)) {
-					intersection = res_v;
-				}
+				let wall = res_v_left ? cell.leftWall : cell.rightWall;
+				let isEdge = res_h_top ? (res_v.y > cellPos.y1 && res_v.y < cellPos.y1 + WallRender.hWallHeight) : (res_v.y < cellPos.y2 && res_v.y > cellPos.y2 - WallRender.hWallHeight);
+				intersection = (wall.isOpen && !isEdge) ? vertex : res_v;
 			}
-			//只与横边界相交或不相交（）
+			//只与横墙相交
 			else if (res_h) {
-				if ((res_h_top && !cell.upWall.isOpen) || (!res_h_top && !cell.downWall.isOpen)) {
-					intersection = res_h;
-				}
+				let wall = res_h_top ? cell.upWall : cell.downWall;
+				let isEdge = res_v_left ? (res_h.x > cellPos.x1 && res_h.x < cellPos.x1 + WallRender.vWallwidth) : (res_h.x < cellPos.x2 && res_h.x > cellPos.x2 - WallRender.vWallwidth);
+				intersection = (wall.isOpen && !isEdge) ? vertex : res_h;
 			}
 			if (!intersection) { intersection = vertex }
 			pos_group.push(new egret.Point(intersection.x, intersection.y));
-			test.push(
-				{ x: intersection.x, y: intersection.y, angle: angle, dis_group: [dis_v, dis_h] }
-			)
+			// test.push(
+			// 	{ x: intersection.x, y: intersection.y, angle: angle, dis_group: [dis_v, dis_h] }
+			// )
 		}
 		self.cirleLight_shape.graphics.clear();
 		self.cirleLight_shape.graphics.beginFill(0xffffff, 1);
@@ -164,68 +163,31 @@ class LightMask extends egret.Sprite {
 		self.cirleLight_shape.graphics.endFill();
 	}
 
-
-	private GetIntersection(a: any, b: any, c: any, d: any): { x: number, y: number } {
-		if (!c.x || !c.y || !d.x || !d.y) {
-			return null;
-		}
-
-		if ((b.y - a.y) * (c.x - d.x) - (b.x - a.x) * (c.y - d.y) == 0) {
-			// Debug.Print("线段平行，无交点！");
-			return null;
-		}
-		let intersection: any = [];
-		intersection.x = ((b.x - a.x) * (c.x - d.x) * (c.y - a.y) - c.x * (b.x - a.x) * (c.y - d.y) + a.x * (b.y - a.y) * (c.x - d.x)) / ((b.y - a.y) * (c.x - d.x) - (b.x - a.x) * (c.y - d.y));
-		intersection.y = ((b.y - a.y) * (c.y - d.y) * (c.x - a.x) - c.y * (b.y - a.y) * (c.x - d.x) + a.y * (b.x - a.x) * (c.y - d.y)) / ((b.x - a.x) * (c.y - d.y) - (b.y - a.y) * (c.x - d.x));
-
-
-		if ((intersection.x - a.x) * (intersection.x - b.x) <= 0 && (intersection.x - c.x) * (intersection.x - d.x) <= 0 && (intersection.y - a.y) * (intersection.y - b.y) <= 0 && (intersection.y - c.y) * (intersection.y - d.y) <= 0) {
-			// Debug.Print("线段相交于点(" + intersection.x + "," + intersection.y + ")！");
-			return intersection //'相交
-		}
-		else {
-			// Debug.Print("线段相交于虚交点(" + intersection.x + "," + intersection.y + ")！");
-			return null; //'相交但不在线段上
-
-		}
-	}
-
 	segmentsIntr(a, b, c, d) {
-
 		if (c.x == -999 || c.y === -999 || d.x == -999 || d.y == -999) {
 			return null;
 		}
-
-		/** 1 解线性方程组, 求线段交点. **/
-		// 如果分母为0 则平行或共线, 不相交 
-		var denominator = (b.y - a.y) * (d.x - c.x) - (a.x - b.x) * (c.y - d.y);
-		if (denominator == 0) {
+		// 三角形abc 面积的2倍  
+		var area_abc = (a.x - c.x) * (b.y - c.y) - (a.y - c.y) * (b.x - c.x);
+		// 三角形abd 面积的2倍  
+		var area_abd = (a.x - d.x) * (b.y - d.y) - (a.y - d.y) * (b.x - d.x);
+		// 面积符号相同则两点在线段同侧,不相交 (对点在线段上的情况,本例当作不相交处理);  
+		if (area_abc * area_abd >= 0) {
 			return null;
 		}
-
-		// 线段所在直线的交点坐标 (x , y) 
-		var x = ((b.x - a.x) * (d.x - c.x) * (c.y - a.y)
-			+ (b.y - a.y) * (d.x - c.x) * a.x
-			- (d.y - c.y) * (b.x - a.x) * c.x) / denominator;
-		var y = -((b.y - a.y) * (d.y - c.y) * (c.x - a.x)
-			+ (b.x - a.x) * (d.y - c.y) * a.y
-			- (d.x - c.x) * (b.y - a.y) * c.y) / denominator;
-
-		/** 2 判断交点是否在两条线段上 **/
-		if (
-			// 交点在线段1上 
-			(x - a.x) * (x - b.x) <= 0 && (y - a.y) * (y - b.y) <= 0
-			// 且交点也在线段2上 
-			&& (x - c.x) * (x - d.x) <= 0 && (y - c.y) * (y - d.y) <= 0
-		) {
-
-			// 返回交点p 
-			return {
-				x: x,
-				y: y
-			}
+		// 三角形cda 面积的2倍  
+		var area_cda = (c.x - a.x) * (d.y - a.y) - (c.y - a.y) * (d.x - a.x);
+		// 三角形cdb 面积的2倍  
+		// 注意: 这里有一个小优化.不需要再用公式计算面积,而是通过已知的三个面积加减得出.  
+		var area_cdb = area_cda + area_abc - area_abd;
+		if (area_cda * area_cdb >= 0) {
+			return null;
 		}
-		//否则不相交 
-		return null
+		//计算交点坐标  
+		var t = area_cda / (area_abd - area_abc);
+		var dx = t * (b.x - a.x),
+			dy = t * (b.y - a.y);
+		return { x: a.x + dx, y: a.y + dy };
+
 	}
 }
