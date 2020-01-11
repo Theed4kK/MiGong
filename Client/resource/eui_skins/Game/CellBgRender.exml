@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="CellBgRenderSkin" width="100" height="100" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" >
+	<w:Config id="16b70ad5af4" ></w:Config>
+	<e:Image id="img_bg" left="-5" right="-5" top="-5" bottom="-5" fillMode="scale" alpha="1" source="cell_bg_02_jpg"/>
+	<e:Image id="img_exitSign" source="" height="40" width="40" verticalCenter="0" horizontalCenter="0" visible="false"/>
+	<e:Image id="img_upWall" top="-5" anchorOffsetX="0" fillMode="repeat" touchEnabled="false" source="wall1_png" height="10" left="-5" right="-5" visible="false"/>
+	<e:Image id="img_leftWall" source="wall1_png" left="-5" fillMode="repeat" top="-5" touchEnabled="false" bottom="-5" visible="false"/>
+	<e:Image id="img_rightWall" anchorOffsetX="0" right="-5" fillMode="repeat" touchEnabled="false" top="-5" bottom="-5" width="10" source="wall1_png" x="10" y="10" visible="false"/>
+	<e:Image id="img_downWall" bottom="-5" anchorOffsetY="0" fillMode="repeat" anchorOffsetX="0" left="-5" right="-5" touchEnabled="false" height="10" source="wall1_png" x="10" y="10" visible="false"/>
+</e:Skin>

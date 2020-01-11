@@ -1,5 +1,5 @@
 @SET EXCEL_FOLDER=.\ÅäÖÃ
-@SET JSON_FOLDER=.\..\resource\gameConfig
+@SET JSON_FOLDER=.\..\Client\resource\gameConfig
 @SET EXE=.\×ª»»¹¤¾ß\excel2json.exe
 
 @ECHO Converting excel files in folder %EXCEL_FOLDER% ...

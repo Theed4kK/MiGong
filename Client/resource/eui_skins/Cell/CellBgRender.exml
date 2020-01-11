@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<e:Skin class="CellBgRenderSkin" width="100" height="100" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" >
-	<w:Config id="16b70ad5af4" ></w:Config>
-	<e:Image id="img_bg" left="-5" right="-5" top="-8" bottom="-8" fillMode="scale" alpha="1" source="cell_bg_02_jpg"/>
-
-	<e:Image id="img_exitSign" source="" height="80" width="80" verticalCenter="0" horizontalCenter="0"/>
-</e:Skin>

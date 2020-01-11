@@ -5,13 +5,15 @@ class Config {
 		return Config.instance;
 	}
 
-	public configs_item: { [key: number]: any };
-	public configs_map: { [key: number]: any };
-	// public configs_level: { [key: number]: MapLib };
+	public config_item: { [key: number]: any };
+	public config_map: { [key: number]: any };
+	// public config_level: { [key: number]: any };
+	public config_common: { [key: string]: any };
 
 	private config_paths = [
-		["configs_item", "item_json"],
-		["configs_map", "map_json"]
+		["config_item", "item_json"],
+		["config_map", "map_json"],
+		["config_common", "commom_json"]
 	]
 
 	public InitCofing(): void {
@@ -22,7 +24,13 @@ class Config {
 
 	private GetConfigFromFile(fileName: string) {
 		let objs = RES.getRes(fileName);
-		let configs: { [key: number]: any } =[];
+		let configs = [];
+		// if (fileName == "commom_json") {
+		// 	let configs: { [key: string]: any } = [];
+		// }
+		// else {
+		// 	let configs: { [key: number]: any } = [];
+		// }
 		objs.forEach(v => {
 			configs[v.id] = v;
 		})

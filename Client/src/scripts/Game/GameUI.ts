@@ -20,14 +20,17 @@ class GameUI extends eui.Component implements eui.UIComponent {
 
 	private gameControl: GameControl;
 
-	private scroller: eui.Scroller;
+	private scroller_map: eui.Scroller;
+	private scroller_role: eui.Scroller;
 	// private img_mapBg: eui.Image;
 	private img_Bg: eui.Image;
+	private img_mapBg: eui.Image;
 	private img_role: eui.Image;
+
 	private mapTexture: egret.Bitmap = new egret.Bitmap();
 
 	private group_light: eui.Group;
-	private group_map:eui.Group;
+	private group_map: eui.Group;
 
 	private stepNum: number = 0;
 	private virt: VirtualRocker = new VirtualRocker();
@@ -35,11 +38,11 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	protected childrenCreated(): void {
 		super.childrenCreated();
 		this.addChild(this.virt);
-		// this.stage.frameRate = 60;
 		this.virt.visible = false;
-		this.scroller.horizontalScrollBar.autoVisibility = false;
-		this.scroller.horizontalScrollBar.visible = false;
-		this.scroller.$hitTest = ()=>{return null;};
+		this.scroller_map.viewport = this.list_cell;
+		// this.scroller_map.horizontalScrollBar.autoVisibility = false;
+		// this.scroller_map.horizontalScrollBar.visible = false;
+		this.scroller_map.$hitTest = () => { return null; };
 		this.GenMiGong();
 		this.AddListener();
 		egret.log("childrenCreated");
@@ -47,8 +50,8 @@ class GameUI extends eui.Component implements eui.UIComponent {
 
 	/**初始化迷宫墙和地面贴图 */
 	private InitManageRenders(cells: Cell[]): void {
-		GameUI.manageRenders = new ManageRenders(this.list_wall, this.list_cell);
-		GameUI.manageRenders.InitRenders(cells);
+		GameUI.manageRenders = new ManageRenders(this.list_cell, this.img_mapBg);
+		GameUI.manageRenders.InitRenders(cells, this.scroller_map.parent.width, this.scroller_map.parent.height);
 	}
 
 	private AddListener(): void {
@@ -71,17 +74,43 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	}
 
 	private MoveScroll(e: egret.Event): void {
-		let scrollH = this.scroller.viewport.scrollH;
+		let scrollH = this.scroller_map.viewport.scrollH;
+		let scrollV = this.scroller_map.viewport.scrollV;
+		let moveX, moveY;
+		let role = this.img_role;
 		let data: any = e.data;
-		if (data.speed < 0) {
-			if (((data.x - scrollH) < (this.scroller.width / 2)) && scrollH > 0) {
-				this.scroller.viewport.scrollH += Math.max(data.speed, -scrollH);
+		let isLeft = data.moveX < 0;
+		let isUp = data.moveY < 0;
+		if (isLeft) {
+			moveX = Math.min(Math.abs(data.moveX), scrollH);
+		}
+		else {
+			moveX = Math.min(data.moveX, scrollH + this.scroller_map.width)
+		}
+		if (data.moveX < 0) {
+			if (((role.x - scrollH) < (this.scroller_map.width / 2)) && scrollH > 0) {
+				this.scroller_map.viewport.scrollH += Math.max(data.speedX, -scrollH);
+				this.scroller_role.viewport.scrollH += Math.max(data.speedX, -scrollH);
 			}
 		}
 		else {
-			let groupWidth = this.scroller.viewport.measuredWidth;
-			if (((data.x - scrollH) > (this.scroller.width / 2)) && ((scrollH + this.scroller.width) < groupWidth)) {
-				this.scroller.viewport.scrollH += Math.min(data.speed, groupWidth - scrollH - this.scroller.width);
+			let groupWidth = this.scroller_map.viewport.contentWidth;
+			if (((role.x - scrollH) > (this.scroller_map.width / 2)) && ((scrollH + this.scroller_map.width) < groupWidth)) {
+				this.scroller_map.viewport.scrollH += Math.min(data.speedX, groupWidth - scrollH - this.scroller_map.width);
+				this.scroller_role.viewport.scrollH += Math.min(data.speedX, groupWidth - scrollH - this.scroller_map.width);
+			}
+		}
+		if (data.moveY < 0) {
+			if (((role.y - scrollV) < (this.scroller_map.height / 2)) && scrollV > 0) {
+				this.scroller_map.viewport.scrollV += Math.max(data.speedY, -scrollV);
+				this.scroller_role.viewport.scrollV += Math.max(data.speedY, -scrollV);
+			}
+		}
+		else {
+			let groupHeight = this.scroller_map.viewport.contentHeight;
+			if (((role.y - scrollV) > (this.scroller_map.height / 2)) && ((scrollV + this.scroller_map.height) < groupHeight)) {
+				this.scroller_map.viewport.scrollV += Math.min(data.speedY, groupHeight - scrollV - this.scroller_map.height);
+				this.scroller_role.viewport.scrollV += Math.min(data.speedY, groupHeight - scrollV - this.scroller_map.height);
 			}
 		}
 	}
@@ -136,7 +165,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		self.InitMask();
 
 		//初始化角色控制器和光照效果
-		self.gameControl = new GameControl(this.img_role, this.group_map, 10)
+		self.gameControl = new GameControl(this.img_role, this.group_light, 10)
 
 		self.PlayStartAni();
 		egret.log("迷宫生成完成");
@@ -145,22 +174,19 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	/**处理遮罩 需要地图生成完成后调用 */
 	private InitMask() {
 		let self: GameUI = this;
-		// self.img_mapBg.width = self.list.width;
-		// self.group_wallBg.width = self.list_wall.width;
-		WallRender.hWallHeight * 2;
 		self.group_light.x = 0;
 		self.group_light.y = 0;
-		self.group_light.width = self.group_map.width;
-		self.group_light.height = self.group_map.height;
+		self.group_light.width = self.list_cell.contentWidth;
+		self.group_light.height = self.list_cell.contentHeight;
 	}
 
 	/**播放开始动画 */
 	private PlayStartAni(): void {
-		let obj: WallRender = GameUI.manageRenders.currentWallRender;
+		let obj: CellBgRender = GameUI.manageRenders.currentBgRender;
 		this.img_role.x = obj.x;
 		this.img_role.y = obj.y + (obj.height / 2);
-		egret.Tween.get(this.scroller.viewport).to({ scrollH: 0 }, this.scroller.viewport.scrollH / 0.5);
-		egret.Tween.get(this.img_role).wait(this.scroller.viewport.scrollH / 0.5).to({ x: obj.x + (obj.width / 2) }, 1000).call(() => {
+		egret.Tween.get(this.scroller_map.viewport).to({ scrollH: 0 }, this.scroller_map.viewport.scrollH / 0.5);
+		egret.Tween.get(this.img_role).wait(this.scroller_map.viewport.scrollH / 0.5).to({ x: obj.x + (obj.width / 2) }, 1000).call(() => {
 			this.img_Bg.touchEnabled = true;
 		});
 		// obj.StartAni(1000);
@@ -168,13 +194,13 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	}
 
 	private SetListScale(): void {
-		if (this.scroller.scaleX == 0.5) {
-			this.scroller.scaleX = 1;
-			this.scroller.scaleY = 1;
+		if (this.scroller_map.scaleX == 0.5) {
+			this.scroller_map.scaleX = 1;
+			this.scroller_map.scaleY = 1;
 		}
 		else {
-			this.scroller.scaleX = 0.5;
-			this.scroller.scaleY = 0.5;
+			this.scroller_map.scaleX = 0.5;
+			this.scroller_map.scaleY = 0.5;
 		}
 	}
 }

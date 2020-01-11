@@ -25,7 +25,7 @@ class ItemManage implements PlayerData {
 	 * 默认合成1个
 	 * 返回:1成功 -1材料数量不足 -2物品无合成配置或错误*/
 	public ComposeItem(id: number, num: number = 1) {
-		let configs = Config.GetInstance().configs_item;
+		let configs = Config.GetInstance().config_item;
 		if (configs[id].need_item == "") {
 			return -2;
 		}

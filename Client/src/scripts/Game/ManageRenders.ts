@@ -1,46 +1,31 @@
 class ManageRenders extends eui.Component implements eui.UIComponent {
-	public constructor(wallList: eui.List, cellList: eui.List) {
+	public constructor(cellList: eui.List, mapBg: eui.Image) {
 		super();
-		this.wallList = wallList;
 		this.cellList = cellList;
+		this.mapBg = mapBg;
 		GameUI.manageCells.addEventListener("RefreshCurRender", this.RefreshRender, this);
 	}
 
-	private wallList: eui.List;
 	private cellList: eui.List;
+	private mapBg: eui.Image;
 	public currentBgRender: CellBgRender;
-	public currentWallRender: WallRender;
 
 	/**初始化背景和墙格子 */
-	public InitRenders(cells: Cell[]): void {
-		let self:ManageRenders = this;
-		self.wallList.dataProvider = new eui.ArrayCollection(GameUI.manageCells.cells);
-		self.wallList.itemRenderer = WallRender;
+	public InitRenders(cells: Cell[], width, height): void {
+		let self: ManageRenders = this;
+		this.mapBg.width = cells.length * Config.GetInstance().config_common["cell_width"].value + Config.GetInstance().config_common["cell_width"].value
+		// self.cellList.height = height;
+		// self.cellList.width = width;
 		self.cellList.dataProvider = new eui.ArrayCollection(GameUI.manageCells.cells);
 		self.cellList.itemRenderer = CellBgRender;
-		self.wallList.validateNow();
-		self.wallList.validateDisplayList();
 		self.cellList.validateNow();
 		self.cellList.validateDisplayList();
+		this.mapBg.width = this.cellList.contentWidth;
+		this.mapBg.height = this.cellList.contentHeight;
 		self.RefreshRender(new egret.Event("", false, false, 0));
 	}
 
 	private RefreshRender(e: egret.Event): void {
-		this.currentWallRender = <WallRender>this.wallList.getElementAt(e.data);
 		this.currentBgRender = <CellBgRender>this.cellList.getElementAt(e.data);
-		this.currentWallRender.ShowWall();
 	}
-
-	// 	/**生成地图底图 需要地图生成完成后调用*/
-	// private GenMapTextrue(): void {
-	// 	let group: eui.Group = <eui.Group>this.scroller.viewport;
-	// 	let mapTexture = this.mapTexture;
-	// 	if (mapTexture.parent == group) { group.removeChild(mapTexture); }
-	// 	var rt: egret.RenderTexture = new egret.RenderTexture();
-	// 	rt.drawToTexture(this.list);
-	// 	mapTexture.texture = rt;
-	// 	group.addChildAt(mapTexture, group.getChildIndex(this.list_bg) - 1);
-	// 	this.list.visible = false;
-	// 	egret.log("地图底图生成完成");
-	// }
 }

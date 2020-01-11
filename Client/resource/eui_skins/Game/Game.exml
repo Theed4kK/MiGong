@@ -5,37 +5,41 @@
 	<e:Image id="img_Bg" horizontalCenter="0" verticalCenter="0" source="loading_jpg" x="0" y="0" scaleX="1" scaleY="1"
 	         touchEnabled="true" />
 	<e:Image id="btn_return" x="482" y="1019" anchorOffsetX="0" anchorOffsetY="0" source="" width="104" height="50"/>
-	<e:Group height="916" top="0" left="0" right="0" touchThrough="false" touchEnabled="false" touchChildren="false">
+	<e:Group height="916" touchThrough="false" touchEnabled="false" touchChildren="false" top="0" left="0" right="0">
 
-		<e:Scroller id="scroller" touchEnabled="false" touchChildren="false" bounces="false" scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0">
+		<e:Scroller id="scroller_map" touchEnabled="false" touchChildren="false" bounces="false" scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0">
 			<e:Group id="group_map" scaleX="1" scaleY="1" touchThrough="false" touchChildren="false" touchEnabled="false">
 
 
-				<e:Image id="img_mapBg" top="8" fillMode="repeat" scaleX="1" scaleY="1" left="5" right="5" bottom="8" width="600" height="900" anchorOffsetX="0" includeInLayout="false" source="cell_bg_02_jpg" visible="false"/>
 
-			<e:List id="list_cell" scaleX="1" scaleY="1" includeInLayout="false">
+
+			<e:List id="list_cell" scaleX="1" scaleY="1" includeInLayout="false" useVirtualLayout="true" width="640" height="910">
 				<e:layout>
 				<e:TileLayout horizontalGap="0" verticalGap="0" requestedRowCount="15" paddingTop="5" paddingBottom="5" paddingLeft="5" paddingRight="5"/>
 				</e:layout>
 			</e:List>
-				<e:List id="list_wall" scaleX="1" scaleY="1">
-					<e:layout>
-					<e:TileLayout horizontalGap="0" verticalGap="0" requestedRowCount="15" paddingLeft="5" paddingRight="5" paddingTop="5" paddingBottom="5"/>
-					</e:layout>
-				</e:List>
-
-				<e:Group id="group_light" includeInLayout="false" y="16" height="900" x="10" blendMode="erase">
-
-				</e:Group>
 
 
-				<e:Image id="img_role" width="20" height="20" x="-9" scaleX="1" scaleY="1" horizontalCenter="0" source="roundthumb_png" includeInLayout="false" verticalCenter="0"/>
+
+
+
+
 
 
 
 			<e:layout>
 				<e:HorizontalLayout gap="0"/>
 			</e:layout>
+			</e:Group>
+		</e:Scroller>
+		<e:Scroller id="scroller_role" scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0">
+			<e:Group>
+				<e:Image id="img_mapBg" top="8" fillMode="repeat" scaleX="1" scaleY="1" left="5" right="5" bottom="8" width="0" height="0" anchorOffsetX="0" includeInLayout="true" source="cell_bg_02_jpg" x="0" y="0"/>
+				<e:Group id="group_light" includeInLayout="false" y="0" height="0" x="0" scaleX="1" scaleY="1"/>
+				<e:Image id="img_role" width="20" height="20" x="0" scaleX="1" scaleY="1" source="roundthumb_png" includeInLayout="false" verticalCenter="0" y="0"/>
+				<e:layout>
+					<e:HorizontalLayout gap="0"/>
+				</e:layout>
 			</e:Group>
 		</e:Scroller>
 	</e:Group>

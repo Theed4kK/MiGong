@@ -8,27 +8,23 @@ class CellBgRender extends eui.ItemRenderer {
 		super.childrenCreated();
 	}
 
-	public static _width: number = 100;
-	public static _height: number = 100;
-	private GetCellSize() {
-		if (CellBgRender._width == 0) {
-			CellBgRender._width = this.width;
-		}
-		if (CellBgRender._height == 0) {
-			CellBgRender._height = this.height;
-		}
-	}
-
 	private img_bg: eui.Image;
 	private img_exitSign: eui.Image;
+
+	private img_leftWall: eui.Image;
+	private img_rightWall: eui.Image;
+	private img_upWall: eui.Image;
+	private img_downWall: eui.Image;
 
 	private tw_autoReturn: egret.Tween;
 
 	protected dataChanged(): void {
 		let cell: Cell = this.data;
+		this.img_bg.visible = !cell;
 
+		this.SetWall();
 		if (cell.item != 0) {
-			let item = Config.GetInstance().configs_item[cell.item];
+			let item = Config.GetInstance().config_item[cell.item];
 			this.img_exitSign.source = item.pic;
 		}
 		else {
@@ -36,7 +32,7 @@ class CellBgRender extends eui.ItemRenderer {
 				this.img_exitSign.source = RES.getRes("532_png")
 				egret.log("特殊地面ID--->" + cell.id);
 			}
-			else {
+			else if (this.img_exitSign) {
 				this.img_exitSign.visible = false;
 			}
 		}
@@ -57,6 +53,14 @@ class CellBgRender extends eui.ItemRenderer {
 
 	public StartAni(): void {
 
+	}
+
+	SetWall() {
+		let cell: Cell = this.data;
+		this.img_leftWall.visible = !cell.leftWall.isOpen;
+		this.img_rightWall.visible = !cell.rightWall.isOpen;
+		this.img_upWall.visible = !cell.upWall.isOpen;
+		this.img_downWall.visible = !cell.downWall.isOpen;
 	}
 
 }

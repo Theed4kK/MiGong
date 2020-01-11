@@ -24,10 +24,12 @@ class ManageCells extends eui.Component implements eui.UIComponent {
 	private col: number;
 	private returnCell: CellBgRender = null;
 
+	cell_width = Config.GetInstance().config_common["cell_width"].value;
+	cell_height = Config.GetInstance().config_common["cell_height"].value;
 	/**设置当前所在格子编号 */
 	public SetIndex(roleX: number, roleY: number): void {
-		let h: number = Math.floor(roleX / WallRender.width);
-		let v: number = Math.floor(roleY / WallRender.height);
+		let h: number = Math.floor(roleX / this.cell_width);
+		let v: number = Math.floor(roleY / this.cell_height);
 		let index: number = v * this.col + h;
 		if (this._index != index) {
 			this._index = index

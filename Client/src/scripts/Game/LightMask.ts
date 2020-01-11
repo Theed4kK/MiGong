@@ -3,70 +3,61 @@ class LightMask extends egret.Sprite {
 	private mask_sprite: egret.Sprite;
 	private cirleLight_shape: egret.Shape;
 	private mask_shape: egret.Shape;
+	private mask_bitmap: egret.Bitmap = new egret.Bitmap();
 
 	private radius: number;
+	wall_height: number = Config.GetInstance().config_common["wall_height"].value;
+	wall_width: number = Config.GetInstance().config_common["wall_height"].value;
+	cell_height: number = Config.GetInstance().config_common["cell_height"].value;
+	cell_width: number = Config.GetInstance().config_common["cell_height"].value;
 	public constructor() {
 		super();
 		let self: LightMask = this;
 		self.cacheAsBitmap = true;
 
 		self.cirleLight_sprite = new egret.Sprite();
-		self.cirleLight_sprite.cacheAsBitmap = true;
 		self.cirleLight_sprite.blendMode = egret.BlendMode.ERASE;
 		self.mask_sprite = new egret.Sprite();
-		self.mask_sprite.cacheAsBitmap = true;
 		self.mask_sprite.blendMode = egret.BlendMode.ERASE;
 		self.mask_sprite.alpha = 0.3;
 
 
-		self.mask_shape = new egret.Shape();
 		self.cirleLight_shape = new egret.Shape();
+		self.mask_shape = new egret.Shape();
+		self.cirleLight_shape.blendMode = egret.BlendMode.ERASE;
 
 		self.mask_sprite.addChild(self.mask_shape);
-		self.cirleLight_sprite.addChild(self.cirleLight_shape);
+		// self.mask_sprite.addChild(self.mask_bitmap);
+		// self.cirleLight_sprite.addChild(self.cirleLight_shape);
 
 		self.addChild(self.mask_sprite);
-		self.addChild(self.cirleLight_sprite);
-	}
-
-	// private render: egret.RenderTexture = new egret.RenderTexture();
-	public MoveLight(posx: number, posy: number) {
-		this.cirleLight_shape.x = posx - WallRender.vWallwidth;
-		this.cirleLight_shape.y = posy - WallRender.hWallHeight;
-
-		this.mask_shape.graphics.beginFill(0xffffff, 1);
-		// self.mask_shape.graphics.beginGradientFill(egret.GradientType.RADIAL, colorGroup, alphasGroup, colorNumGroup, lightMatrix_h);//这个渐变的参数是自己调的，可能不太理想，谁有好的参数可以留言，谢谢啦。
-		this.mask_shape.graphics.drawCircle(posx, posy, CellBgRender._width * 1);
-		this.mask_shape.graphics.endFill();
+		self.addChild(self.cirleLight_shape);
 	}
 
 	//设置背景框的大小
 	public setMaskSize(maskW: number, maskH: number) {
 		this.graphics.clear();
 		this.graphics.beginFill(0x000000);
-		this.graphics.drawRect(WallRender.vWallwidth, WallRender.hWallHeight, maskW - WallRender.vWallwidth * 2, maskH - WallRender.hWallHeight * 2);
+		this.graphics.drawRect(this.wall_width, this.wall_height, maskW - this.wall_width * 2, maskH - this.wall_height * 2);
 		this.graphics.endFill();
-		this.radius = CellBgRender._height + WallRender.hWallHeight / 2;
+		this.radius = this.cell_width + this.cell_height / 2;
 	}
 
-
+	private maskNum: number = 0;
 	//设置光圈的大小
 	public setLightValue(posx: number, posy: number) {
 		let self: LightMask = this;
 		let radius = this.radius;
 		let cell = GameUI.manageCells.currentCell;
-		let cellRender = GameUI.manageRenders.currentBgRender;
+		let cellRender: CellBgRender = GameUI.manageRenders.currentBgRender;
 		let cellPos = {
-			x1: cellRender.x - WallRender.vWallwidth / 2,
-			x2: cellRender.x + WallRender.vWallwidth / 2 + CellBgRender._width,
-			y1: cellRender.y - WallRender.hWallHeight / 2,
-			y2: cellRender.y + WallRender.hWallHeight / 2 + CellBgRender._height,
+			x1: cellRender.x - this.wall_width / 2,
+			x2: cellRender.x + this.wall_width / 2 + this.cell_width,
+			y1: cellRender.y - this.wall_height / 2,
+			y2: cellRender.y + this.wall_height / 2 + this.cell_height,
 		}
 
 		let pos_group: egret.Point[] = [];
-
-		let test: { x: number, y: number, angle: number, dis_group: number[] }[] = [];
-
 		for (let angle = 0; angle <= 360; angle += 1) {
 			let vertex = { x: posx + radius * Math.sin(Math.PI * angle / 180), y: posy - radius * Math.cos(Math.PI * angle / 180) };
 			let boundary_x = vertex.x >= cellPos.x2 ? cellPos.x2 : (vertex.x < cellPos.x1 ? cellPos.x1 : -999);
@@ -91,8 +82,6 @@ class LightMask extends egret.Sprite {
 					let wall_1 = !res_v_left ? cell.rightWall : cell.leftWall;
 					//判断横墙是本格的左或右
 					let _cell = !res_v_left ? cell.rightCell : cell.leftCell;
-					//判断交点是否在
-					let isEdge = res_h_top ? (res_v.y > cellPos.y1 && res_v.y < cellPos.y1 + WallRender.hWallHeight) : (res_v.y < cellPos.y2 && res_v.y > cellPos.y2 - WallRender.hWallHeight);
 					//竖墙存在（本格）
 					if (!wall_1.isOpen) {
 						intersection = res_v;
@@ -105,6 +94,7 @@ class LightMask extends egret.Sprite {
 							intersection = res_h;
 						}
 						else {
+							let isEdge = res_h_top ? (res_v.y > cellPos.y1 && res_v.y < cellPos.y1 + this.wall_height) : (res_v.y < cellPos.y2 && res_v.y > cellPos.y2 - this.wall_height);
 							intersection = isEdge ? res_v : vertex;
 						}
 					}
@@ -116,7 +106,6 @@ class LightMask extends egret.Sprite {
 					//判断竖墙是本格的上或下
 					let _cell = res_h_top ? cell.upCell : cell.downCell;
 					//判断交点是在本格的左或右
-					let isEdge = res_v_left ? (res_h.x > cellPos.x1 && res_h.x < cellPos.x1 + WallRender.vWallwidth) : (res_h.x < cellPos.x2 && res_h.x > cellPos.x2 - WallRender.vWallwidth);
 					//横墙存在（本格）
 					if (!wall_1.isOpen) {
 						intersection = res_h;
@@ -129,6 +118,7 @@ class LightMask extends egret.Sprite {
 							intersection = res_v;
 						}
 						else {
+							let isEdge = res_v_left ? (res_h.x > cellPos.x1 && res_h.x < cellPos.x1 + this.wall_width) : (res_h.x < cellPos.x2 && res_h.x > cellPos.x2 - this.wall_width);
 							intersection = isEdge ? res_h : vertex;
 						}
 					}
@@ -137,30 +127,47 @@ class LightMask extends egret.Sprite {
 			//只与竖墙相交
 			else if (res_v) {
 				let wall = res_v_left ? cell.leftWall : cell.rightWall;
-				let isEdge = res_h_top ? (res_v.y > cellPos.y1 && res_v.y < cellPos.y1 + WallRender.hWallHeight) : (res_v.y < cellPos.y2 && res_v.y > cellPos.y2 - WallRender.hWallHeight);
+				let isEdge = res_h_top ? (res_v.y > cellPos.y1 && res_v.y < cellPos.y1 + this.wall_height) : (res_v.y < cellPos.y2 && res_v.y > cellPos.y2 - this.wall_height);
 				intersection = (wall.isOpen && !isEdge) ? vertex : res_v;
 			}
 			//只与横墙相交
 			else if (res_h) {
 				let wall = res_h_top ? cell.upWall : cell.downWall;
-				let isEdge = res_v_left ? (res_h.x > cellPos.x1 && res_h.x < cellPos.x1 + WallRender.vWallwidth) : (res_h.x < cellPos.x2 && res_h.x > cellPos.x2 - WallRender.vWallwidth);
+				let isEdge = res_v_left ? (res_h.x > cellPos.x1 && res_h.x < cellPos.x1 + this.wall_width) : (res_h.x < cellPos.x2 && res_h.x > cellPos.x2 - this.wall_width);
 				intersection = (wall.isOpen && !isEdge) ? vertex : res_h;
 			}
 			if (!intersection) { intersection = vertex }
 			pos_group.push(new egret.Point(intersection.x, intersection.y));
-			// test.push(
-			// 	{ x: intersection.x, y: intersection.y, angle: angle, dis_group: [dis_v, dis_h] }
-			// )
 		}
-		self.cirleLight_shape.graphics.clear();
-		self.cirleLight_shape.graphics.beginFill(0xffffff, 1);
-		self.cirleLight_shape.graphics.lineStyle(1, 0xffffff);
-		self.cirleLight_shape.graphics.moveTo(posx, posy);
+		self.DrawShape(self.cirleLight_shape,pos_group,posx,posy);
+		let mask_shape = new egret.Shape();
+		self.DrawShape(mask_shape,pos_group,posx,posy);
+		self.mask_sprite.addChild(mask_shape);
+		if (self.maskNum > 1800) {
+			self.maskNum = 0;
+
+			let render = new egret.RenderTexture();
+			render.drawToTexture(self.mask_sprite);
+			if (self.mask_bitmap.texture) {
+				self.mask_bitmap.texture.dispose();
+			}
+			self.mask_bitmap.texture = render;
+			self.mask_sprite.removeChildren();
+			self.mask_sprite.addChild(self.mask_bitmap);
+		}
+		self.maskNum++;
+	}
+
+	DrawShape(shape,pos_group,startX,startY){
+		shape.graphics.clear();
+		shape.graphics.beginFill(0xffffff, 1);
+		shape.graphics.lineStyle(1, 0xffffff);
+		shape.graphics.moveTo(startX, startY);
 		pos_group.forEach(intersection => {
-			self.cirleLight_shape.graphics.lineTo(intersection.x, intersection.y);
+			shape.graphics.lineTo(intersection.x, intersection.y);
 		})
-		self.cirleLight_shape.graphics.lineTo(posx, posy);
-		self.cirleLight_shape.graphics.endFill();
+		shape.graphics.lineTo(startX, startY);
+		shape.graphics.endFill();
 	}
 
 	segmentsIntr(a, b, c, d) {
