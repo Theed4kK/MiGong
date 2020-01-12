@@ -1,9 +1,11 @@
 class ManageCells extends eui.Component implements eui.UIComponent {
-	public constructor(cells: Cell[]) {
+	public constructor(cells: Cell[], cellList: eui.List, mapBg: eui.Image) {
 		super();
 		this.cells = cells;
-		this.SetCurrentCell();
-		this.col = this.currentCell.downCell.id - this.currentCell.id;
+		this.col = cells.length / 15;
+		this.cellList = cellList;
+		this.mapBg = mapBg;
+		this.InitRenders();
 	}
 
 	private _index: number = 0;
@@ -17,9 +19,30 @@ class ManageCells extends eui.Component implements eui.UIComponent {
 	public get currentCell(): Cell {
 		return this._currentCell;
 	};
+	private _currentBgRender: CellBgRender;
+	public get currentBgRender(): CellBgRender {
+		return this._currentBgRender;
+	};
 
 	public cells: Cell[] = [];
 	public returnPath: number[] = [];
+
+	private cellList: eui.List;
+	private mapBg: eui.Image;
+
+	/**初始化背景和墙格子 */
+	public InitRenders(): void {
+		let self: ManageCells = this;
+		this.mapBg.width = this.cells.length * Config.GetInstance().config_common["cell_width"].value + Config.GetInstance().config_common["cell_width"].value
+		self.cellList.dataProvider = new eui.ArrayCollection(this.cells);
+		self.cellList.itemRenderer = CellBgRender;
+		self.cellList.validateNow();
+		self.cellList.validateDisplayList();
+		this.mapBg.width = this.cellList.contentWidth;
+		this.mapBg.height = this.cellList.contentHeight;
+		this.SetCurrentCell();
+	}
+
 
 	private col: number;
 	private returnCell: CellBgRender = null;
@@ -42,7 +65,7 @@ class ManageCells extends eui.Component implements eui.UIComponent {
 		let self: ManageCells = this;
 		self._currentCell = self.cells[self.index]
 		self._currentCell.isPassed = true;
-		self.dispatchEventWith("RefreshCurRender", false, self.index);
+		self._currentBgRender = self.cellList.getElementAt(self._index) as CellBgRender;
 	}
 
 	/**设置返回路径 */
@@ -52,7 +75,7 @@ class ManageCells extends eui.Component implements eui.UIComponent {
 			if (this.returnCell != null) {
 				this.returnCell.HideReturnSign();
 			}
-			this.returnCell = GameUI.manageRenders.currentBgRender;
+			this.returnCell = this._currentBgRender;
 			this.returnCell.SetReturnSign();
 		}
 		if (this.returnCell != null) {

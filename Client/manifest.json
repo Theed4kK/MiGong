@@ -10,7 +10,7 @@
 		"libs/egretmgobe/egretmgobe.js"
 	],
 	"game": [
-		"bin-debug/scripts/Game/GameControl.js",
+		"bin-debug/scripts/Game/CellBgRender.js",
 		"bin-debug/AssetAdapter.js",
 		"bin-debug/Main.js",
 		"bin-debug/Platform.js",
@@ -21,17 +21,15 @@
 		"bin-debug/scripts/Cofing/ItemLib.js",
 		"bin-debug/scripts/Cofing/MapLib.js",
 		"bin-debug/scripts/Game/Cell.js",
-		"bin-debug/scripts/Game/CellBgRender.js",
 		"bin-debug/LoadingUI.js",
+		"bin-debug/scripts/Game/GameControl.js",
 		"bin-debug/scripts/Game/GameItem.js",
 		"bin-debug/scripts/Game/GameUI.js",
 		"bin-debug/scripts/Game/GenCells.js",
 		"bin-debug/scripts/Game/LightMask.js",
 		"bin-debug/scripts/Game/ManageCells.js",
-		"bin-debug/scripts/Game/ManageRenders.js",
 		"bin-debug/scripts/Game/VirtualRocker.js",
 		"bin-debug/scripts/Game/Wall.js",
-		"bin-debug/scripts/Game/WallRender.js",
 		"bin-debug/scripts/PlayerData/ItemManage.js",
 		"bin-debug/scripts/PlayerData/PlayerData.js"
 	]

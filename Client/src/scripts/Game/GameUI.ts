@@ -4,9 +4,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		this.once(egret.Event.REMOVED_FROM_STAGE, this.RemoveListener, this);
 	}
 
-	public static manageCells: ManageCells;
-	public static manageRenders: ManageRenders;
-	private list_wall: eui.List;
+	public manageCells: ManageCells;
 	private list_cell: eui.List;
 
 	private btn_return: eui.Image;
@@ -22,6 +20,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 
 	private scroller_map: eui.Scroller;
 	private scroller_role: eui.Scroller;
+	private scroller_bg: eui.Scroller;
 	// private img_mapBg: eui.Image;
 	private img_Bg: eui.Image;
 	private img_mapBg: eui.Image;
@@ -42,16 +41,9 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		this.scroller_map.viewport = this.list_cell;
 		// this.scroller_map.horizontalScrollBar.autoVisibility = false;
 		// this.scroller_map.horizontalScrollBar.visible = false;
-		this.scroller_map.$hitTest = () => { return null; };
 		this.GenMiGong();
 		this.AddListener();
 		egret.log("childrenCreated");
-	}
-
-	/**初始化迷宫墙和地面贴图 */
-	private InitManageRenders(cells: Cell[]): void {
-		GameUI.manageRenders = new ManageRenders(this.list_cell, this.img_mapBg);
-		GameUI.manageRenders.InitRenders(cells, this.scroller_map.parent.width, this.scroller_map.parent.height);
 	}
 
 	private AddListener(): void {
@@ -61,7 +53,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.Move, this);
 		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_END, this.CancelTouch, this);
 		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_CANCEL, this.CancelTouch, this);
-		GameUI.manageCells.addEventListener("RefreshCurRender", this.UpdateIndex, this);
+		this.manageCells.addEventListener("RefreshCurRender", this.UpdateIndex, this);
 		this.gameControl.addEventListener("moveScroll", this.MoveScroll, this);
 	}
 
@@ -76,43 +68,26 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	private MoveScroll(e: egret.Event): void {
 		let scrollH = this.scroller_map.viewport.scrollH;
 		let scrollV = this.scroller_map.viewport.scrollV;
-		let moveX, moveY;
+		let moveX = 0, moveY = 0;
 		let role = this.img_role;
 		let data: any = e.data;
-		let isLeft = data.moveX < 0;
-		let isUp = data.moveY < 0;
-		if (isLeft) {
-			moveX = Math.min(Math.abs(data.moveX), scrollH);
+		let isLeft = data.moveX < 0 ? -1 : 1;
+		let isUp = data.moveY < 0 ? -1 : 1;
+		if ((isLeft > 0 && role.x >= this.scroller_map.width / 2) || (isLeft < 0 && role.x <= this.scroller_map.viewport.contentWidth - this.scroller_map.width / 2)) {
+			let moveX_min = isLeft < 0 ? scrollH : this.scroller_map.viewport.contentWidth - scrollH - this.scroller_map.width;
+			moveX = Math.min(Math.abs(data.moveX), Math.abs(moveX_min));
 		}
-		else {
-			moveX = Math.min(data.moveX, scrollH + this.scroller_map.width)
+		if ((isUp > 0 && role.y >= this.scroller_map.height / 2) || (isUp < 0 && role.y <= this.scroller_map.viewport.contentHeight - this.scroller_map.height / 2)) {
+			let moveY_min = isUp < 0 ? scrollV : this.scroller_map.viewport.contentHeight - scrollV - this.scroller_map.height;
+			moveY = Math.min(Math.abs(data.moveY), Math.abs(moveY_min));
 		}
-		if (data.moveX < 0) {
-			if (((role.x - scrollH) < (this.scroller_map.width / 2)) && scrollH > 0) {
-				this.scroller_map.viewport.scrollH += Math.max(data.speedX, -scrollH);
-				this.scroller_role.viewport.scrollH += Math.max(data.speedX, -scrollH);
-			}
+		let move = (...scrolls: eui.Scroller[]) => {
+			scrolls.forEach(s => {
+				s.viewport.scrollH += (isLeft * moveX);
+				s.viewport.scrollV += (isUp * moveY);
+			})
 		}
-		else {
-			let groupWidth = this.scroller_map.viewport.contentWidth;
-			if (((role.x - scrollH) > (this.scroller_map.width / 2)) && ((scrollH + this.scroller_map.width) < groupWidth)) {
-				this.scroller_map.viewport.scrollH += Math.min(data.speedX, groupWidth - scrollH - this.scroller_map.width);
-				this.scroller_role.viewport.scrollH += Math.min(data.speedX, groupWidth - scrollH - this.scroller_map.width);
-			}
-		}
-		if (data.moveY < 0) {
-			if (((role.y - scrollV) < (this.scroller_map.height / 2)) && scrollV > 0) {
-				this.scroller_map.viewport.scrollV += Math.max(data.speedY, -scrollV);
-				this.scroller_role.viewport.scrollV += Math.max(data.speedY, -scrollV);
-			}
-		}
-		else {
-			let groupHeight = this.scroller_map.viewport.contentHeight;
-			if (((role.y - scrollV) > (this.scroller_map.height / 2)) && ((scrollV + this.scroller_map.height) < groupHeight)) {
-				this.scroller_map.viewport.scrollV += Math.min(data.speedY, groupHeight - scrollV - this.scroller_map.height);
-				this.scroller_role.viewport.scrollV += Math.min(data.speedY, groupHeight - scrollV - this.scroller_map.height);
-			}
-		}
+		move(this.scroller_map, this.scroller_role, this.scroller_bg);
 	}
 
 	private UpdateIndex(e: egret.Event): void {
@@ -127,7 +102,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.Move, this);
 		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_END, this.CancelTouch, this);
 		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_CANCEL, this.CancelTouch, this);
-		GameUI.manageCells.removeEventListener("RefreshCurRender", this.UpdateIndex, this);
+		this.manageCells.removeEventListener("RefreshCurRender", this.UpdateIndex, this);
 	}
 
 	/**触屏手指移动 */
@@ -160,13 +135,10 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		// let col: number = Number(this.input_col.text);
 		let self: GameUI = this;
 		self.txt_stepNum.text = "已探索：0";
-		GameUI.manageCells = new ManageCells(GenCells.GetCells());
-		self.InitManageRenders(GameUI.manageCells.cells);
+		this.manageCells = new ManageCells(GenCells.GetCells(), this.list_cell, this.img_mapBg);
 		self.InitMask();
-
 		//初始化角色控制器和光照效果
-		self.gameControl = new GameControl(this.img_role, this.group_light, 10)
-
+		self.gameControl = new GameControl(this.img_role, this.group_light, 10,this.manageCells)
 		self.PlayStartAni();
 		egret.log("迷宫生成完成");
 	}
@@ -182,7 +154,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 
 	/**播放开始动画 */
 	private PlayStartAni(): void {
-		let obj: CellBgRender = GameUI.manageRenders.currentBgRender;
+		let obj: CellBgRender = this.manageCells.currentBgRender;
 		this.img_role.x = obj.x;
 		this.img_role.y = obj.y + (obj.height / 2);
 		egret.Tween.get(this.scroller_map.viewport).to({ scrollH: 0 }, this.scroller_map.viewport.scrollH / 0.5);

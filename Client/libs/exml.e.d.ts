@@ -1,7 +1,3 @@
-declare class CellBgRenderSkin extends eui.Skin{
-}
-declare class WallRenderSkin extends eui.Skin{
-}
 declare module skins{
 	class ButtonSkin extends eui.Skin{
 	}
@@ -49,6 +45,8 @@ declare module skins{
 declare module skins{
 	class VSliderSkin extends eui.Skin{
 	}
+}
+declare class CellBgRenderSkin extends eui.Skin{
 }
 declare class GameSkin extends eui.Skin{
 }

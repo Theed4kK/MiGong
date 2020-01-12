@@ -60,12 +60,8 @@ class Common {
 						}
 					})
 				})
-
 			}
 		})
-
-
-
 	}
 
 	public static LoadData(form: string): any {

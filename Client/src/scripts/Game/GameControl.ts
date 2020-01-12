@@ -1,16 +1,18 @@
 class GameControl extends eui.Component {
-	public constructor(img_role: eui.Image, group_light: eui.Group, speed: number, ) {
+	public constructor(img_role: eui.Image, group_light: eui.Group, speed: number, manageCells: ManageCells) {
 		super();
 		this.img_role = img_role;
 		this.group_light = group_light;
+		this.manageCells = manageCells;
 		this.InitLight();
 		this.speed = speed;
 		this.img_role.anchorOffsetX = this.img_role.width / 2;
 		this.img_role.anchorOffsetY = this.img_role.height / 2;
 	}
-
+	
 	public direction: number;
 	public speed: number;
+	private manageCells: ManageCells;
 	private img_role: eui.Image;
 	private group_light: eui.Group;
 	public maskLight: LightMask = new LightMask();
@@ -24,7 +26,7 @@ class GameControl extends eui.Component {
 		let maskLight = this.maskLight;
 		let group_light = this.group_light;
 		maskLight.setMaskSize(group_light.width, group_light.height);
-		maskLight.setLightValue(this.cell_width / 2, this.cell_height / 2);
+		maskLight.setLightValue(this.cell_width / 2, this.cell_height / 2, this.manageCells.currentCell, this.manageCells.currentBgRender);
 		group_light.addChild(this.maskLight);
 		maskLight.x = 0;
 		maskLight.y = 0;
@@ -32,7 +34,7 @@ class GameControl extends eui.Component {
 
 	private RefreshLight() {
 		let role = this.img_role;
-		this.maskLight.setLightValue(this.img_role.x, this.img_role.y);
+		this.maskLight.setLightValue(role.x, role.y, this.manageCells.currentCell, this.manageCells.currentBgRender);
 	}
 
 	public RoleMoveState(state: number, start: number = 0, target: number = 0): void {
@@ -55,7 +57,7 @@ class GameControl extends eui.Component {
 	}
 
 	private RoleAutoMove(): void {
-		let path: number[] = GameUI.manageCells.returnPath;
+		let path: number[] = this.manageCells.returnPath;
 
 		if (path.length == 0) { return; }
 		let index: number;
@@ -79,8 +81,8 @@ class GameControl extends eui.Component {
 		let startTimer: number = egret.getTimer();
 		let speedX = Number((Math.cos(this.direction) * this.speed * type).toFixed(2));
 		let speedY = Number((Math.sin(this.direction) * this.speed * type).toFixed(2));
-		let cell: Cell = GameUI.manageCells.currentCell;
-		let obj: egret.DisplayObject = GameUI.manageRenders.currentBgRender;
+		let cell: Cell = this.manageCells.currentCell;
+		let obj: egret.DisplayObject = this.manageCells.currentBgRender;
 		let moveX: number = 0;
 		let moveY: number = 0;
 		let img_role = this.img_role;
@@ -108,9 +110,8 @@ class GameControl extends eui.Component {
 			moveY = speedY;
 		}
 		img_role.y += moveY;
-
 		this.dispatchEventWith("moveScroll", false, { moveX: moveX, moveY: moveY })
-		GameUI.manageCells.SetIndex(img_role.x, img_role.y);
+		this.manageCells.SetIndex(img_role.x, img_role.y);
 		this.RefreshLight();
 
 	}
@@ -118,8 +119,7 @@ class GameControl extends eui.Component {
 	private IsEdge(type: number): boolean {
 		let isEdge: boolean = true;
 		let img_role: eui.Image = this.img_role;
-
-		let obj: egret.DisplayObject = GameUI.manageRenders.currentBgRender;
+		let obj: egret.DisplayObject = this.manageCells.currentBgRender;
 		switch (type) {
 			case 0:
 				isEdge = (Math.abs(img_role.y - obj.y)) < ((img_role.height / 2) + this.wall_height * 0.5);

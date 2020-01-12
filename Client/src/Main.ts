@@ -73,7 +73,7 @@ class Main extends eui.UILayer {
             const loadingView = new LoadingUI();
             this.stage.addChild(loadingView);
             await RES.loadGroup("preload", 0, loadingView);
-            Config.GetInstance().InitCofing();
+            Config.GetInstance().InitCofing(); //加载配置文件
 
             this.stage.removeChild(loadingView);
         }
