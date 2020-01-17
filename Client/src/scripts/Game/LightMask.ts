@@ -18,6 +18,7 @@ class LightMask extends egret.Sprite {
 		self.cirleLight_sprite = new egret.Sprite();
 		self.cirleLight_sprite.blendMode = egret.BlendMode.ERASE;
 		self.mask_sprite = new egret.Sprite();
+		// self.mask_sprite.cacheAsBitmap = true;
 		self.mask_sprite.blendMode = egret.BlendMode.ERASE;
 		self.mask_sprite.alpha = 0.3;
 
@@ -56,7 +57,7 @@ class LightMask extends egret.Sprite {
 		}
 
 		let pos_group: egret.Point[] = [];
-		for (let angle = 0; angle <= 360; angle += 1) {
+		for (let angle = 0; angle <= 360; angle += 2) {
 			let vertex = { x: posx + radius * Math.sin(Math.PI * angle / 180), y: posy - radius * Math.cos(Math.PI * angle / 180) };
 			let boundary_x = vertex.x >= cellPos.x2 ? cellPos.x2 : (vertex.x <= cellPos.x1 ? cellPos.x1 : -999);
 			let boundary_y = vertex.y >= cellPos.y2 ? cellPos.y2 : (vertex.y <= cellPos.y1 ? cellPos.y1 : -999);
@@ -106,7 +107,6 @@ class LightMask extends egret.Sprite {
 					let wall_1 = res_h_top ? cell.upWall : cell.downWall;
 					//判断竖墙是本格的上或下
 					let _cell = res_h_top ? cell.upCell : cell.downCell;
-					//判断交点是在本格的左或右
 					//横墙存在（本格）
 					if (!wall_1.isOpen) {
 						intersection = res_h;
@@ -128,16 +128,15 @@ class LightMask extends egret.Sprite {
 			//只与竖墙相交
 			else if (res_v) {
 				let res_v_left = res_v.x < cellRender.x + this.cell_width / 2;
-				let res_h_top = res_v.y < cellRender.y + this.cell_height / 2;
 				let wall = res_v_left ? cell.leftWall : cell.rightWall;
-				let cell_2 = res_v_left ? cell.leftCell : cell.rightCell;
-				let wall_2 = res_h_top ? cell_2.upWall : cell_2.downWall;
-				let isEdge = (res_v.y > cellPos.y1 && res_v.y < cellPos.y1 + this.wall_height) || (res_v.y < cellPos.y2 && res_v.y > cellPos.y2 - this.wall_height);
-				// intersection = (wall.isOpen && !isEdge) ? vertex : res_v;
 				if (!wall.isOpen) {
 					intersection = res_v;
 				}
 				else {
+					let res_h_top = res_v.y < cellRender.y + this.cell_height / 2;
+					let cell_2 = res_v_left ? cell.leftCell : cell.rightCell;
+					let wall_2 = res_h_top ? cell_2.upWall : cell_2.downWall;
+					let isEdge = (res_v.y > cellPos.y1 && res_v.y < cellPos.y1 + this.wall_height) || (res_v.y < cellPos.y2 && res_v.y > cellPos.y2 - this.wall_height);
 					if (!isEdge) {
 						intersection = vertex;
 					}
@@ -153,17 +152,16 @@ class LightMask extends egret.Sprite {
 			}
 			//只与横墙相交
 			else if (res_h) {
-				let res_v_left = res_h.x < cellRender.x + this.cell_width / 2;
 				let res_h_top = res_h.y < cellRender.y + this.cell_height / 2;
 				let wall = res_h_top ? cell.upWall : cell.downWall;
-				let cell_2 = res_h_top ? cell.upCell : cell.downCell;
-				let wall_2 = res_v_left ? cell_2.leftWall : cell_2.rightWall;
-				let isEdge = (res_h.x > cellPos.x1 && res_h.x < cellPos.x1 + this.wall_width) || (res_h.x < cellPos.x2 && res_h.x > cellPos.x2 - this.wall_width);
-				// intersection = (wall.isOpen && !isEdge) ? vertex : res_h;
 				if (!wall.isOpen) {
 					intersection = res_h;
 				}
 				else {
+					let res_v_left = res_h.x < cellRender.x + this.cell_width / 2;
+					let cell_2 = res_h_top ? cell.upCell : cell.downCell;
+					let wall_2 = res_v_left ? cell_2.leftWall : cell_2.rightWall;
+					let isEdge = (res_h.x > cellPos.x1 && res_h.x < cellPos.x1 + this.wall_width) || (res_h.x < cellPos.x2 && res_h.x > cellPos.x2 - this.wall_width);
 					if (!isEdge) {
 						intersection = vertex;
 					}
@@ -184,9 +182,8 @@ class LightMask extends egret.Sprite {
 		let mask_shape = new egret.Shape();
 		self.DrawShape(mask_shape, pos_group, posx, posy);
 		self.mask_sprite.addChild(mask_shape);
-		if (self.maskNum > 1800) {
+		if (self.maskNum > 180000) {
 			self.maskNum = 0;
-
 			let render = new egret.RenderTexture();
 			render.drawToTexture(self.mask_sprite);
 			if (self.mask_bitmap.texture) {

@@ -28,8 +28,6 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 class Main extends eui.UILayer {
-
-
     protected createChildren(): void {
         super.createChildren();
 
@@ -50,8 +48,6 @@ class Main extends eui.UILayer {
         let assetAdapter = new AssetAdapter();
         egret.registerImplementation("eui.IAssetAdapter", assetAdapter);
         egret.registerImplementation("eui.IThemeAdapter", new ThemeAdapter());
-
-
         this.runGame().catch(e => {
             console.log(e);
         })
@@ -62,7 +58,7 @@ class Main extends eui.UILayer {
         this.createGameScene();
         await platform.login();
         const userInfo = await platform.getUserInfo();
-        console.log(userInfo);
+        Common.InitWx();
     }
 
     private async loadResource() {
@@ -74,7 +70,6 @@ class Main extends eui.UILayer {
             this.stage.addChild(loadingView);
             await RES.loadGroup("preload", 0, loadingView);
             Config.GetInstance().InitCofing(); //加载配置文件
-
             this.stage.removeChild(loadingView);
         }
         catch (e) {
@@ -94,7 +89,6 @@ class Main extends eui.UILayer {
         })
     }
 
-    private textfield: egret.TextField;
     /**
      * 创建场景界面
      * Create scene interface
@@ -102,7 +96,6 @@ class Main extends eui.UILayer {
     protected createGameScene(): void {
         let gameUI: GameUI = new GameUI();
         this.stage.addChild(gameUI);
-        wx.cloud.init();
     }
 
 }

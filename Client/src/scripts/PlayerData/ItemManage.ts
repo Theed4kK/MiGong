@@ -1,5 +1,4 @@
-
-class ItemManage implements PlayerData {
+class ItemManage implements PlayerDataManage {
 	private constructor() {
 	}
 
@@ -11,14 +10,14 @@ class ItemManage implements PlayerData {
 
 	public data: { [id: number]: number } = {};
 
-	public async GetItem(id: number, num: number = 1) {
+	public GetItem(id: number, num: number = 1) {
 		if (this.data[id]) {
 			this.data[id] += num;
 		}
 		else {
 			this.data[id] = num;
 		}
-		await this.SaveData();
+		this.SaveData();
 	}
 
 	/**合成物品

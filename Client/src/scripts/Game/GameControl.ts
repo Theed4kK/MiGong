@@ -9,7 +9,7 @@ class GameControl extends eui.Component {
 		this.img_role.anchorOffsetX = this.img_role.width / 2;
 		this.img_role.anchorOffsetY = this.img_role.height / 2;
 	}
-	
+
 	public direction: number;
 	public speed: number;
 	private manageCells: ManageCells;
@@ -74,7 +74,7 @@ class GameControl extends eui.Component {
 		this.RoleMove(1);
 	}
 
-
+	private lastPoint: egret.Point;
 	/**角色移动,type:1为手动引动  2为自动移动 */
 	private RoleMove(type: number = 1): void {
 		if (this.direction == null) { return; }
@@ -112,8 +112,10 @@ class GameControl extends eui.Component {
 		img_role.y += moveY;
 		this.dispatchEventWith("moveScroll", false, { moveX: moveX, moveY: moveY })
 		this.manageCells.SetIndex(img_role.x, img_role.y);
-		this.RefreshLight();
-
+		if (this.lastPoint && egret.Point.distance(this.lastPoint, new egret.Point(img_role.x, img_role.y)) > 2) {
+			this.RefreshLight();
+		}
+		this.lastPoint = new egret.Point(img_role.x, img_role.y);
 	}
 
 	private IsEdge(type: number): boolean {

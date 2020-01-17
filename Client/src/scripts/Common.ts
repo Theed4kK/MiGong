@@ -23,24 +23,29 @@ class Common {
 		}
 	}
 
-	public static SaveData(form: string, data: any) {
-		let OPENID: string;
+
+
+	public static OPENID: string;
+	public static InitWx() {
 		wx.cloud.callFunction({
 			name: "GetOpenId",
 			data: {},
 			success: function (res): any {
-				OPENID = res.OPENID
+				Common.OPENID = res.OPENID
 			},
 			fail: function (err): any {
 				console.log("err", err)
 			}
 		})
+		console.log("OPENID--->", Common.OPENID)
+	}
+
+	public static SaveData(form: string, data: any) {
 		const db = wx.cloud.database();
 		let _id;
 		let value = db.collection(form).where({
-			_openid: OPENID
+			_openid: Common.OPENID
 		});
-
 		value.count().then(res => {
 			if (res.total == 0) {
 				db.collection(form).add({
@@ -65,8 +70,6 @@ class Common {
 	}
 
 	public static LoadData(form: string): any {
-		// let dataStr = egret.localStorage.getItem(key);
-		// let data = JSON.parse(dataStr);
 		const db = wx.cloud.database()
 		db.collection(form).get().then(res => {
 			console.log('获取数据', res.data)
