@@ -1,14 +1,18 @@
-class ItemManage implements PlayerDataManage {
+class ItemManage implements IPlayerDataManage {
 	private constructor() {
+		this.LoadData();
 	}
 
-	public static instance: ItemManage = new ItemManage();
+	public static instance: ItemManage;
 
 	public static GetInstance() {
+		if (!ItemManage.instance) {
+			ItemManage.instance = new ItemManage();
+		}
 		return ItemManage.instance;
 	}
 
-	public data: { [id: number]: number } = {};
+	public data: { [id: number]: number };
 
 	public GetItem(id: number, num: number = 1) {
 		if (this.data[id]) {
@@ -48,11 +52,12 @@ class ItemManage implements PlayerDataManage {
 		return 1;
 	}
 
-	public LoadData() {
+	LoadData() {
 		this.data = Common.LoadData(data_key_item);
+		if (!this.data) { this.data = {}; }
 	}
 
-	public SaveData() {
-		Common.SaveData(data_key_item, { ownItems: this.data });
+	SaveData() {
+		Common.SaveData(data_key_item, this.data);
 	}
 }

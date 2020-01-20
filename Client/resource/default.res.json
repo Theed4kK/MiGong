@@ -5,7 +5,7 @@
 			"name": "loading"
 		},
 		{
-			"keys": "wall2_png,wall2_1_png,wall1_png,loading_jpg,cell_bg_03_jpg,cell_bg_02_jpg,cell_bg_01_jpg,common_json,padIcon_png,padIcon_01_png,rect_png,item_json,map_json,level_json,gold_4_png,gold_3_png,gold_7_png,zhuoyue_png,gold_1_png,gold_2_png,gold_5_png,gold_6_png,commom_json",
+			"keys": "wall1_png,loading_jpg,cell_bg_03_jpg,cell_bg_02_jpg,cell_bg_01_jpg,common_json,padIcon_png,padIcon_01_png,rect_png,item_json,map_json,level_json,gold_4_png,gold_3_png,gold_7_png,zhuoyue_png,gold_1_png,gold_2_png,gold_5_png,gold_6_png,commom_json",
 			"name": "preload"
 		}
 	],
@@ -35,16 +35,6 @@
 			"url": "assets/padIcon_01.png",
 			"type": "image",
 			"name": "padIcon_01_png"
-		},
-		{
-			"url": "map/wall2_1.png",
-			"type": "image",
-			"name": "wall2_1_png"
-		},
-		{
-			"url": "map/wall2.png",
-			"type": "image",
-			"name": "wall2_png"
 		},
 		{
 			"url": "map/wall1.png",
@@ -127,9 +117,9 @@
 			"name": "gold_6_png"
 		},
 		{
-			"name": "commom_json",
+			"url": "gameConfig/commom.json",
 			"type": "json",
-			"url": "gameConfig/commom.json"
+			"name": "commom_json"
 		}
 	]
 }

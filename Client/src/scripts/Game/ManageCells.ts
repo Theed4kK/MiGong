@@ -24,17 +24,19 @@ class ManageCells extends eui.Component implements eui.UIComponent {
 		return this._currentBgRender;
 	};
 
-	public cells: Cell[] = [];
 	public returnPath: number[] = [];
-
+	private cells: Cell[] = [];
 	private cellList: eui.List;
+	private arrayCellList: eui.ArrayCollection;
 	private mapBg: eui.Image;
 
 	/**初始化背景和墙格子 */
 	public InitRenders(): void {
 		let self: ManageCells = this;
-		this.mapBg.width = this.cells.length * Config.GetInstance().config_common["cell_width"].value + Config.GetInstance().config_common["cell_width"].value
-		self.cellList.dataProvider = new eui.ArrayCollection(this.cells);
+		this.mapBg.width = this.cells.length * Number(Config.GetInstance().config_common["cell_width"].value) + Number(Config.GetInstance().config_common["cell_width"].value);
+		self.arrayCellList = new eui.ArrayCollection(this.cells);
+		self.arrayCellList.addEventListener(eui.CollectionEvent.COLLECTION_CHANGE, self.RefreshRender, this);
+		self.cellList.dataProvider = self.arrayCellList;
 		self.cellList.itemRenderer = CellBgRender;
 		self.cellList.validateNow();
 		self.cellList.validateDisplayList();
@@ -47,25 +49,36 @@ class ManageCells extends eui.Component implements eui.UIComponent {
 	private col: number;
 	private returnCell: CellBgRender = null;
 
-	cell_width = Config.GetInstance().config_common["cell_width"].value;
-	cell_height = Config.GetInstance().config_common["cell_height"].value;
+	cell_width = +Config.GetInstance().config_common["cell_width"].value;
+	cell_height = +Config.GetInstance().config_common["cell_height"].value;
 	/**设置当前所在格子编号 */
-	public SetIndex(roleX: number, roleY: number): void {
-		let h: number = Math.floor(roleX / this.cell_width);
-		let v: number = Math.floor(roleY / this.cell_height);
+	public SetIndex(role: eui.Image): void {
+		let h: number = Math.floor(role.x / this.cell_width);
+		let v: number = Math.floor(role.y / this.cell_height);
 		let index: number = v * this.col + h;
 		if (this._index != index) {
 			this._index = index
 			this.SetCurrentCell();
 			this.SetReturnPath();
 		}
+		if (this._currentCell.item != 0) {
+			this._currentBgRender.ItemTest(role);
+		}
+	}
+
+	RefreshRender() {
+		this.arrayCellList.itemUpdated(this._currentCell);
 	}
 
 	private SetCurrentCell() {
 		let self: ManageCells = this;
-		self._currentCell = self.cells[self.index]
-		self._currentCell.isPassed = true;
+		self._currentCell = self.arrayCellList.getItemAt(self.index);
 		self._currentBgRender = self.cellList.getElementAt(self._index) as CellBgRender;
+		if (self._currentCell && !self._currentCell.isPassed) {
+			self._currentCell.isPassed = true;
+			this.dispatchEvent(new egret.Event("RefreshCurRender"));
+			PlayerDataManage.GetInstance().GetPoint(1);
+		}
 	}
 
 	/**设置返回路径 */
@@ -76,7 +89,6 @@ class ManageCells extends eui.Component implements eui.UIComponent {
 				this.returnCell.HideReturnSign();
 			}
 			this.returnCell = this._currentBgRender;
-			this.returnCell.SetReturnSign();
 		}
 		if (this.returnCell != null) {
 			if (this.returnPath.indexOf(this.index) == -1) {

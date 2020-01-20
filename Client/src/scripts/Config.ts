@@ -5,14 +5,15 @@ class Config {
 		return Config.instance;
 	}
 
-	public config_item: { [key: number]: any };
-	public config_map: { [key: number]: any };
-	// public config_level: { [key: number]: any };
-	public config_common: { [key: string]: any };
+	public config_item: { [key: number]: ItemLib };
+	public config_map: { [key: number]: MapLib };
+	public config_level: { [key: number]: LevelLib };
+	public config_common: { [key: string]: { id: string, value: string } };
 
 	private config_paths = [
 		["config_item", "item_json"],
 		["config_map", "map_json"],
+		["config_level", "level_json"],
 		["config_common", "commom_json"]
 	]
 
@@ -25,12 +26,6 @@ class Config {
 	private GetConfigFromFile(fileName: string) {
 		let objs = RES.getRes(fileName);
 		let configs = [];
-		// if (fileName == "commom_json") {
-		// 	let configs: { [key: string]: any } = [];
-		// }
-		// else {
-		// 	let configs: { [key: number]: any } = [];
-		// }
 		objs.forEach(v => {
 			configs[v.id] = v;
 		})

@@ -1,8 +1,8 @@
 const data_key_item: string = "item";
-const data_key_level: string = "level";
+const data_key_player: string = "player";
 
 
-interface PlayerDataManage {
+interface IPlayerDataManage {
 	data: any;
 	LoadData();
 	SaveData();

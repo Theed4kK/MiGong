@@ -46,11 +46,9 @@ class GenCells {
 				c.rightCell = (j == col - 1 ? edgeCell : cells[i][j + 1]);
 			}
 		}
-
+		allCell[cells.length - 1].downWall.isOpen = true;
 		GenCells.SetCellDrop(allCell, map);
 		GenCells.SetWallOpen(allCell);
-		// GenCells.SetWallSize(allCell);
-
 		return allCell;
 	}
 

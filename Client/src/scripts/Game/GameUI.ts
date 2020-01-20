@@ -39,11 +39,8 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		this.addChild(this.virt);
 		this.virt.visible = false;
 		this.scroller_map.viewport = this.list_cell;
-		// this.scroller_map.horizontalScrollBar.autoVisibility = false;
-		// this.scroller_map.horizontalScrollBar.visible = false;
 		this.GenMiGong();
 		this.AddListener();
-		egret.log("childrenCreated");
 	}
 
 	private AddListener(): void {
@@ -55,6 +52,17 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_CANCEL, this.CancelTouch, this);
 		this.manageCells.addEventListener("RefreshCurRender", this.UpdateIndex, this);
 		this.gameControl.addEventListener("moveScroll", this.MoveScroll, this);
+	}
+
+	private RemoveListener(): void {
+		this.btn_return.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.TestDb, this);
+		this.btn_test.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.TestDb, this);
+		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.BeginTouch, this);
+		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.Move, this);
+		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_END, this.CancelTouch, this);
+		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_CANCEL, this.CancelTouch, this);
+		this.manageCells.removeEventListener("RefreshCurRender", this.UpdateIndex, this);
+		this.gameControl.removeEventListener("moveScroll", this.MoveScroll, this);
 	}
 
 	private TestDb() {
@@ -95,16 +103,6 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		this.txt_stepNum.text = "已探索：" + this.stepNum.toString();
 	}
 
-	private RemoveListener(): void {
-		this.btn_return.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.TestDb, this);
-		this.btn_test.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.TestDb, this);
-		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.BeginTouch, this);
-		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.Move, this);
-		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_END, this.CancelTouch, this);
-		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_CANCEL, this.CancelTouch, this);
-		this.manageCells.removeEventListener("RefreshCurRender", this.UpdateIndex, this);
-	}
-
 	/**触屏手指移动 */
 	private Move(e: egret.TouchEvent): void {
 		let angle: number = this.virt.onTouchMove(e);
@@ -116,7 +114,6 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		this.gameControl.direction = null;
 		this.gameControl.RoleMoveState(1);	//停止移动
 		this.virt.stop();
-		// egret.log("停止触摸");
 	}
 
 	private BeginTouch(e: egret.TouchEvent): void {
@@ -125,7 +122,6 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		this.virt.y = e.stageY;
 		this.virt.start();
 		this.gameControl.RoleMoveState(0);	//开始移动
-		// egret.log("开始触摸");
 	}
 
 
@@ -138,9 +134,8 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		this.manageCells = new ManageCells(GenCells.GetCells(), this.list_cell, this.img_mapBg);
 		self.InitMask();
 		//初始化角色控制器和光照效果
-		self.gameControl = new GameControl(this.img_role, this.group_light, 10,this.manageCells)
+		self.gameControl = new GameControl(this.img_role, this.group_light, 10, this.manageCells)
 		self.PlayStartAni();
-		egret.log("迷宫生成完成");
 	}
 
 	/**处理遮罩 需要地图生成完成后调用 */
@@ -162,7 +157,6 @@ class GameUI extends eui.Component implements eui.UIComponent {
 			this.img_Bg.touchEnabled = true;
 		});
 		// obj.StartAni(1000);
-		egret.log("开始动画播放完成");
 	}
 
 	private SetListScale(): void {

@@ -19,6 +19,7 @@
 		"bin-debug/scripts/Config.js",
 		"bin-debug/scripts/ItemUI.js",
 		"bin-debug/scripts/Cofing/ItemLib.js",
+		"bin-debug/scripts/Cofing/LevelLib.js",
 		"bin-debug/scripts/Cofing/MapLib.js",
 		"bin-debug/scripts/Game/Cell.js",
 		"bin-debug/LoadingUI.js",
@@ -30,7 +31,8 @@
 		"bin-debug/scripts/Game/ManageCells.js",
 		"bin-debug/scripts/Game/VirtualRocker.js",
 		"bin-debug/scripts/Game/Wall.js",
+		"bin-debug/scripts/PlayerData/IPlayerDataManage.js",
 		"bin-debug/scripts/PlayerData/ItemManage.js",
-		"bin-debug/scripts/PlayerData/PlayerData.js"
+		"bin-debug/scripts/PlayerData/PlayerDataManage.js"
 	]
 }

@@ -5,7 +5,7 @@
 	<e:Image id="img_Bg" horizontalCenter="0" verticalCenter="0" source="loading_jpg" x="0" y="0" scaleX="1" scaleY="1"
 	         touchEnabled="true" />
 	<e:Image id="btn_return" x="482" y="1019" anchorOffsetX="0" anchorOffsetY="0" source="" width="104" height="50"/>
-	<e:Group height="910" touchThrough="false" touchEnabled="false" touchChildren="false" top="0" left="0" right="0">
+	<e:Group height="910" touchThrough="false" touchEnabled="false" touchChildren="false" top="0" left="0" right="0" locked="true">
 		<e:Scroller id="scroller_bg" scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0">
 			<e:Group>
 				<e:Image id="img_mapBg" top="8" fillMode="repeat" scaleX="1" scaleY="1" left="5" right="5" bottom="8" width="0" height="0" anchorOffsetX="0" includeInLayout="true" source="cell_bg_02_jpg" x="0" y="0"/>
@@ -62,7 +62,11 @@
 
 
 		<e:Group anchorOffsetX="0" left="0" right="0" anchorOffsetY="0" touchChildren="true" touchEnabled="false" touchThrough="true" height="74" bottom="155">
-			<e:Button id="btn_test" label="test" x="283" y="24" skinName="skins.ButtonSkin"/>
+			<e:Group height="38" anchorOffsetY="0" anchorOffsetX="0" y="3" left="0" right="0">
+				<e:Image touchEnabled="false" scaleX="1" scaleY="1" source="border_png" top="0" bottom="0" left="0" right="0" fillMode="scale" anchorOffsetX="0"/>
+				<e:Label id="txt_stepNum" text="已探索：1/300" scaleX="1" scaleY="1" fontFamily="Microsoft YaHei" size="16" textColor="0x141401" touchEnabled="false" left="65" top="0" bottom="0" verticalAlign="middle" textAlign="left"/>
+				<e:Label id="txt_stepNum0" text="已找到珍宝：5/10" scaleX="1" scaleY="1" fontFamily="Microsoft YaHei" size="16" textColor="0x141401" touchEnabled="false" left="233" top="0" bottom="0" verticalAlign="middle" textAlign="left" anchorOffsetX="0" width="173.09"/>
+			</e:Group>
 
 
 
@@ -70,12 +74,10 @@
 
 
 		</e:Group>
+		<e:Button id="btn_test" label="退出" x="270" y="161" skinName="skins.ButtonSkin"/>
 
 
-		<e:Group height="38" bottom="73" anchorOffsetY="0" anchorOffsetX="0" left="0" right="0">
-			<e:Image touchEnabled="false" scaleX="1" scaleY="1" horizontalCenter="0" verticalCenter="0" source=""/>
-			<e:Label id="txt_stepNum" text="已探索：0" scaleX="1" scaleY="1" fontFamily="Microsoft YaHei" size="16" textColor="0xdfe02c" touchEnabled="false" horizontalCenter="0" verticalCenter="0"/>
-		</e:Group>
+
 	</e:Group>
 	
 </e:Skin>

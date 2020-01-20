@@ -14,5 +14,9 @@
   {
     "id": "wall_height",
     "value": 10
+  },
+  {
+    "id": "maxLvl",
+    "value": 1000
   }
 ]

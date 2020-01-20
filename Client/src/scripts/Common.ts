@@ -27,6 +27,7 @@ class Common {
 
 	public static OPENID: string;
 	public static InitWx() {
+		wx.cloud.init();
 		wx.cloud.callFunction({
 			name: "GetOpenId",
 			data: {},
@@ -41,6 +42,7 @@ class Common {
 	}
 
 	public static SaveData(form: string, data: any) {
+		wx.cloud.init();
 		const db = wx.cloud.database();
 		let _id;
 		let value = db.collection(form).where({
@@ -70,6 +72,7 @@ class Common {
 	}
 
 	public static LoadData(form: string): any {
+		wx.cloud.init();
 		const db = wx.cloud.database()
 		db.collection(form).get().then(res => {
 			console.log('获取数据', res.data)

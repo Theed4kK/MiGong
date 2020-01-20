@@ -6,10 +6,10 @@ class LightMask extends egret.Sprite {
 	private mask_bitmap: egret.Bitmap = new egret.Bitmap();
 
 	private radius: number;
-	wall_height: number = Config.GetInstance().config_common["wall_height"].value;
-	wall_width: number = Config.GetInstance().config_common["wall_height"].value;
-	cell_height: number = Config.GetInstance().config_common["cell_height"].value;
-	cell_width: number = Config.GetInstance().config_common["cell_height"].value;
+	wall_height: number = + Config.GetInstance().config_common["wall_height"].value;
+	wall_width: number = +Config.GetInstance().config_common["wall_height"].value;
+	cell_height: number = +Config.GetInstance().config_common["cell_height"].value;
+	cell_width: number = +Config.GetInstance().config_common["cell_height"].value;
 	public constructor() {
 		super();
 		let self: LightMask = this;
@@ -45,6 +45,7 @@ class LightMask extends egret.Sprite {
 	}
 
 	private maskNum: number = 0;
+	private passedPos: { [x: number]: { [y: number]: boolean } } = {};
 	//设置光圈的大小和位置
 	public setLightValue(posx: number, posy: number, cell: Cell, cellRender: CellBgRender) {
 		let self: LightMask = this;
@@ -179,10 +180,15 @@ class LightMask extends egret.Sprite {
 			pos_group.push(new egret.Point(intersection.x, intersection.y));
 		}
 		self.DrawShape(self.cirleLight_shape, pos_group, posx, posy);
+		let _posX = Math.floor(posx / 1);
+		let _posY = Math.floor(posy / 1);
+		if (self.passedPos[_posX] && self.passedPos[_posX][_posY]) {
+			return;
+		}
 		let mask_shape = new egret.Shape();
 		self.DrawShape(mask_shape, pos_group, posx, posy);
 		self.mask_sprite.addChild(mask_shape);
-		if (self.maskNum > 180000) {
+		if (self.maskNum > 180) {
 			self.maskNum = 0;
 			let render = new egret.RenderTexture();
 			render.drawToTexture(self.mask_sprite);
@@ -194,7 +200,12 @@ class LightMask extends egret.Sprite {
 			self.mask_sprite.addChild(self.mask_bitmap);
 		}
 		self.maskNum++;
+		if (!self.passedPos[_posX]) {
+			self.passedPos[_posX] = {};
+		}
+		self.passedPos[_posX][_posY] = true;
 	}
+
 
 	DrawShape(shape, pos_group, startX, startY) {
 		shape.graphics.clear();
@@ -208,6 +219,7 @@ class LightMask extends egret.Sprite {
 		shape.graphics.endFill();
 	}
 
+	//获取交点
 	segmentsIntr(a, b, c, d) {
 		if (c.x == -999 || c.y === -999 || d.x == -999 || d.y == -999) {
 			return null;

@@ -16,10 +16,10 @@ class GameControl extends eui.Component {
 	private img_role: eui.Image;
 	private group_light: eui.Group;
 	public maskLight: LightMask = new LightMask();
-	wall_height = Config.GetInstance().config_common["wall_height"].value;
-	wall_width = Config.GetInstance().config_common["wall_height"].value;
-	cell_height = Config.GetInstance().config_common["cell_height"].value;
-	cell_width = Config.GetInstance().config_common["cell_height"].value;
+	wall_height = +Config.GetInstance().config_common["wall_height"].value;
+	wall_width = +Config.GetInstance().config_common["wall_height"].value;
+	cell_height = +Config.GetInstance().config_common["cell_height"].value;
+	cell_width = +Config.GetInstance().config_common["cell_height"].value;
 
 	/**初始化光照 */
 	private InitLight() {
@@ -74,7 +74,7 @@ class GameControl extends eui.Component {
 		this.RoleMove(1);
 	}
 
-	private lastPoint: egret.Point;
+	private lastPoint: egret.Point = new egret.Point(0, 0);
 	/**角色移动,type:1为手动引动  2为自动移动 */
 	private RoleMove(type: number = 1): void {
 		if (this.direction == null) { return; }
@@ -111,11 +111,11 @@ class GameControl extends eui.Component {
 		}
 		img_role.y += moveY;
 		this.dispatchEventWith("moveScroll", false, { moveX: moveX, moveY: moveY })
-		this.manageCells.SetIndex(img_role.x, img_role.y);
+		this.manageCells.SetIndex(img_role);
 		if (this.lastPoint && egret.Point.distance(this.lastPoint, new egret.Point(img_role.x, img_role.y)) > 2) {
 			this.RefreshLight();
+			this.lastPoint = new egret.Point(img_role.x, img_role.y);
 		}
-		this.lastPoint = new egret.Point(img_role.x, img_role.y);
 	}
 
 	private IsEdge(type: number): boolean {

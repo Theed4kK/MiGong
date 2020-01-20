@@ -2,6 +2,7 @@ class CellBgRender extends eui.ItemRenderer {
 	public constructor() {
 		super();
 		// this.addEventListener(egret.Event.ADDED, this.GetCellSize, this);
+		this.addEventListener("", this.ArriveCell, this);
 	}
 
 	protected childrenCreated(): void {
@@ -10,6 +11,7 @@ class CellBgRender extends eui.ItemRenderer {
 
 	private img_bg: eui.Image;
 	private img_exitSign: eui.Image;
+	private img_item: eui.Image;
 
 	private img_leftWall: eui.Image;
 	private img_rightWall: eui.Image;
@@ -20,31 +22,36 @@ class CellBgRender extends eui.ItemRenderer {
 
 	protected dataChanged(): void {
 		let cell: Cell = this.data;
-		this.img_bg.visible = !cell;
-
 		this.SetWall();
 		if (cell.item != 0) {
 			let item = Config.GetInstance().config_item[cell.item];
-			this.img_exitSign.source = item.pic;
+			this.img_item.source = item.pic;
 		}
-		else {
-			if (cell.isSpecial) {
-				this.img_exitSign.source = RES.getRes("532_png")
-				egret.log("特殊地面ID--->" + cell.id);
-			}
-			else if (this.img_exitSign) {
-				this.img_exitSign.visible = false;
-			}
+		if (cell.isSpecial) {
+			this.img_bg.source = RES.getRes("532_png")
+			this.img_bg.visible = true;
 		}
-		if (cell.downCell == null && cell.rightCell == null) {
-			this.visible = true;
-			this.img_bg.visible = false;
-			this.img_exitSign.source = RES.getRes("100_png")
+
+	}
+
+	ItemTest(role: eui.Image) {
+		let rect1: egret.Rectangle = role.getBounds();
+		let rect2: egret.Rectangle = this.img_item.getBounds();
+		let point1 = role.localToGlobal();
+		let point2 = this.img_item.localToGlobal();
+		rect1.x = point1.x;
+		rect1.y = point1.y;
+		rect2.x = point2.x;
+		rect2.y = point2.y;
+		if (rect1.intersects(rect2)) {
+			this.data.item = 0;
+			this.img_item.visible = false;
+			ItemManage.GetInstance().GetItem(this.data.item);
 		}
 	}
 
-	public SetReturnSign(): void {
-		// this.img_exitSign.visible = true;
+	private ArriveCell() {
+
 	}
 
 	public HideReturnSign(): void {
