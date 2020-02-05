@@ -1,6 +1,6 @@
 class LightMask extends egret.Sprite {
-	private cirleLight_sprite: egret.Sprite;
 	private mask_sprite: egret.Sprite;
+	private mask_con: egret.DisplayObjectContainer = new egret.DisplayObjectContainer();;
 	private cirleLight_shape: egret.Shape;
 	private mask_shape: egret.Shape;
 	private mask_bitmap: egret.Bitmap = new egret.Bitmap();
@@ -13,12 +13,10 @@ class LightMask extends egret.Sprite {
 	public constructor() {
 		super();
 		let self: LightMask = this;
-		self.cacheAsBitmap = true;
+		// self.cacheAsBitmap = true;
 
-		self.cirleLight_sprite = new egret.Sprite();
-		self.cirleLight_sprite.blendMode = egret.BlendMode.ERASE;
 		self.mask_sprite = new egret.Sprite();
-		// self.mask_sprite.cacheAsBitmap = true;
+		self.mask_sprite.cacheAsBitmap = true;
 		self.mask_sprite.blendMode = egret.BlendMode.ERASE;
 		self.mask_sprite.alpha = 0.3;
 
@@ -27,195 +25,213 @@ class LightMask extends egret.Sprite {
 		self.mask_shape = new egret.Shape();
 		self.cirleLight_shape.blendMode = egret.BlendMode.ERASE;
 
-		self.mask_sprite.addChild(self.mask_shape);
-		// self.mask_sprite.addChild(self.mask_bitmap);
-		// self.cirleLight_sprite.addChild(self.cirleLight_shape);
+		self.mask_sprite.addChild(self.mask_bitmap);
+		self.mask_sprite.addChild(self.mask_con);
 
-		self.addChild(self.mask_sprite);
+		// self.addChild(self.mask_sprite);
 		self.addChild(self.cirleLight_shape);
 	}
 
 	//设置背景框的大小
-	public setMaskSize(maskW: number, maskH: number) {
+	public SetMaskSize(maskW: number, maskH: number) {
 		this.graphics.clear();
-		this.graphics.beginFill(0x000000);
+		this.graphics.beginFill(0x000000, 1);
 		this.graphics.drawRect(this.wall_width, this.wall_height, maskW - this.wall_width * 2, maskH - this.wall_height * 2);
 		this.graphics.endFill();
-		this.radius = this.cell_width + this.wall_width / 2;
+		this.radius = this.cell_width * 2 + this.wall_width / 2;
+	}
+
+	public SetMaskPos(posx, posy) {
+		this.cirleLight_shape.x = posx;
+		this.cirleLight_shape.y = posy;
+	}
+
+	public SetLightValue() {
+		let c_m = new egret.Matrix();
+		c_m.createGradientBox(this.radius, this.radius, 0, -this.radius / 2, -this.radius / 2);
+		let colorGroup = [0, 50, 180, 255];
+		let alphaGroup = [1, 0.9, 0.3, 0]
+		this.cirleLight_shape.graphics.clear();
+		this.cirleLight_shape.graphics.beginGradientFill(egret.GradientType.RADIAL, [0xffffff, 0xffffff, 0xffffff, 0xffffff], alphaGroup, colorGroup, c_m);//这个渐变的参数是自己调的，可能不太理想，谁有好的参数可以留言，谢谢啦。
+		this.cirleLight_shape.graphics.drawCircle(0, 0, this.radius);
+		this.cirleLight_shape.graphics.endFill();
 	}
 
 	private maskNum: number = 0;
 	private passedPos: { [x: number]: { [y: number]: boolean } } = {};
 	//设置光圈的大小和位置
-	public setLightValue(posx: number, posy: number, cell: Cell, cellRender: CellBgRender) {
-		let self: LightMask = this;
-		let radius = this.radius;
-		let cellPos = {
-			x1: cellRender.x - this.wall_width / 2,
-			x2: cellRender.x + this.wall_width / 2 + this.cell_width,
-			y1: cellRender.y - this.wall_height / 2,
-			y2: cellRender.y + this.wall_height / 2 + this.cell_height,
-		}
+	// public setLightValue(posx: number, posy: number, cell: Cell, cellRender: CellBgRender) {
+	// 	let self: LightMask = this;
+	// 	let radius = this.radius;
+	// 	let cellPos = {
+	// 		x1: cellRender.x - this.wall_width / 2,
+	// 		x2: cellRender.x + this.wall_width / 2 + this.cell_width,
+	// 		y1: cellRender.y - this.wall_height / 2,
+	// 		y2: cellRender.y + this.wall_height / 2 + this.cell_height,
+	// 	}
 
-		let pos_group: egret.Point[] = [];
-		for (let angle = 0; angle <= 360; angle += 2) {
-			let vertex = { x: posx + radius * Math.sin(Math.PI * angle / 180), y: posy - radius * Math.cos(Math.PI * angle / 180) };
-			let boundary_x = vertex.x >= cellPos.x2 ? cellPos.x2 : (vertex.x <= cellPos.x1 ? cellPos.x1 : -999);
-			let boundary_y = vertex.y >= cellPos.y2 ? cellPos.y2 : (vertex.y <= cellPos.y1 ? cellPos.y1 : -999);
-			let offset = { y: vertex.y > posy ? 0.3 : -0.3, x: vertex.x > posx ? 0.3 : -0.3 };
-			// let offset = { y: 0, x: 0 }
-			//竖边界交点
-			let res_v = this.segmentsIntr(vertex, { x: posx, y: posy }, { x: boundary_x, y: posy - offset.y }, { x: boundary_x, y: vertex.y + offset.y })
-			//横边界交点
-			let res_h = this.segmentsIntr(vertex, { x: posx, y: posy }, { x: posx - offset.x, y: boundary_y }, { x: vertex.x + offset.x, y: boundary_y })
-			let intersection;
-			// let res_v_left = angle > 180;
-			// let res_h_top = angle < 90 || angle > 270;
-			let dis_v, dis_h;
-			//同时与横竖边界相交
-			if (res_v && res_h) {
-				let res_v_left = res_v.x < cellRender.x + this.cell_width / 2;
-				let res_h_top = res_h.y < cellRender.y + this.cell_height / 2;
-				//距离两个交点的长度
-				dis_v = egret.Point.distance(new egret.Point(posx, posy), new egret.Point(res_v.x, res_v.y));
-				dis_h = egret.Point.distance(new egret.Point(posx, posy), new egret.Point(res_h.x, res_h.y));
-				//先与竖边界相交
-				if (dis_v < dis_h) {
-					//判断竖墙是本格的左或右
-					let wall_1 = !res_v_left ? cell.rightWall : cell.leftWall;
-					//判断横墙是本格的左或右
-					let _cell = !res_v_left ? cell.rightCell : cell.leftCell;
-					//竖墙存在（本格）
-					if (!wall_1.isOpen) {
-						intersection = res_v;
-					}
-					//竖墙不存在
-					else {
-						//相交的横墙是上还是下
-						let wall_2 = res_h_top ? _cell.upWall : _cell.downWall;
-						if (!wall_2.isOpen) {
-							intersection = res_h;
-						}
-						else {
-							let isEdge = (res_v.y > cellPos.y1 && res_v.y < cellPos.y1 + this.wall_height) || (res_v.y < cellPos.y2 && res_v.y > cellPos.y2 - this.wall_height);
-							intersection = isEdge ? res_v : vertex;
-						}
-					}
-				}
-				//先与横边界相交
-				else {
-					//判断横墙是本格的上或下
-					let wall_1 = res_h_top ? cell.upWall : cell.downWall;
-					//判断竖墙是本格的上或下
-					let _cell = res_h_top ? cell.upCell : cell.downCell;
-					//横墙存在（本格）
-					if (!wall_1.isOpen) {
-						intersection = res_h;
-					}
-					//横墙不存在
-					else {
-						//相交的竖墙是左还是右
-						let wall_2 = res_v_left ? _cell.leftWall : _cell.rightWall;
-						if (!wall_2.isOpen) {
-							intersection = res_v;
-						}
-						else {
-							let isEdge = (res_h.x > cellPos.x1 && res_h.x < cellPos.x1 + this.wall_width) || (res_h.x < cellPos.x2 && res_h.x > cellPos.x2 - this.wall_width);
-							intersection = isEdge ? res_h : vertex;
-						}
-					}
-				}
-			}
-			//只与竖墙相交
-			else if (res_v) {
-				let res_v_left = res_v.x < cellRender.x + this.cell_width / 2;
-				let wall = res_v_left ? cell.leftWall : cell.rightWall;
-				if (!wall.isOpen) {
-					intersection = res_v;
-				}
-				else {
-					let res_h_top = res_v.y < cellRender.y + this.cell_height / 2;
-					let cell_2 = res_v_left ? cell.leftCell : cell.rightCell;
-					let wall_2 = res_h_top ? cell_2.upWall : cell_2.downWall;
-					let isEdge = (res_v.y > cellPos.y1 && res_v.y < cellPos.y1 + this.wall_height) || (res_v.y < cellPos.y2 && res_v.y > cellPos.y2 - this.wall_height);
-					if (!isEdge) {
-						intersection = vertex;
-					}
-					else {
-						if (wall_2.isOpen) {
-							intersection = res_v;
-						}
-						else {
-							intersection = vertex;
-						}
-					}
-				}
-			}
-			//只与横墙相交
-			else if (res_h) {
-				let res_h_top = res_h.y < cellRender.y + this.cell_height / 2;
-				let wall = res_h_top ? cell.upWall : cell.downWall;
-				if (!wall.isOpen) {
-					intersection = res_h;
-				}
-				else {
-					let res_v_left = res_h.x < cellRender.x + this.cell_width / 2;
-					let cell_2 = res_h_top ? cell.upCell : cell.downCell;
-					let wall_2 = res_v_left ? cell_2.leftWall : cell_2.rightWall;
-					let isEdge = (res_h.x > cellPos.x1 && res_h.x < cellPos.x1 + this.wall_width) || (res_h.x < cellPos.x2 && res_h.x > cellPos.x2 - this.wall_width);
-					if (!isEdge) {
-						intersection = vertex;
-					}
-					else {
-						if (wall_2.isOpen) {
-							intersection = res_h;
-						}
-						else {
-							intersection = vertex;
-						}
-					}
-				}
-			}
-			if (!intersection) { intersection = vertex }
-			pos_group.push(new egret.Point(intersection.x, intersection.y));
-		}
-		self.DrawShape(self.cirleLight_shape, pos_group, posx, posy);
-		let _posX = Math.floor(posx / 1);
-		let _posY = Math.floor(posy / 1);
-		if (self.passedPos[_posX] && self.passedPos[_posX][_posY]) {
-			return;
-		}
-		let mask_shape = new egret.Shape();
-		self.DrawShape(mask_shape, pos_group, posx, posy);
-		self.mask_sprite.addChild(mask_shape);
-		if (self.maskNum > 180) {
-			self.maskNum = 0;
-			let render = new egret.RenderTexture();
-			render.drawToTexture(self.mask_sprite);
-			if (self.mask_bitmap.texture) {
-				self.mask_bitmap.texture.dispose();
-			}
-			self.mask_bitmap.texture = render;
-			self.mask_sprite.removeChildren();
-			self.mask_sprite.addChild(self.mask_bitmap);
-		}
-		self.maskNum++;
-		if (!self.passedPos[_posX]) {
-			self.passedPos[_posX] = {};
-		}
-		self.passedPos[_posX][_posY] = true;
-	}
+	// 	let pos_group: { posx: number, posy: number, points: egret.Point[] } = { posx: posx, posy: posy, points: [] };
+	// 	for (let angle = 0; angle <= 360; angle += 2) {
+	// 		let vertex = { x: posx + radius * Math.sin(Math.PI * angle / 180), y: posy - radius * Math.cos(Math.PI * angle / 180) };
+	// 		let boundary_x = vertex.x >= cellPos.x2 ? cellPos.x2 : (vertex.x <= cellPos.x1 ? cellPos.x1 : -999);
+	// 		let boundary_y = vertex.y >= cellPos.y2 ? cellPos.y2 : (vertex.y <= cellPos.y1 ? cellPos.y1 : -999);
+	// 		let offset = { y: vertex.y > posy ? 0.3 : -0.3, x: vertex.x > posx ? 0.3 : -0.3 };
+	// 		// let offset = { y: 0, x: 0 }
+	// 		//竖边界交点
+	// 		let res_v = this.segmentsIntr(vertex, { x: posx, y: posy }, { x: boundary_x, y: posy - offset.y }, { x: boundary_x, y: vertex.y + offset.y })
+	// 		//横边界交点
+	// 		let res_h = this.segmentsIntr(vertex, { x: posx, y: posy }, { x: posx - offset.x, y: boundary_y }, { x: vertex.x + offset.x, y: boundary_y })
+	// 		let intersection;
+	// 		// let res_v_left = angle > 180;
+	// 		// let res_h_top = angle < 90 || angle > 270;
+	// 		let dis_v, dis_h;
+	// 		//同时与横竖边界相交
+	// 		if (res_v && res_h) {
+	// 			let res_v_left = res_v.x < cellRender.x + this.cell_width / 2;
+	// 			let res_h_top = res_h.y < cellRender.y + this.cell_height / 2;
+	// 			//距离两个交点的长度
+	// 			dis_v = egret.Point.distance(new egret.Point(posx, posy), new egret.Point(res_v.x, res_v.y));
+	// 			dis_h = egret.Point.distance(new egret.Point(posx, posy), new egret.Point(res_h.x, res_h.y));
+	// 			//先与竖边界相交
+	// 			if (dis_v < dis_h) {
+	// 				//判断竖墙是本格的左或右
+	// 				let wall_1 = !res_v_left ? cell.rightWall : cell.leftWall;
+	// 				//判断横墙是本格的左或右
+	// 				let _cell = !res_v_left ? cell.rightCell : cell.leftCell;
+	// 				//竖墙存在（本格）
+	// 				if (!wall_1.isOpen) {
+	// 					intersection = res_v;
+	// 				}
+	// 				//竖墙不存在
+	// 				else {
+	// 					//相交的横墙是上还是下
+	// 					let wall_2 = res_h_top ? _cell.upWall : _cell.downWall;
+	// 					if (!wall_2.isOpen) {
+	// 						intersection = res_h;
+	// 					}
+	// 					else {
+	// 						let isEdge = (res_v.y > cellPos.y1 && res_v.y < cellPos.y1 + this.wall_height) || (res_v.y < cellPos.y2 && res_v.y > cellPos.y2 - this.wall_height);
+	// 						intersection = isEdge ? res_v : vertex;
+	// 					}
+	// 				}
+	// 			}
+	// 			//先与横边界相交
+	// 			else {
+	// 				//判断横墙是本格的上或下
+	// 				let wall_1 = res_h_top ? cell.upWall : cell.downWall;
+	// 				//判断竖墙是本格的上或下
+	// 				let _cell = res_h_top ? cell.upCell : cell.downCell;
+	// 				//横墙存在（本格）
+	// 				if (!wall_1.isOpen) {
+	// 					intersection = res_h;
+	// 				}
+	// 				//横墙不存在
+	// 				else {
+	// 					//相交的竖墙是左还是右
+	// 					let wall_2 = res_v_left ? _cell.leftWall : _cell.rightWall;
+	// 					if (!wall_2.isOpen) {
+	// 						intersection = res_v;
+	// 					}
+	// 					else {
+	// 						let isEdge = (res_h.x > cellPos.x1 && res_h.x < cellPos.x1 + this.wall_width) || (res_h.x < cellPos.x2 && res_h.x > cellPos.x2 - this.wall_width);
+	// 						intersection = isEdge ? res_h : vertex;
+	// 					}
+	// 				}
+	// 			}
+	// 		}
+	// 		//只与竖墙相交
+	// 		else if (res_v) {
+	// 			let res_v_left = res_v.x < cellRender.x + this.cell_width / 2;
+	// 			let wall = res_v_left ? cell.leftWall : cell.rightWall;
+	// 			if (!wall.isOpen) {
+	// 				intersection = res_v;
+	// 			}
+	// 			else {
+	// 				let res_h_top = res_v.y < cellRender.y + this.cell_height / 2;
+	// 				let cell_2 = res_v_left ? cell.leftCell : cell.rightCell;
+	// 				let wall_2 = res_h_top ? cell_2.upWall : cell_2.downWall;
+	// 				let isEdge = (res_v.y > cellPos.y1 && res_v.y < cellPos.y1 + this.wall_height) || (res_v.y < cellPos.y2 && res_v.y > cellPos.y2 - this.wall_height);
+	// 				if (!isEdge) {
+	// 					intersection = vertex;
+	// 				}
+	// 				else {
+	// 					if (wall_2.isOpen) {
+	// 						intersection = res_v;
+	// 					}
+	// 					else {
+	// 						intersection = vertex;
+	// 					}
+	// 				}
+	// 			}
+	// 		}
+	// 		//只与横墙相交
+	// 		else if (res_h) {
+	// 			let res_h_top = res_h.y < cellRender.y + this.cell_height / 2;
+	// 			let wall = res_h_top ? cell.upWall : cell.downWall;
+	// 			if (!wall.isOpen) {
+	// 				intersection = res_h;
+	// 			}
+	// 			else {
+	// 				let res_v_left = res_h.x < cellRender.x + this.cell_width / 2;
+	// 				let cell_2 = res_h_top ? cell.upCell : cell.downCell;
+	// 				let wall_2 = res_v_left ? cell_2.leftWall : cell_2.rightWall;
+	// 				let isEdge = (res_h.x > cellPos.x1 && res_h.x < cellPos.x1 + this.wall_width) || (res_h.x < cellPos.x2 && res_h.x > cellPos.x2 - this.wall_width);
+	// 				if (!isEdge) {
+	// 					intersection = vertex;
+	// 				}
+	// 				else {
+	// 					if (wall_2.isOpen) {
+	// 						intersection = res_h;
+	// 					}
+	// 					else {
+	// 						intersection = vertex;
+	// 					}
+	// 				}
+	// 			}
+	// 		}
+	// 		if (!intersection) { intersection = vertex }
+	// 		pos_group.points.push(new egret.Point(intersection.x, intersection.y));
+	// 	}
+	// 	self.DrawShape(self.cirleLight_shape, pos_group);
+	// 	let _posX = Math.floor(posx / 5);
+	// 	let _posY = Math.floor(posy / 5);
+	// 	if (self.passedPos[_posX] && self.passedPos[_posX][_posY]) {
+	// 		return;
+	// 	}
+	// 	// let mask_shape = new egret.Shape();
+	// 	// self.DrawShape(mask_shape, pos_group);
+	// 	// self.mask_con.addChild(mask_shape);
+	// 	// if (self.maskNum > 180) {
+	// 	// 	self.maskNum = 0;
+	// 	// 	let render = new egret.RenderTexture();
+	// 	// 	render.drawToTexture(self.mask_sprite);
+	// 	// 	if (self.mask_bitmap.texture) {
+	// 	// 		self.mask_bitmap.texture.dispose();
+	// 	// 	}
+	// 	// 	self.mask_bitmap.texture = render;
+	// 	// 	self.mask_sprite.removeChild(self.mask_con);
+	// 	// 	self.mask_con = new egret.DisplayObjectContainer();
+	// 	// 	self.mask_sprite.addChild(self.mask_con);
+	// 	// }
+	// 	// self.maskNum++;
+	// 	if (!self.passedPos[_posX]) {
+	// 		self.passedPos[_posX] = {};
+	// 	}
+	// 	self.passedPos[_posX][_posY] = true;
+	// }
 
 
-	DrawShape(shape, pos_group, startX, startY) {
-		shape.graphics.clear();
+	DrawShape(shape, pos_group, clear: boolean = true) {
+		if (clear) {
+			shape.graphics.clear();
+		}
 		shape.graphics.beginFill(0xffffff, 1);
 		shape.graphics.lineStyle(1, 0xffffff);
-		shape.graphics.moveTo(startX, startY);
-		pos_group.forEach(intersection => {
+		shape.graphics.moveTo(pos_group.posx, pos_group.posy);
+		pos_group.points.forEach(intersection => {
 			shape.graphics.lineTo(intersection.x, intersection.y);
 		})
-		shape.graphics.lineTo(startX, startY);
+		shape.graphics.lineTo(pos_group.posx, pos_group.posy);
 		shape.graphics.endFill();
 	}
 

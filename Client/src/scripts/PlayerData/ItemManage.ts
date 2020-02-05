@@ -24,6 +24,19 @@ class ItemManage implements IPlayerDataManage {
 		this.SaveData();
 	}
 
+	public GetItems(items: { [id: number]: number }) {
+		if (items == {}) { return; }
+		for (let id in items) {
+			if (this.data[id]) {
+				this.data[id] += items[id];
+			}
+			else {
+				this.data[id] = items[id];
+			}
+		}
+		this.SaveData();
+	}
+
 	/**合成物品
 	 * 默认合成1个
 	 * 返回:1成功 -1材料数量不足 -2物品无合成配置或错误*/

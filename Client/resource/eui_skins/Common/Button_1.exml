@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="Button_1" width="100" height="50" currentState="up" xmlns:e="http://ns.egret.com/eui" states="disable,up" >
+	<e:Image left="0" right="0" top="0" bottom="0" source="on_png" scale9Grid="14,12,35,3" alpha.up="1" alpha.disable="0.5"/>
+	<e:Label text="按钮文字" left="0" right="0" top="0" bottom="0" textAlign="center" verticalAlign="middle" size="18" textColor.up="0xffffff" textColor.disable="0x878787"/>
+</e:Skin>

@@ -19,10 +19,13 @@
 		"CellBgRender": "resource/eui_skins/Game/CellBgRender.exml",
 		"VirtualRocker": "resource/eui_skins/Game/VirtualRocker.exml",
 		"ItemUI": "resource/eui_skins/ItemUI.exml",
-		"GameItem": "resource/eui_skins/Game/GameItem.exml"
+		"GameItem": "resource/eui_skins/Game/GameItem.exml",
+		"ExitTips": "resource/eui_skins/Game/ExitTips.exml",
+		"StartPage": "resource/eui_skins/StartPage.exml"
 	},
 	"autoGenerateExmlsList": true,
 	"exmls": [
+		"resource/eui_skins/Common/Button_1.exml",
 		"resource/eui_skins/Common/ButtonSkin.exml",
 		"resource/eui_skins/Common/CheckBoxSkin.exml",
 		"resource/eui_skins/Common/HScrollBarSkin.exml",
@@ -36,13 +39,15 @@
 		"resource/eui_skins/Common/VScrollBarSkin.exml",
 		"resource/eui_skins/Common/VSliderSkin.exml",
 		"resource/eui_skins/Game/CellBgRender.exml",
+		"resource/eui_skins/Game/ExitTips.exml",
 		"resource/eui_skins/Game/Game.exml",
 		"resource/eui_skins/Game/GameItem.exml",
 		"resource/eui_skins/Game/GameItemRender.exml",
 		"resource/eui_skins/Game/VirtualRocker.exml",
 		"resource/eui_skins/item/ItemRendererSkin.exml",
 		"resource/eui_skins/item/ItemUI.exml",
-		"resource/eui_skins/Loading.exml"
+		"resource/eui_skins/Loading.exml",
+		"resource/eui_skins/StartPage.exml"
 	],
 	"path": "resource/default.thm.json"
 }

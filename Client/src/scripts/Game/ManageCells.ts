@@ -35,7 +35,6 @@ class ManageCells extends eui.Component implements eui.UIComponent {
 		let self: ManageCells = this;
 		this.mapBg.width = this.cells.length * Number(Config.GetInstance().config_common["cell_width"].value) + Number(Config.GetInstance().config_common["cell_width"].value);
 		self.arrayCellList = new eui.ArrayCollection(this.cells);
-		self.arrayCellList.addEventListener(eui.CollectionEvent.COLLECTION_CHANGE, self.RefreshRender, this);
 		self.cellList.dataProvider = self.arrayCellList;
 		self.cellList.itemRenderer = CellBgRender;
 		self.cellList.validateNow();
@@ -45,9 +44,22 @@ class ManageCells extends eui.Component implements eui.UIComponent {
 		this.SetCurrentCell();
 	}
 
+	ExitMap() {
+		ItemManage.GetInstance().GetItems(this.mapData.item);
+		PlayerDataManage.GetInstance().GetPoint(this.mapData.point);
+	}
 
 	private col: number;
 	private returnCell: CellBgRender = null;
+	private mapData: {
+		point: number,
+		item: { [id: number]: number },
+		itemNum: number
+	} = {
+		point: 0,
+		item: {},
+		itemNum: 0
+	};
 
 	cell_width = +Config.GetInstance().config_common["cell_width"].value;
 	cell_height = +Config.GetInstance().config_common["cell_height"].value;
@@ -61,23 +73,29 @@ class ManageCells extends eui.Component implements eui.UIComponent {
 			this.SetCurrentCell();
 			this.SetReturnPath();
 		}
-		if (this._currentCell.item != 0) {
-			this._currentBgRender.ItemTest(role);
-		}
+		this.GetCellItem(role);
 	}
 
-	RefreshRender() {
-		this.arrayCellList.itemUpdated(this._currentCell);
+	GetCellItem(role: eui.Image) {
+		if (this._currentCell.item != 0 && this._currentBgRender.ItemTest(role)) {
+			if (this.mapData.item[this._currentCell.item]) {
+				this.mapData.item[this._currentCell.item]++;
+			} else {
+				this.mapData.item[this._currentCell.item] = 1;
+			}
+			this._currentCell.item = 0;
+			this.mapData.itemNum++;
+		}
 	}
 
 	private SetCurrentCell() {
 		let self: ManageCells = this;
 		self._currentCell = self.arrayCellList.getItemAt(self.index);
 		self._currentBgRender = self.cellList.getElementAt(self._index) as CellBgRender;
+		this.mapData.point++;
 		if (self._currentCell && !self._currentCell.isPassed) {
 			self._currentCell.isPassed = true;
 			this.dispatchEvent(new egret.Event("RefreshCurRender"));
-			PlayerDataManage.GetInstance().GetPoint(1);
 		}
 	}
 

@@ -23,18 +23,20 @@ class GameControl extends eui.Component {
 
 	/**初始化光照 */
 	private InitLight() {
-		let maskLight = this.maskLight;
-		let group_light = this.group_light;
-		maskLight.setMaskSize(group_light.width, group_light.height);
-		maskLight.setLightValue(this.cell_width / 2, this.cell_height / 2, this.manageCells.currentCell, this.manageCells.currentBgRender);
-		group_light.addChild(this.maskLight);
-		maskLight.x = 0;
-		maskLight.y = 0;
+		// let maskLight = this.maskLight;
+		// let group_light = this.group_light;
+		// maskLight.SetMaskSize(group_light.width, group_light.height);
+		// // maskLight.setLightValue(this.cell_width / 2, this.cell_height / 2, this.manageCells.currentCell, this.manageCells.currentBgRender);
+		// maskLight.SetLightValue();
+		// group_light.addChild(this.maskLight);
+		// maskLight.x = 0;
+		// maskLight.y = 0;
 	}
 
 	private RefreshLight() {
 		let role = this.img_role;
-		this.maskLight.setLightValue(role.x, role.y, this.manageCells.currentCell, this.manageCells.currentBgRender);
+		// this.maskLight.setLightValue(role.x, role.y, this.manageCells.currentCell, this.manageCells.currentBgRender);
+		// this.maskLight.SetMaskPos(role.x,role.y);
 	}
 
 	public RoleMoveState(state: number, start: number = 0, target: number = 0): void {
@@ -112,7 +114,7 @@ class GameControl extends eui.Component {
 		img_role.y += moveY;
 		this.dispatchEventWith("moveScroll", false, { moveX: moveX, moveY: moveY })
 		this.manageCells.SetIndex(img_role);
-		if (this.lastPoint && egret.Point.distance(this.lastPoint, new egret.Point(img_role.x, img_role.y)) > 2) {
+		if (this.lastPoint && Math.abs(moveX) > 1 || Math.abs(moveY) > 1) {
 			this.RefreshLight();
 			this.lastPoint = new egret.Point(img_role.x, img_role.y);
 		}

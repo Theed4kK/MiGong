@@ -2,7 +2,7 @@
 ///<reference path="api.d.ts"/>
 
 import * as path from 'path';
-import { UglifyPlugin, CompilePlugin, ManifestPlugin, ExmlPlugin, EmitResConfigFilePlugin, TextureMergerPlugin, CleanPlugin } from 'built-in';
+import { UglifyPlugin, CompilePlugin, ManifestPlugin, ExmlPlugin, EmitResConfigFilePlugin, TextureMergerPlugin, CleanPlugin, ResSplitPlugin } from 'built-in';
 import { WxgamePlugin } from './wxgame/wxgame';
 import { CustomPlugin } from './myplugin';
 import * as defaultConfig from './config';
@@ -41,6 +41,11 @@ const config: ResourceManagerConfig = {
                         target: "main.min.js"
                     }
                     ]),
+                    new ResSplitPlugin({
+                        matchers: [
+                            { from: "resource/**", to: `../${projectName}_wxgame_remote` }
+                        ]
+                    }),
                     new ManifestPlugin({ output: 'manifest.js' })
                 ]
             }

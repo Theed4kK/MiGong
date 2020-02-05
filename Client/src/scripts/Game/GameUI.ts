@@ -1,4 +1,4 @@
-class GameUI extends eui.Component implements eui.UIComponent {
+class GameUI extends UIBase {
 	public constructor() {
 		super();
 		this.once(egret.Event.REMOVED_FROM_STAGE, this.RemoveListener, this);
@@ -7,8 +7,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	public manageCells: ManageCells;
 	private list_cell: eui.List;
 
-	private btn_return: eui.Image;
-	private btn_test: eui.Button;
+	private btn_exit: eui.Button;
 
 	private input_col: eui.TextInput;
 	private input_speed: eui.TextInput;
@@ -44,8 +43,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	}
 
 	private AddListener(): void {
-		this.btn_return.addEventListener(egret.TouchEvent.TOUCH_TAP, this.ReturnSignCell, this);
-		this.btn_test.addEventListener(egret.TouchEvent.TOUCH_TAP, this.TestDb, this);
+		this.btn_exit.addEventListener(egret.TouchEvent.TOUCH_TAP, this.ExitMap, this);
 		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.BeginTouch, this);
 		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.Move, this);
 		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_END, this.CancelTouch, this);
@@ -55,8 +53,7 @@ class GameUI extends eui.Component implements eui.UIComponent {
 	}
 
 	private RemoveListener(): void {
-		this.btn_return.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.TestDb, this);
-		this.btn_test.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.TestDb, this);
+		this.btn_exit.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.ExitMap, this);
 		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.BeginTouch, this);
 		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.Move, this);
 		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_END, this.CancelTouch, this);
@@ -65,8 +62,13 @@ class GameUI extends eui.Component implements eui.UIComponent {
 		this.gameControl.removeEventListener("moveScroll", this.MoveScroll, this);
 	}
 
-	private TestDb() {
-		ItemManage.GetInstance().GetItem(Common.getRandomInt(1, 3), 1);
+	private ExitMap() {
+		let exitTips = UIBase.OpenUI(ExitTips,this.txt_stepNum.text,this.txt_stepNum.text);
+		exitTips.once("ExitMap", () => {
+			this.manageCells.ExitMap();
+			UIBase.CloseUI(GameUI);
+			egret.log("退出地图");
+		}, this)
 	}
 
 	private ReturnSignCell(): void {
@@ -118,8 +120,8 @@ class GameUI extends eui.Component implements eui.UIComponent {
 
 	private BeginTouch(e: egret.TouchEvent): void {
 		if (!this.gameControl) { return; }
-		this.virt.x = e.stageX;
-		this.virt.y = e.stageY;
+		this.virt.x = e.localX;
+		this.virt.y = e.localY;
 		this.virt.start();
 		this.gameControl.RoleMoveState(0);	//开始移动
 	}

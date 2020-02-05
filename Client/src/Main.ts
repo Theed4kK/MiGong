@@ -63,7 +63,9 @@ class Main extends eui.UILayer {
 
     private async loadResource() {
         try {
-            await RES.loadConfig("resource/default.res.json", "resource/");
+            // await RES.loadConfig("resource/default.res.json", "resource/");
+            egret.ImageLoader.crossOrigin = "anonymous";
+            await RES.loadConfig("default.res.json","http://172.20.10.10:8080/resource/");
             await RES.loadGroup("loading");//加载loading组
             await this.loadTheme();
             const loadingView = new LoadingUI();
@@ -94,8 +96,13 @@ class Main extends eui.UILayer {
      * Create scene interface
      */
     protected createGameScene(): void {
-        let gameUI: GameUI = new GameUI();
-        this.stage.addChild(gameUI);
+        // this.stage.addChild(new StartPage());
+        let bg = new egret.Bitmap(RES.getRes("loading_jpg"));
+        bg.width = this.width;
+        bg.height = this.height;
+        this.stage.addChild(bg);
+        UIBase.stage = this.stage;
+        UIBase.OpenUI(StartPage);
     }
 
 }

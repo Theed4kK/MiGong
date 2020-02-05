@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="StartPageSkin" width="750" height="1334" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" xmlns:ns1="*" xmlns:tween="egret.tween.*" >
+	<w:Declarations>
+	</w:Declarations>
+	<w:Config id="16fcbc6bb06" ></w:Config>
+	<e:Image left="0" right="0" top="0" bottom="0" source="loading_jpg"/>
+	<e:Button id="btn_start" label="开始游戏" anchorOffsetX="0" width="160.61" anchorOffsetY="0" height="71.21" horizontalCenter="0" bottom="274">
+	</e:Button>
+</e:Skin>

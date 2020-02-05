@@ -27,56 +27,74 @@ class Common {
 
 	public static OPENID: string;
 	public static InitWx() {
-		wx.cloud.init();
-		wx.cloud.callFunction({
-			name: "GetOpenId",
-			data: {},
-			success: function (res): any {
-				Common.OPENID = res.OPENID
-			},
-			fail: function (err): any {
-				console.log("err", err)
-			}
-		})
-		console.log("OPENID--->", Common.OPENID)
+		try {
+			wx.cloud.init();
+			wx.cloud.callFunction({
+				name: "GetOpenId",
+				data: {},
+				success: function (res): any {
+					Common.OPENID = res.OPENID
+				},
+				fail: function (err): any {
+					console.log("err", err)
+				}
+			})
+			console.log("OPENID--->", Common.OPENID)
+		}
+		catch (err) {
+			console.log(`未能成功初始化微信云：${err}`)
+		}
+
 	}
 
 	public static SaveData(form: string, data: any) {
-		wx.cloud.init();
-		const db = wx.cloud.database();
-		let _id;
-		let value = db.collection(form).where({
-			_openid: Common.OPENID
-		});
-		value.count().then(res => {
-			if (res.total == 0) {
-				db.collection(form).add({
-					data: data,
-					success: res => {
-						console.log("添加成功", res)
-					}
-				})
-			}
-			else {
-				value.get().then(res => {
-					_id = res.data[0]._id;
-					db.collection(form).doc(_id).update({
+		try {
+			wx.cloud.init();
+			const db = wx.cloud.database();
+			let _id;
+			let value = db.collection(form).where({
+				_openid: Common.OPENID
+			});
+			value.count().then(res => {
+				if (res.total == 0) {
+					db.collection(form).add({
 						data: data,
 						success: res => {
-							console.log("更新成功", res)
+							console.log("添加成功", res)
 						}
 					})
-				})
-			}
-		})
+				}
+				else {
+					value.get().then(res => {
+						_id = res.data[0]._id;
+						db.collection(form).doc(_id).update({
+							data: data,
+							success: res => {
+								console.log("更新成功", res)
+							}
+						})
+					})
+				}
+			})
+		}
+		catch (err) {
+			egret.localStorage.setItem(form, data);
+		}
+
 	}
 
 	public static LoadData(form: string): any {
-		wx.cloud.init();
-		const db = wx.cloud.database()
-		db.collection(form).get().then(res => {
-			console.log('获取数据', res.data)
-			return res.data;
-		})
+		try {
+			wx.cloud.init();
+			const db = wx.cloud.database()
+			db.collection(form).get().then(res => {
+				console.log('获取数据', res.data)
+				return res.data;
+			})
+		}
+		catch (err) {
+			return egret.localStorage.getItem(form);
+		}
+
 	}
 }

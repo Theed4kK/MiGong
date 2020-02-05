@@ -120,6 +120,11 @@
 			"url": "gameConfig/commom.json",
 			"type": "json",
 			"name": "commom_json"
+		},
+		{
+			"url": "assets/role.png",
+			"type": "image",
+			"name": "role_png"
 		}
 	]
 }

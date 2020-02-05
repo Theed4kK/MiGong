@@ -1,3 +1,5 @@
+declare class Button_1 extends eui.Skin{
+}
 declare module skins{
 	class ButtonSkin extends eui.Skin{
 	}
@@ -48,6 +50,8 @@ declare module skins{
 }
 declare class CellBgRenderSkin extends eui.Skin{
 }
+declare class ExitTipsSkin extends eui.Skin{
+}
 declare class GameSkin extends eui.Skin{
 }
 declare class GameItemSkin extends eui.Skin{
@@ -63,4 +67,6 @@ declare module skins{
 declare class ItemUISkin extends eui.Skin{
 }
 declare class Loading extends eui.Skin{
+}
+declare class StartPageSkin extends eui.Skin{
 }
