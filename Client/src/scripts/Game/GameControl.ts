@@ -1,20 +1,20 @@
 class GameControl extends eui.Component {
-	public constructor(img_role: eui.Image, group_light: eui.Group, speed: number, manageCells: ManageCells) {
+	public constructor(role: eui.Group, speed: number, manageCells: ManageCells) {
 		super();
-		this.img_role = img_role;
-		this.group_light = group_light;
+		this.role = role;
 		this.manageCells = manageCells;
-		this.InitLight();
+		// this.InitLight();
 		this.speed = speed;
-		this.img_role.anchorOffsetX = this.img_role.width / 2;
-		this.img_role.anchorOffsetY = this.img_role.height / 2;
+		this.role.anchorOffsetX = this.role.width / 2;
+		this.role.anchorOffsetY = this.role.height / 2;
 	}
 
 	public direction: number;
 	public speed: number;
 	private manageCells: ManageCells;
-	private img_role: eui.Image;
+	private role: eui.Group;
 	private group_light: eui.Group;
+	// private maskSize: number[];
 	public maskLight: LightMask = new LightMask();
 	wall_height = +Config.GetInstance().config_common["wall_height"].value;
 	wall_width = +Config.GetInstance().config_common["wall_height"].value;
@@ -22,21 +22,18 @@ class GameControl extends eui.Component {
 	cell_width = +Config.GetInstance().config_common["cell_height"].value;
 
 	/**初始化光照 */
-	private InitLight() {
-		// let maskLight = this.maskLight;
-		// let group_light = this.group_light;
-		// maskLight.SetMaskSize(group_light.width, group_light.height);
-		// // maskLight.setLightValue(this.cell_width / 2, this.cell_height / 2, this.manageCells.currentCell, this.manageCells.currentBgRender);
-		// maskLight.SetLightValue();
-		// group_light.addChild(this.maskLight);
-		// maskLight.x = 0;
-		// maskLight.y = 0;
-	}
+	// private InitLight() {
+	// 	let maskLight = this.maskLight;
+	// 	maskLight.SetMaskSize(this.maskSize[0], this.maskSize[1]);
+	// 	maskLight.MoveMask(this.cell_width / 2, this.cell_height / 2, this.manageCells.currentCell, this.manageCells.currentBgRender);
+	// 	this.group_light.addChild(this.maskLight);
+	// 	maskLight.x = 0;
+	// 	maskLight.y = 0;
+	// }
 
 	private RefreshLight() {
-		let role = this.img_role;
-		// this.maskLight.setLightValue(role.x, role.y, this.manageCells.currentCell, this.manageCells.currentBgRender);
-		// this.maskLight.SetMaskPos(role.x,role.y);
+		let role = this.role;
+		this.maskLight.MoveMask(role.x, role.y, this.manageCells.currentCell, this.manageCells.currentBgRender);
 	}
 
 	public RoleMoveState(state: number, start: number = 0, target: number = 0): void {
@@ -68,7 +65,7 @@ class GameControl extends eui.Component {
 		} else {
 			index = path[0] + 0.5;
 		}
-		this.direction = Math.atan2(index * this.cell_height - this.img_role.y, index * this.cell_width - this.img_role.x);
+		this.direction = Math.atan2(index * this.cell_height - this.role.y, index * this.cell_width - this.role.x);
 		this.RoleMove(2);
 	}
 
@@ -79,59 +76,60 @@ class GameControl extends eui.Component {
 	private lastPoint: egret.Point = new egret.Point(0, 0);
 	/**角色移动,type:1为手动引动  2为自动移动 */
 	private RoleMove(type: number = 1): void {
-		if (this.direction == null) { return; }
+		let self: GameControl = this;
+		if (self.direction == null) { return; }
 		let startTimer: number = egret.getTimer();
-		let speedX = Number((Math.cos(this.direction) * this.speed * type).toFixed(2));
-		let speedY = Number((Math.sin(this.direction) * this.speed * type).toFixed(2));
-		let cell: Cell = this.manageCells.currentCell;
-		let obj: egret.DisplayObject = this.manageCells.currentBgRender;
+		let speedX = +(Math.cos(self.direction) * self.speed * type).toFixed();
+		let speedY = +(Math.sin(self.direction) * self.speed * type).toFixed();
+		let cell: Cell = self.manageCells.currentCell;
+		let obj: egret.DisplayObject = self.manageCells.currentBgRender;
 		let moveX: number = 0;
 		let moveY: number = 0;
-		let img_role = this.img_role;
+		let role = self.role;
 
 		let moveRight = speedX > 0;
 		let nearWall: Wall = moveRight ? cell.rightWall : cell.leftWall;
-		if (!nearWall.isOpen || this.IsEdge(0)) {
-			let width: number = this.wall_width * 0.5 + img_role.width * 0.5;
-			let distance: number = Math.abs(obj.x + (moveRight ? 1 : 0) * obj.width / type - img_role.x) - width;
+		if (!nearWall.isOpen || self.IsEdge(0)) {
+			let width: number = self.wall_width * 0.5 + role.width * 0.5;
+			let distance: number = Math.abs(obj.x + (moveRight ? 1 : 0) * obj.width / type - role.x) - width;
 			moveX = moveRight ? Math.min(distance, speedX) : Math.max(-distance, speedX);
 		}
 		else {
 			moveX = speedX;
 		}
-		img_role.x += moveX;
+		role.x += moveX;
 
 		moveRight = speedY < 0;
 		nearWall = moveRight ? cell.upWall : cell.downWall;
-		if (!nearWall.isOpen || this.IsEdge(1)) {
-			let height: number = this.wall_height * 0.5 + img_role.height * 0.5;
-			let distance: number = Math.abs(obj.y + (moveRight ? 0 : 1) * obj.height / type - img_role.y) - height;
+		if (!nearWall.isOpen || self.IsEdge(1)) {
+			let height: number = self.wall_height * 0.5 + role.height * 0.5;
+			let distance: number = Math.abs(obj.y + (moveRight ? 0 : 1) * obj.height / type - role.y) - height;
 			moveY = moveRight ? Math.max(-distance, speedY) : Math.min(distance, speedY);
 		}
 		else {
 			moveY = speedY;
 		}
-		img_role.y += moveY;
-		this.dispatchEventWith("moveScroll", false, { moveX: moveX, moveY: moveY })
-		this.manageCells.SetIndex(img_role);
-		if (this.lastPoint && Math.abs(moveX) > 1 || Math.abs(moveY) > 1) {
-			this.RefreshLight();
-			this.lastPoint = new egret.Point(img_role.x, img_role.y);
-		}
+		role.y += moveY;
+		self.role.dispatchEventWith("moveScroll", false, { moveX: moveX, moveY: moveY })
+		self.manageCells.SetIndex(role);
+		// if (self.lastPoint && Math.abs(moveX) > 1 || Math.abs(moveY) > 1) {
+		// 	self.RefreshLight();
+		// 	self.lastPoint = new egret.Point(img_role.x, img_role.y);
+		// }
 	}
 
 	private IsEdge(type: number): boolean {
 		let isEdge: boolean = true;
-		let img_role: eui.Image = this.img_role;
+		let role: eui.Group = this.role;
 		let obj: egret.DisplayObject = this.manageCells.currentBgRender;
 		switch (type) {
 			case 0:
-				isEdge = (Math.abs(img_role.y - obj.y)) < ((img_role.height / 2) + this.wall_height * 0.5);
-				isEdge = isEdge || ((Math.abs(img_role.y - obj.y - obj.height) < (img_role.height / 2) + this.wall_height * 0.5));
+				isEdge = (Math.abs(role.y - obj.y)) < ((role.height / 2) + this.wall_height * 0.5);
+				isEdge = isEdge || ((Math.abs(role.y - obj.y - obj.height) < (role.height / 2) + this.wall_height * 0.5));
 				break;
 			case 1:
-				isEdge = (Math.abs(img_role.x - obj.x)) < ((img_role.width / 2) + this.wall_width * 0.5);
-				isEdge = isEdge || ((Math.abs(img_role.x - obj.x - obj.width) < (img_role.width / 2) + this.wall_width * 0.5));
+				isEdge = (Math.abs(role.x - obj.x)) < ((role.width / 2) + this.wall_width * 0.5);
+				isEdge = isEdge || ((Math.abs(role.x - obj.x - obj.width) < (role.width / 2) + this.wall_width * 0.5));
 				break;
 		}
 		return isEdge;

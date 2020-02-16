@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="ItemUISkin" width="600" height="800" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" >
+	<w:Config id="16c6b5bfcd8" ></w:Config>
+	<e:Image top="0" bottom="0" left="0" right="0" scale9Grid="52,54,131,144" source=""/>
+</e:Skin>

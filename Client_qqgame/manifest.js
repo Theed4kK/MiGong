@@ -1,0 +1,8 @@
+requirePlugin("egret-library/egret.min.js")
+requirePlugin("egret-library/eui.min.js")
+requirePlugin("egret-library/assetsmanager.min.js")
+requirePlugin("egret-library/tween.min.js")
+require("./js/WXCloudApi.js")
+require("./js/egretmgobe.js")
+require("./js/main.js")
+require("./js/default.thm.js")

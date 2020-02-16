@@ -27,15 +27,15 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-class LoadingUI extends eui.Component implements eui.UIComponent {
-
+class LoadingUI extends eui.Component implements RES.PromiseTaskReporter {
     public constructor() {
         super();
-        this.skinName = "Loading";
     }
 
-
+    private progressBar: eui.ProgressBar;
     public onProgress(current: number, total: number): void {
-        // this.textField.text = `Loading...${current}/${total}`;
+        this.progressBar.minimum = 0;
+        this.progressBar.maximum = total;
+        this.progressBar.value = current;
     }
 }

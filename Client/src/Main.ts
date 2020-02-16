@@ -57,21 +57,25 @@ class Main extends eui.UILayer {
         await this.loadResource()
         this.createGameScene();
         await platform.login();
-        const userInfo = await platform.getUserInfo();
-        Common.InitWx();
+        await DBManage.GetInstance().Init();
     }
 
     private async loadResource() {
         try {
-            // await RES.loadConfig("resource/default.res.json", "resource/");
-            egret.ImageLoader.crossOrigin = "anonymous";
-            await RES.loadConfig("default.res.json","http://172.20.10.10:8080/resource/");
-            await RES.loadGroup("loading");//加载loading组
+            if (egret.Capabilities.runtimeType != egret.RuntimeType.WEB) {
+                egret.ImageLoader.crossOrigin = "anonymous";
+                await RES.loadConfig("default.res.json", "http://192.168.11.104:8080/resource/");
+                console.log("使用网络资源");
+            }
+            else {
+                await RES.loadConfig("resource/default.res.json", "resource/");
+                console.log("使用本地资源");
+            }
             await this.loadTheme();
             const loadingView = new LoadingUI();
             this.stage.addChild(loadingView);
             await RES.loadGroup("preload", 0, loadingView);
-            Config.GetInstance().InitCofing(); //加载配置文件
+            await Config.GetInstance().InitCofing();//解析配置文件
             this.stage.removeChild(loadingView);
         }
         catch (e) {
@@ -97,11 +101,9 @@ class Main extends eui.UILayer {
      */
     protected createGameScene(): void {
         // this.stage.addChild(new StartPage());
-        let bg = new egret.Bitmap(RES.getRes("loading_jpg"));
-        bg.width = this.width;
-        bg.height = this.height;
-        this.stage.addChild(bg);
-        UIBase.stage = this.stage;
+        let uiLayer = new eui.UILayer();
+        UIBase.UILayer = uiLayer;
+        this.stage.addChild(uiLayer);
         UIBase.OpenUI(StartPage);
     }
 

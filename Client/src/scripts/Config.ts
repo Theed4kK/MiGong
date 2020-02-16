@@ -1,4 +1,8 @@
 class Config {
+	private constructor() {
+
+	}
+
 	private static instance: Config;
 	public static GetInstance() {
 		Config.instance = Config.instance ? Config.instance : new Config();
@@ -17,18 +21,13 @@ class Config {
 		["config_common", "commom_json"]
 	]
 
-	public InitCofing(): void {
-		this.config_paths.forEach(path => {
-			Config.instance[path[0]] = this.GetConfigFromFile(path[1]);
-		})
-	}
-
-	private GetConfigFromFile(fileName: string) {
-		let objs = RES.getRes(fileName);
-		let configs = [];
-		objs.forEach(v => {
-			configs[v.id] = v;
-		})
-		return configs;
+	async InitCofing() {
+		for (let path of this.config_paths) {
+			const res = await RES.getResAsync(path[1])
+			Config.instance[path[0]] = {};
+			for (let v of res) {
+				Config.instance[path[0]][v.id] = v;
+			}
+		}
 	}
 }

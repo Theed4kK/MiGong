@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="BagUISkin" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" >
+	<w:Config id="17033cbfcd5" ></w:Config>
+	<e:Group anchorOffsetY="0" height="1169.58" width="731" y="0" x="0" touchThrough="false" touchChildren="true">
+		<e:Image scaleX="1" scaleY="1" source="tutorial_new_png" fillMode="scale" x="0" height="1098" y="0"/>
+		<e:ViewStack id="view" height="1000" selectedIndex="0" width="650" scaleX="1" scaleY="1" x="41" y="36">
+			<e:Group width="100%" height="100%" name="视图">
+			<e:Label text="道具" left="0" right="0" top="-18" verticalAlign="middle" textAlign="center" size="40" textColor="0x000000" height="100" bold="true"/>
+			<e:Scroller left="23" right="23" top="79" bottom="39">
+				<e:Group>
+				<e:List id="list_item1" height="885" anchorOffsetX="0" y="0" scaleX="1" scaleY="1" left="0" right="0">
+					<e:layout>
+					<e:VerticalLayout horizontalAlign="left" verticalAlign="top"/>
+					</e:layout>
+				</e:List>
+				</e:Group>
+			</e:Scroller>
+			</e:Group>
+			<e:Group width="100%" height="100%" name="Group">
+			<e:Label text="贡品" left="0" right="0" verticalAlign="middle" textAlign="center" size="40" x="-50" scaleX="1" scaleY="1" textColor="0x000000" height="100" bold="true" top="-18"/>
+			<e:Scroller left="23" right="23" top="79" bottom="39">
+				<e:Group>
+				<e:List id="list_item2" height="885" anchorOffsetX="0" y="0" scaleX="1" scaleY="1" left="0" right="0">
+					<e:layout>
+					<e:VerticalLayout horizontalAlign="left" verticalAlign="top"/>
+					</e:layout>
+				</e:List>
+				</e:Group>
+			</e:Scroller>
+			</e:Group>
+		</e:ViewStack>
+		<e:TabBar id="tabBar" width="648" height="92" anchorOffsetY="0" anchorOffsetX="0" itemRendererSkinName="BagTabBar" scaleX="1" scaleY="1" y="1071" touchThrough="true" horizontalCenter="3">
+			<e:layout>
+			<e:HorizontalLayout horizontalAlign="center" verticalAlign="top"/>
+			</e:layout>
+			<e:ArrayCollection>
+				<e:Array>
+					<e:Object name="aaaa"/>
+					<e:Object name="null"/>
+					<e:Object name="null"/>
+				</e:Array>
+			</e:ArrayCollection>
+		</e:TabBar>
+	</e:Group>
+</e:Skin>

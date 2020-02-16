@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="GameSkin" width="750" height="1624" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing"
+        xmlns:ns1="*">
+	<w:Config id="16b364587c8"></w:Config>
+	<e:Image id="img_Bg" source="loading_jpg" scaleX="1" scaleY="1"
+	         touchEnabled="true"  height="1624" left="0" right="0" top="0"/>
+	<e:Image id="btn_return" x="482" y="1019" anchorOffsetX="0" anchorOffsetY="0" source="" width="104" height="50" visible="false"/>
+	<e:Group touchThrough="false" touchEnabled="false" touchChildren="false" top="80" left="0" right="0" anchorOffsetY="0" bottom="350">
+		<e:Scroller id="scroller_bg" scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0">
+			<e:Group>
+				<e:Image id="img_mapBg" top="8" fillMode="repeat" scaleX="1" scaleY="1" left="5" right="5" bottom="8" width="500" height="500" anchorOffsetX="0" includeInLayout="true" source="cell_bg_02_jpg" x="0" y="0"/>
+				<e:layout>
+					<e:HorizontalLayout gap="0"/>
+				</e:layout>
+			</e:Group>
+		</e:Scroller>
+
+		<e:Scroller id="scroller_map" touchEnabled="false" touchChildren="false" bounces="false" scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0">
+			<e:Group id="group_map" scaleX="1" scaleY="1" touchThrough="false" touchChildren="false" touchEnabled="false">
+
+
+
+
+			<e:List id="list_cell" scaleX="1" scaleY="1" includeInLayout="true" useVirtualLayout="false">
+				<e:layout>
+				<e:TileLayout horizontalGap="0" verticalGap="0" requestedRowCount="15" paddingTop="5" paddingBottom="5" paddingLeft="5" paddingRight="5" orientation="rows"/>
+				</e:layout>
+			</e:List>
+
+
+
+
+
+
+
+
+
+			<e:layout>
+				<e:HorizontalLayout gap="0"/>
+			</e:layout>
+			</e:Group>
+		</e:Scroller>
+		<e:Scroller id="scroller_role" scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0">
+			<e:Group id="group_light">
+
+
+				<e:Image id="img_role" width="40" height="40" x="0" scaleX="1" scaleY="1" includeInLayout="false" verticalCenter="0" y="0" source="role_png"/>
+				<e:layout>
+					<e:HorizontalLayout gap="0"/>
+				</e:layout>
+			</e:Group>
+		</e:Scroller>
+	</e:Group>
+
+
+
+
+
+
+	<e:Group left="0" right="0" touchThrough="true" touchEnabled="false" touchChildren="true" anchorOffsetY="0" height="300" bottom="50">
+
+
+
+		<e:Group anchorOffsetX="0" left="0" right="0" anchorOffsetY="0" touchChildren="true" touchEnabled="false" touchThrough="true" height="74" top="0">
+			<e:Group height="38" anchorOffsetY="0" anchorOffsetX="0" y="3" left="0" right="0">
+				<e:Image touchEnabled="false" scaleX="1" scaleY="1" source="border_png" top="0" bottom="0" left="0" right="0" fillMode="scale" anchorOffsetX="0"/>
+				<e:Label id="txt_stepNum" text="已探索：1/300" scaleX="1" scaleY="1" fontFamily="Microsoft YaHei" size="16" textColor="0x141401" touchEnabled="false" left="65" top="0" bottom="0" verticalAlign="middle" textAlign="left"/>
+				<e:Label id="txt_stepNum0" text="已找到宝藏：5/10" scaleX="1" scaleY="1" fontFamily="Microsoft YaHei" size="16" textColor="0x141401" touchEnabled="false" left="233" top="0" bottom="0" verticalAlign="middle" textAlign="left" anchorOffsetX="0" width="173.09"/>
+			</e:Group>
+
+
+
+
+
+
+		</e:Group>
+		<e:Button id="btn_exit" label="退出" skinName="skins.ButtonSkin" horizontalCenter="0" bottom="133"/>
+
+
+
+	</e:Group>
+	
+</e:Skin>

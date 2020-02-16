@@ -1,10 +1,9 @@
-class ManageCells extends eui.Component implements eui.UIComponent {
-	public constructor(cells: Cell[], cellList: eui.List, mapBg: eui.Image) {
-		super();
+class ManageCells {
+	public constructor(cells: Cell[], cellList: eui.List, group_mapBg: eui.Group) {
 		this.cells = cells;
 		this.col = cells.length / 15;
 		this.cellList = cellList;
-		this.mapBg = mapBg;
+		this.group_mapBg = group_mapBg;
 		this.InitRenders();
 	}
 
@@ -28,24 +27,51 @@ class ManageCells extends eui.Component implements eui.UIComponent {
 	private cells: Cell[] = [];
 	private cellList: eui.List;
 	private arrayCellList: eui.ArrayCollection;
-	private mapBg: eui.Image;
+	private group_mapBg: eui.Group;
 
 	/**初始化背景和墙格子 */
 	public InitRenders(): void {
 		let self: ManageCells = this;
-		this.mapBg.width = this.cells.length * Number(Config.GetInstance().config_common["cell_width"].value) + Number(Config.GetInstance().config_common["cell_width"].value);
 		self.arrayCellList = new eui.ArrayCollection(this.cells);
 		self.cellList.dataProvider = self.arrayCellList;
 		self.cellList.itemRenderer = CellBgRender;
 		self.cellList.validateNow();
 		self.cellList.validateDisplayList();
-		this.mapBg.width = this.cellList.contentWidth;
-		this.mapBg.height = this.cellList.contentHeight;
+
+		let ground_bitmap = new egret.Bitmap();
+		let wall_bitmap = new egret.Bitmap();
+		self.group_mapBg.addChild(ground_bitmap);
+		self.group_mapBg.addChild(wall_bitmap);
+		let ground_render = new egret.RenderTexture();
+		let wall_render = new egret.RenderTexture();
+
+		ground_render.drawToTexture(self.cellList);
+		ground_bitmap.texture = ground_render;
+		for (let i = 0; i < self.arrayCellList.length; i++) {
+			let cell: Cell = self.arrayCellList.getItemAt(i);
+			cell.renderState++;
+		}
+		self.arrayCellList.refresh();
+		self.cellList.validateNow();
+		self.cellList.validateDisplayList();
+
+		wall_render.drawToTexture(self.cellList);
+		wall_bitmap.texture = wall_render;
+		for (let i = 0; i < self.arrayCellList.length; i++) {
+			let cell: Cell = self.arrayCellList.getItemAt(i);
+			cell.renderState++;
+		}
+		self.arrayCellList.refresh();
+
+		// self.cellList.validateNow();
+		// self.cellList.validateDisplayList();
 		this.SetCurrentCell();
 	}
 
 	ExitMap() {
-		ItemManage.GetInstance().GetItems(this.mapData.item);
+		if (this.mapData.itemNum > 0) {
+			ItemManage.GetInstance().GetItems(this.mapData.item);
+		}
 		PlayerDataManage.GetInstance().GetPoint(this.mapData.point);
 	}
 
@@ -64,7 +90,7 @@ class ManageCells extends eui.Component implements eui.UIComponent {
 	cell_width = +Config.GetInstance().config_common["cell_width"].value;
 	cell_height = +Config.GetInstance().config_common["cell_height"].value;
 	/**设置当前所在格子编号 */
-	public SetIndex(role: eui.Image): void {
+	public SetIndex(role: eui.Group): void {
 		let h: number = Math.floor(role.x / this.cell_width);
 		let v: number = Math.floor(role.y / this.cell_height);
 		let index: number = v * this.col + h;
@@ -76,7 +102,7 @@ class ManageCells extends eui.Component implements eui.UIComponent {
 		this.GetCellItem(role);
 	}
 
-	GetCellItem(role: eui.Image) {
+	GetCellItem(role: eui.Group) {
 		if (this._currentCell.item != 0 && this._currentBgRender.ItemTest(role)) {
 			if (this.mapData.item[this._currentCell.item]) {
 				this.mapData.item[this._currentCell.item]++;
@@ -84,6 +110,7 @@ class ManageCells extends eui.Component implements eui.UIComponent {
 				this.mapData.item[this._currentCell.item] = 1;
 			}
 			this._currentCell.item = 0;
+			this.arrayCellList.itemUpdated(this._currentCell);
 			this.mapData.itemNum++;
 		}
 	}
@@ -95,7 +122,7 @@ class ManageCells extends eui.Component implements eui.UIComponent {
 		this.mapData.point++;
 		if (self._currentCell && !self._currentCell.isPassed) {
 			self._currentCell.isPassed = true;
-			this.dispatchEvent(new egret.Event("RefreshCurRender"));
+			this.cellList.dispatchEvent(new egret.Event("RefreshCurRender"));
 		}
 	}
 

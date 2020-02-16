@@ -1,0 +1,9 @@
+{"file":"item_icon.png","frames":{
+"gold_5":{"x":351,"y":127,"w":141,"h":121,"offX":0,"offY":14,"sourceW":148,"sourceH":135},
+"gold_6":{"x":2,"y":158,"w":130,"h":82,"offX":9,"offY":32,"sourceW":148,"sourceH":135},
+"gold_7":{"x":2,"y":244,"w":109,"h":62,"offX":17,"offY":44,"sourceW":148,"sourceH":135},
+"zhuoyue":{"x":115,"y":244,"w":60,"h":73,"offX":0,"offY":0,"sourceW":60,"sourceH":73},
+"gold_1":{"x":2,"y":2,"w":193,"h":152,"offX":0,"offY":0,"sourceW":193,"sourceH":152},
+"gold_2":{"x":199,"y":2,"w":148,"h":135,"offX":0,"offY":0,"sourceW":148,"sourceH":135},
+"gold_3":{"x":199,"y":141,"w":147,"h":110,"offX":0,"offY":25,"sourceW":148,"sourceH":135},
+"gold_4":{"x":351,"y":2,"w":148,"h":121,"offX":0,"offY":14,"sourceW":148,"sourceH":135}}}

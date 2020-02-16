@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="BagItemRenderSkin" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" width="604" height="125">
+	<e:Image left="0" source="box_jiaotai_png" right="0" top="0" bottom="0"/>
+	<e:Image verticalCenter="0" left="20" source="sign_empty_box_png"/>
+	<e:Image id="img_icon" width="80" height="80" verticalCenter="0" left="35"/>
+	<e:Label id="txt_name" text="物品名字" fontFamily="Microsoft YaHei" left="147" size="26" textColor="0xe81972" strokeColor="0xd80a48" stroke="0.2" verticalCenter="-39"/>
+	<e:Label id="txt_num" text="拥有数量：500" fontFamily="Microsoft YaHei" size="22" right="19" top="0" bottom="0" verticalAlign="middle" textAlign="right" anchorOffsetX="0" width="216.67" textColor="0xc69b59"/>
+	<e:Label id="txt_des" text="物品描述" fontFamily="Microsoft YaHei" size="20" left="147" anchorOffsetX="0" width="268" anchorOffsetY="0" height="71.33" textColor="0x141414" verticalCenter="22.5"/>
+</e:Skin>

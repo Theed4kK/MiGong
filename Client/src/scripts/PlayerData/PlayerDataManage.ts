@@ -1,52 +1,63 @@
 class PlayerDataManage implements IPlayerDataManage {
 	public constructor() {
-		this.LoadData();
 	}
 
-	public data: {
+	data: {
 		level: number,
 		point: number
 	};
+	private init: boolean = false;
+	async Getdata() {
+		if (!this.init) {
+			await PlayerDataManage.instance.LoadData().then(res => {
+				this.init = true;
+			});
+			return this.data;
+		} else {
+			return this.data;
+		}
+	}
 
-	public static instance: PlayerDataManage;
+	private static instance: PlayerDataManage;
 
 	public static GetInstance() {
 		if (!PlayerDataManage.instance) {
-			PlayerDataManage.instance = new PlayerDataManage();
+			PlayerDataManage.instance = new PlayerDataManage()
 		}
 		return PlayerDataManage.instance;
 	}
 
-	public GetPoint(num: number) {
-		this.data.point += num;
-		if (this.data.point < 0) { this.data.point = 0 }
+	async GetPoint(num: number) {
+		let data = await this.Getdata();
+		data.point += num;
+		if (data.point < 0) { data.point = 0 }
 		let maxLvl = +Config.GetInstance().config_common["maxLvl"].value;
 		let configs = Config.GetInstance().config_level;
 		if (num >= 0) {
-			for (let i = this.data.level; i < maxLvl; i++) {
-				if (this.data.point < configs[i].point) {
+			for (let i = data.level; i < maxLvl; i++) {
+				if (data.point < configs[i].point) {
 					break;
 				}
-				this.data.level++;
+				data.level++;
 			}
 		}
 		else {
-			for (let i = this.data.level; i > 1; i--) {
-				if (this.data.point >= configs[i - 1].point) {
+			for (let i = data.level; i > 1; i--) {
+				if (data.point >= configs[i - 1].point) {
 					break;
 				}
-				this.data.level--;
+				data.level--;
 			}
 		}
 		this.SaveData();
 	}
 
 	SaveData() {
-		Common.SaveData(data_key_player, this.data);
+		DBManage.GetInstance().SaveData(data_key_player, this.data);
 	}
 
-	LoadData() {
-		this.data = Common.LoadData(data_key_player);
+	async LoadData() {
+		this.data = await DBManage.GetInstance().LoadData(data_key_player);
 		if (!this.data) {
 			this.data = { level: 1, point: 0 };
 		}

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="BagTabBar" xmlns:e="http://ns.egret.com/eui" states="up,down" >
+	<e:Image anchorOffsetX="0" anchorOffsetY="0" alpha.down="1" alpha.up="0.5" touchEnabled.down="false" y="0" x="0" source="style7_default_png"/>
+	<e:Label text="{data}" left="0" right="0" top="0" bottom="0" verticalAlign="middle" textAlign="center" textColor.down="0xffffff" textColor.up="0xbfbfbf" touchEnabled.down="false"/>
+</e:Skin>

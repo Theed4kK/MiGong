@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin class="VirtualRockerSkin" width="140" height="140" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" >
+<e:Skin class="VirtualRockerSkin" width="300" height="300" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" >
 	<w:Config id="16b78c6ee92" ></w:Config>
 	<e:Group left="0" right="0" top="0" bottom="0" touchEnabled="false" touchThrough="false" touchChildren="false">
-		<e:Image id="circle" source="padIcon_png" anchorOffsetX="0" anchorOffsetY="0" x="0" y="0" scaleX="1" scaleY="1" touchEnabled="false"/>
-		<e:Image id="ball" source="padIcon_01_png" anchorOffsetX="25" anchorOffsetY="25" scaleX="1" scaleY="1" width="50" height="50" y="70" x="70" touchEnabled="false"/>
+		<e:Image id="circle" anchorOffsetX="0" anchorOffsetY="0" scaleX="1" scaleY="1" touchEnabled="false" source="padIcon" width="300" height="300" y="0" x="0"/>
+		<e:Image id="ball" anchorOffsetX="25" anchorOffsetY="25" scaleX="1" scaleY="1" width="50" height="50" touchEnabled="false" source="padIcon_01" x="150" y="150"/>
 	</e:Group>
 
 </e:Skin>

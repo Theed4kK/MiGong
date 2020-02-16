@@ -1,9 +1,6 @@
 class LightMask extends egret.Sprite {
-	private mask_sprite: egret.Sprite;
-	private mask_con: egret.DisplayObjectContainer = new egret.DisplayObjectContainer();;
-	private cirleLight_shape: egret.Shape;
 	private mask_shape: egret.Shape;
-	private mask_bitmap: egret.Bitmap = new egret.Bitmap();
+	private cirleLight_shape: egret.Shape;
 
 	private radius: number;
 	wall_height: number = + Config.GetInstance().config_common["wall_height"].value;
@@ -13,22 +10,16 @@ class LightMask extends egret.Sprite {
 	public constructor() {
 		super();
 		let self: LightMask = this;
-		// self.cacheAsBitmap = true;
+		self.cacheAsBitmap = true;
 
-		self.mask_sprite = new egret.Sprite();
-		self.mask_sprite.cacheAsBitmap = true;
-		self.mask_sprite.blendMode = egret.BlendMode.ERASE;
-		self.mask_sprite.alpha = 0.3;
-
+		self.mask_shape = new egret.Shape();
+		self.mask_shape.blendMode = egret.BlendMode.ERASE;
+		self.mask_shape.alpha = 0.4;
 
 		self.cirleLight_shape = new egret.Shape();
-		self.mask_shape = new egret.Shape();
 		self.cirleLight_shape.blendMode = egret.BlendMode.ERASE;
 
-		self.mask_sprite.addChild(self.mask_bitmap);
-		self.mask_sprite.addChild(self.mask_con);
-
-		// self.addChild(self.mask_sprite);
+		self.addChild(self.mask_shape);
 		self.addChild(self.cirleLight_shape);
 	}
 
@@ -38,7 +29,16 @@ class LightMask extends egret.Sprite {
 		this.graphics.beginFill(0x000000, 1);
 		this.graphics.drawRect(this.wall_width, this.wall_height, maskW - this.wall_width * 2, maskH - this.wall_height * 2);
 		this.graphics.endFill();
-		this.radius = this.cell_width * 2 + this.wall_width / 2;
+		this.radius = this.cell_width - this.wall_width * 2;
+		let c_m = new egret.Matrix();
+		c_m.createGradientBox(this.radius * 2, this.radius * 2, 0, -this.radius, -this.radius);
+		let colorGroup = [0, 255];
+		let alphaGroup = [1, 0.2];
+		this.cirleLight_shape.graphics.clear();
+		this.cirleLight_shape.graphics.beginGradientFill(egret.GradientType.RADIAL, [0xffffff, 0xffffff], alphaGroup, colorGroup, c_m);//这个渐变的参数是自己调的，可能不太理想，谁有好的参数可以留言，谢谢啦。
+		this.cirleLight_shape.graphics.drawCircle(0, 0, this.radius);
+		this.cirleLight_shape.graphics.endFill();
+
 	}
 
 	public SetMaskPos(posx, posy) {
@@ -46,21 +46,23 @@ class LightMask extends egret.Sprite {
 		this.cirleLight_shape.y = posy;
 	}
 
-	public SetLightValue() {
-		let c_m = new egret.Matrix();
-		c_m.createGradientBox(this.radius, this.radius, 0, -this.radius / 2, -this.radius / 2);
-		let colorGroup = [0, 50, 180, 255];
-		let alphaGroup = [1, 0.9, 0.3, 0]
-		this.cirleLight_shape.graphics.clear();
-		this.cirleLight_shape.graphics.beginGradientFill(egret.GradientType.RADIAL, [0xffffff, 0xffffff, 0xffffff, 0xffffff], alphaGroup, colorGroup, c_m);//这个渐变的参数是自己调的，可能不太理想，谁有好的参数可以留言，谢谢啦。
-		this.cirleLight_shape.graphics.drawCircle(0, 0, this.radius);
-		this.cirleLight_shape.graphics.endFill();
-	}
+	// private passedPos: { [x: number]: { [y: number]: boolean } } = {};
+	设置光圈的位置
+	public MoveMask(posx: number, posy: number, cell: Cell, cellRender: CellBgRender) {
+		let self: LightMask = this;
+		self.cirleLight_shape.x = posx;
+		self.cirleLight_shape.y = posy;
 
-	private maskNum: number = 0;
-	private passedPos: { [x: number]: { [y: number]: boolean } } = {};
-	//设置光圈的大小和位置
-	// public setLightValue(posx: number, posy: number, cell: Cell, cellRender: CellBgRender) {
+		// if (egret.Capabilities.runtimeType == egret.RuntimeType.WXGAME) {
+		// 	let point = self.cirleLight_shape.localToGlobal();
+		// 	platform.drawMask(egret.sys.mainCanvas(), { x: point.x, y: point.y, radius: self.radius });
+		// }
+
+		// self.mask_shape.graphics.beginFill(0x000000, 1);
+		// self.mask_shape.graphics.drawCircle(posx, posy, self.radius);
+		// self.mask_shape.graphics.endFill();
+	}
+	// public MoveMask(posx: number, posy: number, cell: Cell, cellRender: CellBgRender) {
 	// 	let self: LightMask = this;
 	// 	let radius = this.radius;
 	// 	let cellPos = {
@@ -70,7 +72,6 @@ class LightMask extends egret.Sprite {
 	// 		y2: cellRender.y + this.wall_height / 2 + this.cell_height,
 	// 	}
 
-	// 	let pos_group: { posx: number, posy: number, points: egret.Point[] } = { posx: posx, posy: posy, points: [] };
 	// 	for (let angle = 0; angle <= 360; angle += 2) {
 	// 		let vertex = { x: posx + radius * Math.sin(Math.PI * angle / 180), y: posy - radius * Math.cos(Math.PI * angle / 180) };
 	// 		let boundary_x = vertex.x >= cellPos.x2 ? cellPos.x2 : (vertex.x <= cellPos.x1 ? cellPos.x1 : -999);

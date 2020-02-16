@@ -1,8 +1,6 @@
 class CellBgRender extends eui.ItemRenderer {
 	public constructor() {
 		super();
-		// this.addEventListener(egret.Event.ADDED, this.GetCellSize, this);
-		this.addEventListener("", this.ArriveCell, this);
 	}
 
 	protected childrenCreated(): void {
@@ -22,27 +20,29 @@ class CellBgRender extends eui.ItemRenderer {
 
 	private tw_autoReturn: egret.Tween;
 
+	private group_wall: eui.Group;
+
 	protected dataChanged(): void {
-		let cell: Cell = this.data;
-		this.SetWall();
-		if (cell.item != 0) {
+		let self:CellBgRender = this;
+		let cell: Cell = self.data;
+		self.img_bg.visible = cell.renderState == 0;
+		if (cell.renderState == 1) {
+			self.SetWall();
+		}
+		self.group_wall.visible = cell.renderState == 1;
+		if (cell.item != 0 && cell.renderState >= 2) {
 			let item = Config.GetInstance().config_item[cell.item];
-			this.img_item.source = item.pic;
-			this.img_item.visible = true;
-			this.img_item.x = this.x + Common.getRandomInt(this.img_leftWall.width / 2, this.width - this.img_rightWall.width / 2 - this.img_item.width);
-			this.img_item.y = this.y + Common.getRandomInt(this.img_upWall.height / 2, this.height - this.img_downWall.height / 2 - this.img_item.height);
-			egret.log(`格子ID为：${cell.id}`);
+			self.img_item.source = item.pic;
+			self.img_item.visible = true;
+			self.img_item.x = self.x + Common.getRandomInt(self.img_leftWall.width / 2, self.width - self.img_rightWall.width / 2 - self.img_item.width);
+			self.img_item.y = self.y + Common.getRandomInt(self.img_upWall.height / 2, self.height - self.img_downWall.height / 2 - self.img_item.height);
 		}
-		else{
-			this.img_item.visible = false;
-		}
-		if (cell.isSpecial) {
-			this.img_bg.source = RES.getRes("532_png")
-			this.img_bg.visible = true;
+		else {
+			self.img_item.visible = false;
 		}
 	}
 
-	ItemTest(role: eui.Image): boolean {
+	ItemTest(role: eui.Group): boolean {
 		let rect1: egret.Rectangle = role.getBounds();
 		let rect2: egret.Rectangle = this.img_item.getBounds();
 		let point1 = role.localToGlobal();
@@ -56,10 +56,6 @@ class CellBgRender extends eui.ItemRenderer {
 			return true;
 		}
 		return false;
-	}
-
-	private ArriveCell() {
-
 	}
 
 	public HideReturnSign(): void {

@@ -3,10 +3,11 @@ class GenCells {
 	}
 
 	/**根据行和列返回格子列表 */
-	public static GetCells(): Cell[] {
+	public static async GetCells() {
 		let cells: Cell[][] = [];
 		let allCell: Cell[] = [];
-		let map: MapLib = Config.GetInstance().config_map[1];
+		let playerData = await PlayerDataManage.GetInstance().Getdata();
+		let map: MapLib = Config.GetInstance().config_map[playerData.level];
 		let row = 15;
 		let col = map.size;
 

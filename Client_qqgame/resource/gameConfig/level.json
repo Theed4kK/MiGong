@@ -1,0 +1,212 @@
+[
+  {
+    "id": 1,
+    "name": "选中者",
+    "point": 100,
+    "weight_bearing": 10,
+    "map_choose": 1
+  },
+  {
+    "id": 2,
+    "name": "选中者",
+    "point": 200,
+    "weight_bearing": 20,
+    "map_choose": 2
+  },
+  {
+    "id": 3,
+    "name": "选中者",
+    "point": 300,
+    "weight_bearing": 30,
+    "map_choose": 3
+  },
+  {
+    "id": 4,
+    "name": "选中者",
+    "point": 400,
+    "weight_bearing": 40,
+    "map_choose": 4
+  },
+  {
+    "id": 5,
+    "name": "选中者",
+    "point": 500,
+    "weight_bearing": 50,
+    "map_choose": 5
+  },
+  {
+    "id": 6,
+    "name": "选中者",
+    "point": 600,
+    "weight_bearing": 60,
+    "map_choose": 6
+  },
+  {
+    "id": 7,
+    "name": "选中者",
+    "point": 700,
+    "weight_bearing": 70,
+    "map_choose": 7
+  },
+  {
+    "id": 8,
+    "name": "选中者",
+    "point": 800,
+    "weight_bearing": 80,
+    "map_choose": 8
+  },
+  {
+    "id": 9,
+    "name": "选中者",
+    "point": 900,
+    "weight_bearing": 90,
+    "map_choose": 9
+  },
+  {
+    "id": 10,
+    "name": "选中者",
+    "point": 1000,
+    "weight_bearing": 100,
+    "map_choose": 10
+  },
+  {
+    "id": 11,
+    "name": "选中者",
+    "point": 1100,
+    "weight_bearing": 110,
+    "map_choose": 11
+  },
+  {
+    "id": 12,
+    "name": "选中者",
+    "point": 1200,
+    "weight_bearing": 120,
+    "map_choose": 12
+  },
+  {
+    "id": 13,
+    "name": "选中者",
+    "point": 1300,
+    "weight_bearing": 130,
+    "map_choose": 13
+  },
+  {
+    "id": 14,
+    "name": "选中者",
+    "point": 1400,
+    "weight_bearing": 140,
+    "map_choose": 14
+  },
+  {
+    "id": 15,
+    "name": "选中者",
+    "point": 1500,
+    "weight_bearing": 150,
+    "map_choose": 15
+  },
+  {
+    "id": 16,
+    "name": "选中者",
+    "point": 1600,
+    "weight_bearing": 160,
+    "map_choose": 16
+  },
+  {
+    "id": 17,
+    "name": "选中者",
+    "point": 1700,
+    "weight_bearing": 170,
+    "map_choose": 17
+  },
+  {
+    "id": 18,
+    "name": "选中者",
+    "point": 1800,
+    "weight_bearing": 180,
+    "map_choose": 18
+  },
+  {
+    "id": 19,
+    "name": "选中者",
+    "point": 1900,
+    "weight_bearing": 190,
+    "map_choose": 19
+  },
+  {
+    "id": 20,
+    "name": "选中者",
+    "point": 2000,
+    "weight_bearing": 200,
+    "map_choose": 20
+  },
+  {
+    "id": 21,
+    "name": "选中者",
+    "point": 2100,
+    "weight_bearing": 210,
+    "map_choose": 21
+  },
+  {
+    "id": 22,
+    "name": "选中者",
+    "point": 2200,
+    "weight_bearing": 220,
+    "map_choose": 22
+  },
+  {
+    "id": 23,
+    "name": "选中者",
+    "point": 2300,
+    "weight_bearing": 230,
+    "map_choose": 23
+  },
+  {
+    "id": 24,
+    "name": "选中者",
+    "point": 2400,
+    "weight_bearing": 240,
+    "map_choose": 24
+  },
+  {
+    "id": 25,
+    "name": "选中者",
+    "point": 2500,
+    "weight_bearing": 250,
+    "map_choose": 25
+  },
+  {
+    "id": 26,
+    "name": "选中者",
+    "point": 2600,
+    "weight_bearing": 260,
+    "map_choose": 26
+  },
+  {
+    "id": 27,
+    "name": "选中者",
+    "point": 2700,
+    "weight_bearing": 270,
+    "map_choose": 27
+  },
+  {
+    "id": 28,
+    "name": "选中者",
+    "point": 2800,
+    "weight_bearing": 280,
+    "map_choose": 28
+  },
+  {
+    "id": 29,
+    "name": "选中者",
+    "point": 2900,
+    "weight_bearing": 290,
+    "map_choose": 29
+  },
+  {
+    "id": 30,
+    "name": "选中者",
+    "point": 3000,
+    "weight_bearing": 300,
+    "map_choose": 30
+  }
+]

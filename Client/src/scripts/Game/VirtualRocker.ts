@@ -60,6 +60,4 @@ class VirtualRocker extends eui.Component implements eui.UIComponent {
 		}
 		return angle;
 	}
-
-	// window["VirtualRocker"] = VirtualRocker;
 }

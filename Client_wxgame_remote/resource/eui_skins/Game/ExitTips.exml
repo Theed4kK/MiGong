@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="ExitTipsSkin" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" >
+	<w:Config id="16fcbb7f426" ></w:Config>
+	<e:Group width="480" height="350" horizontalCenter="0" verticalCenter="0">
+		<e:Image left="0" right="0" top="0" bottom="0" source="header_png" scale9Grid="2,2,12,12" x="-112" y="-409" scaleX="1" scaleY="1"/>
+		<e:Label text="提示" top="0" anchorOffsetY="0" left="0" right="0" height="59.33" verticalAlign="middle" textAlign="center" bold="true" x="-112" y="-409" scaleX="1" scaleY="1"/>
+		<e:Label id="txt_tips" text="确认退出？\n当前已获得探索积分：500\n已获得所有宝藏" left="20" right="20" top="108" anchorOffsetY="0" height="155.33" verticalAlign="top" textAlign="center" size="24" wordWrap="true" lineSpacing="10" x="-92" y="-301" scaleX="1" scaleY="1"/>
+		<e:Button id="btn_cancel" label="再等等" anchorOffsetX="0" width="141.33" anchorOffsetY="0" height="64.67" left="60" bottom="50" x="-52" y="612.3299999999999" scaleX="1" scaleY="1"/>
+		<e:Button id="btn_exit" label="退出" anchorOffsetX="0" width="141.33" anchorOffsetY="0" height="64.67" right="60" bottom="50" x="326.6699999999999" y="612.3299999999999" scaleX="1" scaleY="1"/>
+	</e:Group>
+</e:Skin>

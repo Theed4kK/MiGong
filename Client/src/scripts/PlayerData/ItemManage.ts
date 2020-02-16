@@ -1,6 +1,5 @@
 class ItemManage implements IPlayerDataManage {
 	private constructor() {
-		this.LoadData();
 	}
 
 	public static instance: ItemManage;
@@ -13,25 +12,42 @@ class ItemManage implements IPlayerDataManage {
 	}
 
 	public data: { [id: number]: number };
+	private init: boolean = false;
+	async Getdata() {
+		if (!this.init) {
+			await ItemManage.instance.LoadData().then(res => {
+				this.init = true;
+			});
+		}
+		return this.data;
+	}
 
-	public GetItem(id: number, num: number = 1) {
-		if (this.data[id]) {
-			this.data[id] += num;
+	async GetItem(id: number, num: number = 1) {
+		let data = await this.Getdata();
+		if (data[id]) {
+			data[id] += num;
 		}
 		else {
-			this.data[id] = num;
+			data[id] = num;
+		}
+		if (data[id] == 0) {
+			delete data[id];
 		}
 		this.SaveData();
 	}
 
-	public GetItems(items: { [id: number]: number }) {
+	async GetItems(items: { [id: number]: number }) {
 		if (items == {}) { return; }
+		let data = await this.Getdata();
 		for (let id in items) {
-			if (this.data[id]) {
-				this.data[id] += items[id];
+			if (data[id]) {
+				data[id] += items[id];
 			}
 			else {
-				this.data[id] = items[id];
+				data[id] = items[id];
+			}
+			if (data[id] == 0) {
+				delete data[id];
 			}
 		}
 		this.SaveData();
@@ -40,17 +56,18 @@ class ItemManage implements IPlayerDataManage {
 	/**合成物品
 	 * 默认合成1个
 	 * 返回:1成功 -1材料数量不足 -2物品无合成配置或错误*/
-	public ComposeItem(id: number, num: number = 1) {
+	async ComposeItem(id: number, num: number = 1) {
 		let configs = Config.GetInstance().config_item;
 		if (configs[id].need_item == "") {
 			return -2;
 		}
+		let data = await this.Getdata();
 		let need_items = configs[id].need_item.split(",");
 		let need_nums = configs[id].need_num.split(",");
 		need_items.forEach((v, i) => {
 			let id = Number(v);
 			if (configs[id]) {
-				if (this.data[id] < Number(need_nums[i])) {
+				if (data[id] < Number(need_nums[i])) {
 					return -1;
 				}
 			}
@@ -65,12 +82,12 @@ class ItemManage implements IPlayerDataManage {
 		return 1;
 	}
 
-	LoadData() {
-		this.data = Common.LoadData(data_key_item);
+	async LoadData() {
+		this.data = await DBManage.GetInstance().LoadData(data_key_item);
 		if (!this.data) { this.data = {}; }
 	}
 
 	SaveData() {
-		Common.SaveData(data_key_item, this.data);
+		DBManage.GetInstance().SaveData(data_key_item, this.data);
 	}
 }

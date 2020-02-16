@@ -8,6 +8,7 @@ class GameUI extends UIBase {
 	private list_cell: eui.List;
 
 	private btn_exit: eui.Button;
+	private btn_hideWall: eui.Button;
 
 	private input_col: eui.TextInput;
 	private input_speed: eui.TextInput;
@@ -20,15 +21,12 @@ class GameUI extends UIBase {
 	private scroller_map: eui.Scroller;
 	private scroller_role: eui.Scroller;
 	private scroller_bg: eui.Scroller;
-	// private img_mapBg: eui.Image;
+
 	private img_Bg: eui.Image;
-	private img_mapBg: eui.Image;
 	private img_role: eui.Image;
 
-	private mapTexture: egret.Bitmap = new egret.Bitmap();
-
-	private group_light: eui.Group;
-	private group_map: eui.Group;
+	private group_role: eui.Group;
+	private group_bg: eui.Group;
 
 	private stepNum: number = 0;
 	private virt: VirtualRocker = new VirtualRocker();
@@ -38,8 +36,10 @@ class GameUI extends UIBase {
 		this.addChild(this.virt);
 		this.virt.visible = false;
 		this.scroller_map.viewport = this.list_cell;
-		this.GenMiGong();
-		this.AddListener();
+		this.GenMiGong().then(() => {
+			console.log("地图生成完成")
+			this.AddListener();
+		});
 	}
 
 	private AddListener(): void {
@@ -48,8 +48,11 @@ class GameUI extends UIBase {
 		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.Move, this);
 		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_END, this.CancelTouch, this);
 		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_CANCEL, this.CancelTouch, this);
-		this.manageCells.addEventListener("RefreshCurRender", this.UpdateIndex, this);
-		this.gameControl.addEventListener("moveScroll", this.MoveScroll, this);
+		this.list_cell.addEventListener("RefreshCurRender", this.UpdateIndex, this);
+		this.group_role.addEventListener("moveScroll", this.MoveScroll, this);
+		this.btn_hideWall.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
+			this.list_cell.visible = !this.list_cell.visible;
+		}, this)
 	}
 
 	private RemoveListener(): void {
@@ -58,16 +61,15 @@ class GameUI extends UIBase {
 		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.Move, this);
 		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_END, this.CancelTouch, this);
 		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_CANCEL, this.CancelTouch, this);
-		this.manageCells.removeEventListener("RefreshCurRender", this.UpdateIndex, this);
-		this.gameControl.removeEventListener("moveScroll", this.MoveScroll, this);
+		this.list_cell.removeEventListener("RefreshCurRender", this.UpdateIndex, this);
+		this.group_role.removeEventListener("moveScroll", this.MoveScroll, this);
 	}
 
 	private ExitMap() {
-		let exitTips = UIBase.OpenUI(ExitTips,this.txt_stepNum.text,this.txt_stepNum.text);
+		let exitTips = UIBase.OpenUI(ExitTips, this.txt_stepNum.text, this.txt_stepNum.text);
 		exitTips.once("ExitMap", () => {
 			this.manageCells.ExitMap();
 			UIBase.CloseUI(GameUI);
-			egret.log("退出地图");
 		}, this)
 	}
 
@@ -79,7 +81,7 @@ class GameUI extends UIBase {
 		let scrollH = this.scroller_map.viewport.scrollH;
 		let scrollV = this.scroller_map.viewport.scrollV;
 		let moveX = 0, moveY = 0;
-		let role = this.img_role;
+		let role = this.group_role;
 		let data: any = e.data;
 		let isLeft = data.moveX < 0 ? -1 : 1;
 		let isUp = data.moveY < 0 ? -1 : 1;
@@ -128,37 +130,54 @@ class GameUI extends UIBase {
 
 
 	/**生成迷宫 */
-	private GenMiGong(): void {
+	private async GenMiGong() {
 		let row: number = 15;
-		// let col: number = Number(this.input_col.text);
 		let self: GameUI = this;
 		self.txt_stepNum.text = "已探索：0";
-		this.manageCells = new ManageCells(GenCells.GetCells(), this.list_cell, this.img_mapBg);
-		self.InitMask();
-		//初始化角色控制器和光照效果
-		self.gameControl = new GameControl(this.img_role, this.group_light, 10, this.manageCells)
+		let cells = await GenCells.GetCells();
+		self.manageCells = new ManageCells(cells, self.list_cell, self.group_bg);
+		self.gameControl = new GameControl(self.group_role, 10, self.manageCells, )
+		if (DBManage.GetInstance().userInfo.avatarUrl) {
+			RES.getResByUrl(DBManage.GetInstance().userInfo.avatarUrl, self.SetMaskAndFrame, this, RES.ResourceItem.TYPE_IMAGE)
+		}
+		else {
+			self.SetMaskAndFrame();
+		}
 		self.PlayStartAni();
 	}
 
-	/**处理遮罩 需要地图生成完成后调用 */
-	private InitMask() {
+	private SetMaskAndFrame(res?) {
 		let self: GameUI = this;
-		self.group_light.x = 0;
-		self.group_light.y = 0;
-		self.group_light.width = self.list_cell.contentWidth;
-		self.group_light.height = self.list_cell.contentHeight;
+		if (res) {
+			self.img_role.source = res;
+		}
+		const role_mask = new egret.Shape();
+		role_mask.graphics.beginFill(0xff0000);
+		role_mask.graphics.drawCircle(self.group_role.width / 2, self.group_role.width / 2, self.group_role.width / 2 - 3);
+		role_mask.graphics.endFill();
+		self.group_role.addChild(role_mask);
+		self.img_role.mask = role_mask;
+
+		const c_m = new egret.Matrix();
+		c_m.createGradientBox(self.group_role.width * 2, self.group_role.width * 2, 0, -self.group_role.width, -self.group_role.width);
+		const colorGroup = [0, 50, 255];
+		const alphaGroup = [0, 0.2, 1];
+		const headFrame = new egret.Shape();
+		headFrame.graphics.beginGradientFill(egret.GradientType.RADIAL, [0xff0000, 0xff00ff, 0xffff00], alphaGroup, colorGroup, c_m);
+		headFrame.graphics.drawCircle(self.group_role.width / 2, self.group_role.width / 2, self.group_role.width / 2);
+		headFrame.graphics.endFill();
+		self.group_role.addChildAt(headFrame, 0);
 	}
 
 	/**播放开始动画 */
 	private PlayStartAni(): void {
 		let obj: CellBgRender = this.manageCells.currentBgRender;
-		this.img_role.x = obj.x;
-		this.img_role.y = obj.y + (obj.height / 2);
+		this.group_role.x = obj.x;
+		this.group_role.y = obj.y + (obj.height / 2);
 		egret.Tween.get(this.scroller_map.viewport).to({ scrollH: 0 }, this.scroller_map.viewport.scrollH / 0.5);
-		egret.Tween.get(this.img_role).wait(this.scroller_map.viewport.scrollH / 0.5).to({ x: obj.x + (obj.width / 2) }, 1000).call(() => {
+		egret.Tween.get(this.group_role).wait(this.scroller_map.viewport.scrollH / 0.5).to({ x: obj.x + (obj.width / 2) }, 1000).call(() => {
 			this.img_Bg.touchEnabled = true;
 		});
-		// obj.StartAni(1000);
 	}
 
 	private SetListScale(): void {

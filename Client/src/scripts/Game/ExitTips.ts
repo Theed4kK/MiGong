@@ -1,7 +1,6 @@
 class ExitTips extends UIBase {
 	public constructor(point: string, itemNum: string) {
 		super(true);
-		this.needConstructor = true;
 		this.addEventListener(egret.Event.ADDED_TO_STAGE, () => {
 			this.txt_tips.text = `确认退出迷宫？\n当前已探索：${point}\n当前已找到宝藏：${itemNum}`;
 		}, this);

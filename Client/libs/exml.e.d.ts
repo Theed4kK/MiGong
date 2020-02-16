@@ -60,6 +60,12 @@ declare class GameItemRender extends eui.Skin{
 }
 declare class VirtualRockerSkin extends eui.Skin{
 }
+declare class BagItemRenderSkin extends eui.Skin{
+}
+declare class BagTabBar extends eui.Skin{
+}
+declare class BagUISkin extends eui.Skin{
+}
 declare module skins{
 	class ItemRendererSkin extends eui.Skin{
 	}

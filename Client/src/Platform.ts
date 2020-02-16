@@ -6,10 +6,10 @@
  */
 declare interface Platform {
 
-    getUserInfo(): Promise<any>;
+    getUserInfo(buttonImage?: string): Promise<any>;
 
-    login(): Promise<any>
-
+    login(): Promise<any>;
+    drawMask?(canvas: any, arc: any): any;
 }
 
 class DebugPlatform implements Platform {
@@ -19,6 +19,8 @@ class DebugPlatform implements Platform {
     async login() {
 
     }
+
+
 }
 
 
