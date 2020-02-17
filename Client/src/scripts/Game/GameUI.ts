@@ -8,13 +8,13 @@ class GameUI extends UIBase {
 	private list_cell: eui.List;
 
 	private btn_exit: eui.Button;
-	private btn_hideWall: eui.Button;
 
 	private input_col: eui.TextInput;
 	private input_speed: eui.TextInput;
 	private input_touchError: eui.TextInput;
 
 	private txt_stepNum: eui.Label;
+	private txt_moveMode: eui.Label;
 
 	private gameControl: GameControl;
 
@@ -27,6 +27,8 @@ class GameUI extends UIBase {
 
 	private group_role: eui.Group;
 	private group_bg: eui.Group;
+
+	private toggle_moveMode: eui.ToggleSwitch;
 
 	private stepNum: number = 0;
 	private virt: VirtualRocker = new VirtualRocker();
@@ -50,9 +52,7 @@ class GameUI extends UIBase {
 		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_CANCEL, this.CancelTouch, this);
 		this.list_cell.addEventListener("RefreshCurRender", this.UpdateIndex, this);
 		this.group_role.addEventListener("moveScroll", this.MoveScroll, this);
-		this.btn_hideWall.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
-			this.list_cell.visible = !this.list_cell.visible;
-		}, this)
+		this.toggle_moveMode.addEventListener(egret.TouchEvent.TOUCH_TAP, this.SwitchMoveMode, this)
 	}
 
 	private RemoveListener(): void {
@@ -63,6 +63,21 @@ class GameUI extends UIBase {
 		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_CANCEL, this.CancelTouch, this);
 		this.list_cell.removeEventListener("RefreshCurRender", this.UpdateIndex, this);
 		this.group_role.removeEventListener("moveScroll", this.MoveScroll, this);
+		this.toggle_moveMode.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.SwitchMoveMode, this)
+	}
+
+	SwitchMoveMode() {
+		if (this.gameControl.moveMode == MOVE_MODE.Rocker) {
+			this.img_Bg.touchEnabled = false;
+			this.txt_moveMode.text = "当前操作模式：陀螺仪";
+			this.virt.visible = false;
+			this.CancelTouch();
+		}
+		else {
+			this.txt_moveMode.text = "当前操作模式：摇杆";
+			this.img_Bg.touchEnabled = true;
+		}
+		this.gameControl.MoveModeChange();
 	}
 
 	private ExitMap() {
@@ -71,10 +86,6 @@ class GameUI extends UIBase {
 			this.manageCells.ExitMap();
 			UIBase.CloseUI(GameUI);
 		}, this)
-	}
-
-	private ReturnSignCell(): void {
-		this.gameControl.RoleMoveState(2);
 	}
 
 	private MoveScroll(e: egret.Event): void {
@@ -114,17 +125,13 @@ class GameUI extends UIBase {
 	}
 
 	private CancelTouch() {
-		if (!this.gameControl) { return; }
 		this.gameControl.direction = null;
 		this.gameControl.RoleMoveState(1);	//停止移动
-		this.virt.stop();
+		this.virt.visible = false;
 	}
 
 	private BeginTouch(e: egret.TouchEvent): void {
-		if (!this.gameControl) { return; }
-		this.virt.x = e.localX;
-		this.virt.y = e.localY;
-		this.virt.start();
+		this.virt.start(e.localX, e.localY);
 		this.gameControl.RoleMoveState(0);	//开始移动
 	}
 

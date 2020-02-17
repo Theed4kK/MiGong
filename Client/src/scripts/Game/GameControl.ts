@@ -1,6 +1,9 @@
-class GameControl extends eui.Component {
+enum MOVE_MODE {
+	Rocker,
+	Gyroscope
+}
+class GameControl {
 	public constructor(role: eui.Group, speed: number, manageCells: ManageCells) {
-		super();
 		this.role = role;
 		this.manageCells = manageCells;
 		// this.InitLight();
@@ -11,11 +14,14 @@ class GameControl extends eui.Component {
 
 	public direction: number;
 	public speed: number;
+	public moveMode: MOVE_MODE = MOVE_MODE.Rocker;
 	private manageCells: ManageCells;
+
 	private role: eui.Group;
 	private group_light: eui.Group;
-	// private maskSize: number[];
-	public maskLight: LightMask = new LightMask();
+
+	private orientation: egret.DeviceOrientation;
+	public maskLight: LightMask;
 	wall_height = +Config.GetInstance().config_common["wall_height"].value;
 	wall_width = +Config.GetInstance().config_common["wall_height"].value;
 	cell_height = +Config.GetInstance().config_common["cell_height"].value;
@@ -36,18 +42,42 @@ class GameControl extends eui.Component {
 		this.maskLight.MoveMask(role.x, role.y, this.manageCells.currentCell, this.manageCells.currentBgRender);
 	}
 
+	public MoveModeChange() {
+		if (this.moveMode == MOVE_MODE.Rocker) {
+			this.moveMode = MOVE_MODE.Gyroscope;
+			if (!this.orientation) {
+				this.orientation = new egret.DeviceOrientation();
+			}
+			this.orientation.addEventListener(egret.Event.CHANGE, this.onOrientation, this);
+			this.orientation.start();
+			this.RoleMoveState(0);
+		}
+		else {
+			this.orientation.stop();
+			this.orientation.removeEventListener(egret.Event.CHANGE, this.onOrientation, this);
+			this.moveMode = MOVE_MODE.Rocker;
+			this.RoleMoveState(1);
+		}
+	}
+
+	private onOrientation(e: egret.OrientationEvent) {
+		if (e.beta != null && e.gamma != null) {
+			this.direction = Math.atan2(e.beta, e.gamma);
+		}
+	}
+
 	public RoleMoveState(state: number, start: number = 0, target: number = 0): void {
 		switch (state) {
 			//操作移动
 			case 0:
-				this.addEventListener(egret.Event.ENTER_FRAME, this.PlayerMove, this);
+				this.role.addEventListener(egret.Event.ENTER_FRAME, this.PlayerMove, this);
 				break;
 			//停止操作移动
 			case 1:
-				this.removeEventListener(egret.Event.ENTER_FRAME, this.PlayerMove, this);
+				this.role.removeEventListener(egret.Event.ENTER_FRAME, this.PlayerMove, this);
 				break;
 			case 2:
-				this.addEventListener(egret.Event.ENTER_FRAME, this.RoleAutoMove, this);
+				this.role.addEventListener(egret.Event.ENTER_FRAME, this.RoleAutoMove, this);
 				break;
 			case 3:
 				this.RoleAutoMove();
@@ -73,7 +103,6 @@ class GameControl extends eui.Component {
 		this.RoleMove(1);
 	}
 
-	private lastPoint: egret.Point = new egret.Point(0, 0);
 	/**角色移动,type:1为手动引动  2为自动移动 */
 	private RoleMove(type: number = 1): void {
 		let self: GameControl = this;
@@ -112,10 +141,6 @@ class GameControl extends eui.Component {
 		role.y += moveY;
 		self.role.dispatchEventWith("moveScroll", false, { moveX: moveX, moveY: moveY })
 		self.manageCells.SetIndex(role);
-		// if (self.lastPoint && Math.abs(moveX) > 1 || Math.abs(moveY) > 1) {
-		// 	self.RefreshLight();
-		// 	self.lastPoint = new egret.Point(img_role.x, img_role.y);
-		// }
 	}
 
 	private IsEdge(type: number): boolean {

@@ -28,35 +28,33 @@ class VirtualRocker extends eui.Component implements eui.UIComponent {
 		this.touchEnabled = false;
 	}
 
-	public start() {
+	public start(x, y) {
+		this.x = x;
+		this.y = y;
 		this.visible = true;
 		this.ball.x = this.centerX;
 		this.ball.y = this.centerY;
-	}
-
-	//停止虚拟摇杆
-	public stop() {
-		this.visible = false;
 	}
 
 	//触摸移动，设置小球的位置
 	private p1: egret.Point = new egret.Point();
 	private p2: egret.Point = new egret.Point();
 	public onTouchMove(e: egret.TouchEvent): number {
-		this.p1.x = this.x;
-		this.p1.y = this.y;
-		this.p2.x = e.stageX;
-		this.p2.y = e.stageY;
-		let dist = egret.Point.distance(this.p1, this.p2);
-		let angle: number = Math.atan2(e.stageY - this.y, e.stageX - this.x);
+		let self: VirtualRocker = this;
+		self.p1.x = self.x;
+		self.p1.y = self.y;
+		self.p2.x = e.stageX;
+		self.p2.y = e.stageY;
+		let dist = egret.Point.distance(self.p1, self.p2);
+		let angle: number = Math.atan2(e.stageY - self.y, e.stageX - self.x);
 		//手指距离在圆环范围内
-		if (dist <= (this.circleRadius - this.ballRadius)) {
-			this.ball.x = this.centerX + e.stageX - this.x;
-			this.ball.y = this.centerY + e.stageY - this.y;
+		if (dist <= (self.circleRadius - self.ballRadius)) {
+			self.ball.x = self.centerX + e.stageX - self.x;
+			self.ball.y = self.centerY + e.stageY - self.y;
 			//手指距离在圆环范围外
 		} else {
-			this.ball.x = Math.cos(angle) * (this.circleRadius - this.ballRadius) + this.centerX;
-			this.ball.y = Math.sin(angle) * (this.circleRadius - this.ballRadius) + this.centerY;
+			self.ball.x = Math.cos(angle) * (self.circleRadius - self.ballRadius) + self.centerX;
+			self.ball.y = Math.sin(angle) * (self.circleRadius - self.ballRadius) + self.centerY;
 		}
 		return angle;
 	}
