@@ -1,12 +1,9 @@
 class PlayerDataManage implements IPlayerDataManage {
-	public constructor() {
-	}
-
 	data: {
 		level: number,
 		point: number
 	};
-	private init: boolean = false;
+	init: boolean = false;
 	async Getdata() {
 		if (!this.init) {
 			await PlayerDataManage.instance.LoadData().then(res => {

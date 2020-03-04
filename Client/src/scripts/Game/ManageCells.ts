@@ -122,7 +122,7 @@ class ManageCells {
 		this.mapData.point++;
 		if (self._currentCell && !self._currentCell.isPassed) {
 			self._currentCell.isPassed = true;
-			this.cellList.dispatchEvent(new egret.Event("RefreshCurRender"));
+			GameEvent.dispatchEventWith(GameEvent.RefreshCurRender);
 		}
 	}
 

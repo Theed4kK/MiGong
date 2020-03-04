@@ -1,4 +1,6 @@
 class Common {
+
+	/**获得一个随机整数 */
 	public static getRandomInt(min: number, max: number): number {
 		var Range = max - min;
 		var Rand = Math.random();
@@ -23,6 +25,7 @@ class Common {
 		}
 	}
 
+	/**字典类转数组类，用于给eui.list提供数据源 */
 	public static DictionaryToArray(dict: { [id: number]: any } | { [id: string]: any }): { id: number | string, value: any }[] {
 		let data: { id: number | string, value: any }[] = [];
 		for (let item in dict) {

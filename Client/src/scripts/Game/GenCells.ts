@@ -8,6 +8,10 @@ class GenCells {
 		let allCell: Cell[] = [];
 		let playerData = await PlayerDataManage.GetInstance().Getdata();
 		let map: MapLib = Config.GetInstance().config_map[playerData.level];
+		if (!map) {
+			console.log(`未能读取到${playerData.level}级的地图配置`);
+			return;
+		}
 		let row = 15;
 		let col = map.size;
 

@@ -18,6 +18,7 @@
 		"bin-debug/scripts/BagUI.js",
 		"bin-debug/scripts/Common.js",
 		"bin-debug/scripts/Config.js",
+		"bin-debug/scripts/GameEvent.js",
 		"bin-debug/scripts/ItemUI.js",
 		"bin-debug/scripts/StartPage.js",
 		"bin-debug/AssetAdapter.js",

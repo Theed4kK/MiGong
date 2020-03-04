@@ -139,7 +139,7 @@ class GameControl {
 			moveY = speedY;
 		}
 		role.y += moveY;
-		self.role.dispatchEventWith("moveScroll", false, { moveX: moveX, moveY: moveY })
+		GameEvent.dispatchEventWith(GameEvent.MoveScroll, false, { moveX: moveX, moveY: moveY });
 		self.manageCells.SetIndex(role);
 	}
 

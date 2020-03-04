@@ -1,7 +1,4 @@
 class ItemManage implements IPlayerDataManage {
-	private constructor() {
-	}
-
 	public static instance: ItemManage;
 
 	public static GetInstance() {
@@ -12,7 +9,7 @@ class ItemManage implements IPlayerDataManage {
 	}
 
 	public data: { [id: number]: number };
-	private init: boolean = false;
+	init: boolean = false;
 	async Getdata() {
 		if (!this.init) {
 			await ItemManage.instance.LoadData().then(res => {

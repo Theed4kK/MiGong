@@ -5,8 +5,14 @@
 	<w:Config id="16fcbc6bb06" ></w:Config>
 	<e:Image source="board_bg2_jpg" height="1624" width="750" x="0" anchorOffsetX="0" anchorOffsetY="0" bottom="0"/>
 
-	<e:Button id="btn_start" label="开始游戏" anchorOffsetX="0" width="200" anchorOffsetY="0" height="100" horizontalCenter="0" bottom="163">
+	<e:Button id="btn_start" label="" anchorOffsetX="0" anchorOffsetY="0" horizontalCenter="0" bottom="215">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="btn_enter_new_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
 	</e:Button>
-	<e:Button id="btn_bag" label="背包" anchorOffsetX="0" width="160.61" anchorOffsetY="0" height="71.21" left="100" bottom="395"/>
+	<e:Button id="btn_bag" label="物品" anchorOffsetX="0" width="160.61" anchorOffsetY="0" height="71.21" left="100" bottom="395"/>
 	<e:Button id="btn_level" label="信仰" anchorOffsetX="0" width="160.61" anchorOffsetY="0" right="100" bottom="395" height="71"/>
 </e:Skin>

@@ -42,6 +42,10 @@ class GameUI extends UIBase {
 			console.log("地图生成完成")
 			this.AddListener();
 		});
+		this.txt_moveMode.textFlow = [
+			{ text: "当前操作模式：" },
+			{ text: "摇杆", style: { "textColor": 0x336600, "strokeColor": 0x6699cc, "stroke": 1 } }
+		];
 	}
 
 	private AddListener(): void {
@@ -50,8 +54,8 @@ class GameUI extends UIBase {
 		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.Move, this);
 		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_END, this.CancelTouch, this);
 		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_CANCEL, this.CancelTouch, this);
-		this.list_cell.addEventListener("RefreshCurRender", this.UpdateIndex, this);
-		this.group_role.addEventListener("moveScroll", this.MoveScroll, this);
+		GameEvent.addEventListener(GameEvent.RefreshCurRender, this.UpdateIndex, this);
+		GameEvent.addEventListener(GameEvent.MoveScroll, this.MoveScroll, this);
 		this.toggle_moveMode.addEventListener(egret.TouchEvent.TOUCH_TAP, this.SwitchMoveMode, this)
 	}
 
@@ -61,20 +65,24 @@ class GameUI extends UIBase {
 		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.Move, this);
 		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_END, this.CancelTouch, this);
 		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_CANCEL, this.CancelTouch, this);
-		this.list_cell.removeEventListener("RefreshCurRender", this.UpdateIndex, this);
-		this.group_role.removeEventListener("moveScroll", this.MoveScroll, this);
+		GameEvent.removeEventListener(GameEvent.RefreshCurRender, this.UpdateIndex, this);
+		GameEvent.removeEventListener(GameEvent.MoveScroll, this.MoveScroll, this);
 		this.toggle_moveMode.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.SwitchMoveMode, this)
 	}
 
 	SwitchMoveMode() {
 		if (this.gameControl.moveMode == MOVE_MODE.Rocker) {
 			this.img_Bg.touchEnabled = false;
-			this.txt_moveMode.text = "当前操作模式：陀螺仪";
+			this.txt_moveMode.textFlow = [{ text: "当前操作模式：" }
+				, { text: "陀螺仪", style: { "textColor": 0x336600, "strokeColor": 0x6699cc, "stroke": 1 } }
+			];
 			this.virt.visible = false;
 			this.CancelTouch();
 		}
 		else {
-			this.txt_moveMode.text = "当前操作模式：摇杆";
+			this.txt_moveMode.textFlow = [{ text: "当前操作模式：" }
+				, { text: "摇杆", style: { "textColor": 0x336600, "strokeColor": 0x6699cc, "stroke": 1 } }
+			];
 			this.img_Bg.touchEnabled = true;
 		}
 		this.gameControl.MoveModeChange();

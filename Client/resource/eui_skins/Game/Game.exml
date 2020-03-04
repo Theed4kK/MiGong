@@ -2,10 +2,11 @@
 <e:Skin class="GameSkin" width="750" height="1624" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing"
         xmlns:ns1="*">
 	<w:Config id="16b364587c8"></w:Config>
-	<e:Image id="img_Bg" source="loading_jpg" scaleX="1" scaleY="1"
-	         touchEnabled="true"  height="1624" left="0" right="0" top="0"/>
+	<e:Image id="img_Bg" scaleX="1" scaleY="1"
+	         touchEnabled="true"  height="1624" left="0" right="0" top="0" source="board_bg2_jpg"/>
 	<e:Image id="btn_return" x="482" y="1019" anchorOffsetX="0" anchorOffsetY="0" source="" width="104" height="50" visible="false"/>
-	<e:Group touchThrough="false" touchEnabled="false" touchChildren="false" top="80" left="0" right="0" anchorOffsetY="0" bottom="350">
+	<e:Group touchThrough="false" touchEnabled="false" touchChildren="false" top="89" left="0" right="0" anchorOffsetY="0" bottom="215">
+		<e:Image scaleX="1" scaleY="1" source="rect" left="0" right="0" top="0" bottom="0" scale9Grid="1,1,8,8"/>
 		<e:Scroller id="scroller_bg" scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0">
 			<e:Group id="group_bg">
 				<e:layout>
@@ -45,8 +46,10 @@
 
 
 				<e:Group id="group_role" width="45" height="45" x="0" y="0" scaleX="1" scaleY="1" includeInLayout="false">
-					<e:Image id="img_headFrame" scaleX="1" scaleY="1" includeInLayout="true" source="HeadFrame_png" left="0" right="0" top="0" bottom="0" visible="false"/>
-					<e:Image id="img_role" scaleX="1" scaleY="1" includeInLayout="true" left="0" top="0" bottom="0" right="0" source="border"/>
+					<e:Image id="img_mask" scaleX="1" scaleY="1" includeInLayout="true" left="3" right="3" top="3" bottom="3" source="headMask"/>
+					<e:Image id="img_role" scaleX="1" scaleY="1" includeInLayout="true" left="3" top="3" bottom="3" right="3" source="gold_2" mask="img_mask"/>
+					<e:Image id="img_headFrame" scaleX="1" scaleY="1" includeInLayout="true" left="-3" right="-3" top="-3" bottom="-3" source="headFrame"/>
+
 				</e:Group>
 				<e:layout>
 					<e:BasicLayout/>
@@ -61,19 +64,27 @@
 
 
 
-	<e:Group left="0" right="0" touchThrough="true" touchEnabled="false" touchChildren="true" anchorOffsetY="0" height="300" bottom="50">
+	<e:Group left="0" right="0" touchThrough="true" touchEnabled="false" touchChildren="true" anchorOffsetY="0" bottom="0" top="0">
+		<e:Image touchEnabled="false" scaleX="1" scaleY="1" fillMode="scale" anchorOffsetX="0" height="89" top="0" source="title_bg" left="0" right="0"/>
 
 
 
 
-		<e:Button id="btn_exit" label="退出" skinName="skins.ButtonSkin" horizontalCenter="0" bottom="133"/>
-		<e:Group height="38" anchorOffsetY="0" anchorOffsetX="0" y="3" left="0" right="0" x="0" scaleX="1" scaleY="1">
-			<e:Image touchEnabled="false" scaleX="1" scaleY="1" top="0" bottom="0" left="0" right="0" fillMode="scale" anchorOffsetX="0" source="border"/>
-			<e:Label id="txt_stepNum" text="已探索：1/300" scaleX="1" scaleY="1" fontFamily="Microsoft YaHei" size="16" textColor="0x141401" touchEnabled="false" left="65" top="0" bottom="0" verticalAlign="middle" textAlign="left"/>
-			<e:Label id="txt_stepNum0" text="已找到宝藏：5/10" scaleX="1" scaleY="1" fontFamily="Microsoft YaHei" size="16" textColor="0x141401" touchEnabled="false" left="233" top="0" bottom="0" verticalAlign="middle" textAlign="left" anchorOffsetX="0" width="173.09"/>
-		</e:Group>
-		<e:ToggleSwitch id="toggle_moveMode" label="ToggleButton" bottom="20" right="28"/>
-		<e:Label id="txt_moveMode" text="当前操作模式：摇杆" verticalAlign="bottom" bottom="20" size="24" textAlign="right" right="99"/>
+		<e:ToggleSwitch id="toggle_moveMode" label="ToggleButton" bottom="40" right="28"/>
+		<e:Button id="btn_exit" label="退出" horizontalCenter="0" bottom="100" width="135" height="67">
+			<e:skinName>
+			<e:Skin states="up,down,disabled">
+				<e:Image width="100%" height="100%" source="style13_default" source.down="style13_default" source.disabled="style13_default"/>
+				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+			</e:skinName>
+		</e:Button>
+		<e:Label id="txt_stepNum" text="地图名字" scaleX="1" scaleY="1" fontFamily="Microsoft YaHei" size="26" textColor="0x141401" touchEnabled="false" left="0" verticalAlign="middle" textAlign="center" height="38" right="0" top="39" anchorOffsetX="0" visible="false"/>
+		<e:Label id="txt_mapName" text="地图名字" scaleX="1" scaleY="1" fontFamily="Microsoft YaHei" size="26" textColor="0x141401" touchEnabled="false" left="0" verticalAlign="middle" textAlign="center" height="30" right="0" top="40" anchorOffsetX="0"/>
+		<e:Label id="txt_moveMode" text="当前操作模式：" verticalAlign="bottom" bottom="40" size="24" textAlign="left" right="99" width="240" fontFamily="Microsoft YaHei"/>
+
+
+
 
 
 
