@@ -5,7 +5,7 @@
 	<e:Image id="img_Bg" scaleX="1" scaleY="1"
 	         touchEnabled="true"  height="1624" left="0" right="0" top="0" source="board_bg2_jpg"/>
 	<e:Image id="btn_return" x="482" y="1019" anchorOffsetX="0" anchorOffsetY="0" source="" width="104" height="50" visible="false"/>
-	<e:Group touchThrough="false" touchEnabled="false" touchChildren="false" top="89" left="0" right="0" anchorOffsetY="0" bottom="215">
+	<e:Group touchThrough="false" touchEnabled="false" touchChildren="false" top="57" left="0" right="0" anchorOffsetY="0" bottom="215">
 		<e:Image scaleX="1" scaleY="1" source="rect" left="0" right="0" top="0" bottom="0" scale9Grid="1,1,8,8"/>
 		<e:Scroller id="scroller_bg" scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0">
 			<e:Group id="group_bg">
@@ -65,13 +65,13 @@
 
 
 	<e:Group left="0" right="0" touchThrough="true" touchEnabled="false" touchChildren="true" anchorOffsetY="0" bottom="0" top="0">
-		<e:Image touchEnabled="false" scaleX="1" scaleY="1" fillMode="scale" anchorOffsetX="0" height="89" top="0" source="title_bg" left="0" right="0"/>
+		<e:Image touchEnabled="false" scaleX="1" scaleY="1" fillMode="scale" anchorOffsetX="0" top="0" source="title_bg" left="0" right="0"/>
 
 
 
 
-		<e:ToggleSwitch id="toggle_moveMode" label="ToggleButton" bottom="40" right="28"/>
-		<e:Button id="btn_exit" label="退出" horizontalCenter="0" bottom="100" width="135" height="67">
+		<e:ToggleSwitch id="toggle_moveMode" label="ToggleButton" bottom="40" left="259"/>
+		<e:Button id="btn_exit" label="逃离" bottom="16" width="135" height="67" right="32">
 			<e:skinName>
 			<e:Skin states="up,down,disabled">
 				<e:Image width="100%" height="100%" source="style13_default" source.down="style13_default" source.disabled="style13_default"/>
@@ -79,9 +79,9 @@
 			</e:Skin>
 			</e:skinName>
 		</e:Button>
-		<e:Label id="txt_stepNum" text="地图名字" scaleX="1" scaleY="1" fontFamily="Microsoft YaHei" size="26" textColor="0x141401" touchEnabled="false" left="0" verticalAlign="middle" textAlign="center" height="38" right="0" top="39" anchorOffsetX="0" visible="false"/>
-		<e:Label id="txt_mapName" text="地图名字" scaleX="1" scaleY="1" fontFamily="Microsoft YaHei" size="26" textColor="0x141401" touchEnabled="false" left="0" verticalAlign="middle" textAlign="center" height="30" right="0" top="40" anchorOffsetX="0"/>
-		<e:Label id="txt_moveMode" text="当前操作模式：" verticalAlign="bottom" bottom="40" size="24" textAlign="left" right="99" width="240" fontFamily="Microsoft YaHei"/>
+		<e:Label id="txt_stepNum" text="" scaleX="1" scaleY="1" fontFamily="Microsoft YaHei" size="26" touchEnabled="false" left="0" verticalAlign="middle" textAlign="center" height="38" right="0" anchorOffsetX="0" bottom="161" textColor="0xb0e5b7"/>
+		<e:Label id="txt_mapName" text="地图名字" scaleX="1" scaleY="1" fontFamily="Microsoft YaHei" size="30" touchEnabled="false" left="36" verticalAlign="middle" textAlign="left" height="57" right="0" top="0" anchorOffsetX="0" textColor="0xc6c605" stroke="0.5" strokeColor="0x4c3d03"/>
+		<e:Label id="txt_moveMode" text="当前操作模式：" verticalAlign="bottom" bottom="40" size="24" textAlign="left" width="240" fontFamily="Microsoft YaHei" left="20"/>
 
 
 

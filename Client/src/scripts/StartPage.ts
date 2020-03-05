@@ -19,6 +19,8 @@ class StartPage extends UIBase {
 	AddListeners() {
 		this.btn_start.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
 			UIBase.OpenUI(GameUI);
+			ScreenMovies.MovieStart(5, () => {
+			});
 		}, this)
 		this.btn_bag.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
 			UIBase.OpenUI(BagUI);

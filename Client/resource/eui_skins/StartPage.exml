@@ -5,7 +5,7 @@
 	<w:Config id="16fcbc6bb06" ></w:Config>
 	<e:Image source="board_bg2_jpg" height="1624" width="750" x="0" anchorOffsetX="0" anchorOffsetY="0" bottom="0"/>
 
-	<e:Button id="btn_start" label="" anchorOffsetX="0" anchorOffsetY="0" horizontalCenter="0" bottom="215">
+	<e:Button id="btn_start" label="" anchorOffsetX="0" anchorOffsetY="0" horizontalCenter="0" verticalCenter="0">
 		<e:skinName>
 			<e:Skin states="up,down,disabled">
 			<e:Image width="100%" height="100%" source="btn_enter_new_png"/>

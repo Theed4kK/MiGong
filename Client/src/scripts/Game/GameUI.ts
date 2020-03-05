@@ -42,10 +42,17 @@ class GameUI extends UIBase {
 			console.log("地图生成完成")
 			this.AddListener();
 		});
-		this.txt_moveMode.textFlow = [
-			{ text: "当前操作模式：" },
-			{ text: "摇杆", style: { "textColor": 0x336600, "strokeColor": 0x6699cc, "stroke": 1 } }
-		];
+		if (!egret.Capabilities.isMobile) {
+			this.txt_moveMode.visible = false;
+			this.toggle_moveMode.visible = false;
+		}
+		else {
+			this.txt_moveMode.textFlow = [
+				{ text: "当前操作模式：" },
+				{ text: "摇杆", style: { "textColor": 0x336600, "strokeColor": 0x6699cc, "stroke": 0.5 } }
+			];
+		}
+
 	}
 
 	private AddListener(): void {
@@ -92,7 +99,7 @@ class GameUI extends UIBase {
 		let exitTips = UIBase.OpenUI(ExitTips, this.txt_stepNum.text, this.txt_stepNum.text);
 		exitTips.once("ExitMap", () => {
 			this.manageCells.ExitMap();
-			UIBase.CloseUI(GameUI);
+			UIBase.CloseUI(GameUI, true);
 		}, this)
 	}
 

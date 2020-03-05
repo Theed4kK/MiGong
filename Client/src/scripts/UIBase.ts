@@ -69,11 +69,17 @@ class UIBase extends eui.Component implements eui.UIComponent {
 		return ui;
 	}
 
-	public static CloseUI<T>(creator: { new (...arg): T }): boolean {
+	public static CloseUI<T>(creator: { new (...arg): T }, remove: boolean = false): boolean {
 		let className = creator.prototype.__class__;
-		let ui: any = UIBase.uiList[className];
+		let ui: UIBase = UIBase.uiList[className];
 		if (ui) {
-			ui.visible = false;
+			if (remove) {
+				UIBase.UILayer.removeChild(ui);
+				delete UIBase.uiList[className];
+			}
+			else {
+				ui.visible = false;
+			}
 			return true;
 		}
 		else {

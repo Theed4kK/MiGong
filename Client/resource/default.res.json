@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "common_json,loading_jpg,game_json,green_fnt,green_png,title_bg_png",
+			"keys": "common_json,loading_jpg,game_json,green_fnt,green_png",
 			"name": "preload"
 		}
 	],
@@ -67,11 +67,6 @@
 			"url": "assets/green.png",
 			"type": "image",
 			"name": "green_png"
-		},
-		{
-			"name": "title_bg_png",
-			"type": "image",
-			"url": "assets/game/title_bg.png"
 		}
 	]
 }
