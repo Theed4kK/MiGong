@@ -71,7 +71,7 @@
 
 
 		<e:ToggleSwitch id="toggle_moveMode" label="ToggleButton" bottom="40" left="259"/>
-		<e:Button id="btn_exit" label="逃离" bottom="16" width="135" height="67" right="32">
+		<e:Button id="btn_exit" label="逃离" bottom="20" width="135" height="67" horizontalCenter="0">
 			<e:skinName>
 			<e:Skin states="up,down,disabled">
 				<e:Image width="100%" height="100%" source="style13_default" source.down="style13_default" source.disabled="style13_default"/>
@@ -80,7 +80,7 @@
 			</e:skinName>
 		</e:Button>
 		<e:Label id="txt_stepNum" text="" scaleX="1" scaleY="1" fontFamily="Microsoft YaHei" size="26" touchEnabled="false" left="0" verticalAlign="middle" textAlign="center" height="38" right="0" anchorOffsetX="0" bottom="161" textColor="0xb0e5b7"/>
-		<e:Label id="txt_mapName" text="地图名字" scaleX="1" scaleY="1" fontFamily="Microsoft YaHei" size="30" touchEnabled="false" left="36" verticalAlign="middle" textAlign="left" height="57" right="0" top="0" anchorOffsetX="0" textColor="0xc6c605" stroke="0.5" strokeColor="0x4c3d03"/>
+		<e:Label id="txt_mapName" text="地图名字" scaleX="1" scaleY="1" fontFamily="Microsoft YaHei" size="30" touchEnabled="false" left="20" verticalAlign="middle" textAlign="left" height="57" right="0" top="0" anchorOffsetX="0" textColor="0xc6c605" stroke="0.5" strokeColor="0x4c3d03"/>
 		<e:Label id="txt_moveMode" text="当前操作模式：" verticalAlign="bottom" bottom="40" size="24" textAlign="left" width="240" fontFamily="Microsoft YaHei" left="20"/>
 
 

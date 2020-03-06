@@ -15,4 +15,5 @@
 	</e:Button>
 	<e:Button id="btn_bag" label="物品" anchorOffsetX="0" width="160.61" anchorOffsetY="0" height="71.21" left="100" bottom="395"/>
 	<e:Button id="btn_level" label="信仰" anchorOffsetX="0" width="160.61" anchorOffsetY="0" right="100" bottom="395" height="71"/>
+	<e:Button label="Button" x="600" y="1536.36"/>
 </e:Skin>

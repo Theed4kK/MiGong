@@ -15,6 +15,7 @@ class GameUI extends UIBase {
 
 	private txt_stepNum: eui.Label;
 	private txt_moveMode: eui.Label;
+	private txt_mapName: eui.Label;
 
 	private gameControl: GameControl;
 
@@ -35,24 +36,27 @@ class GameUI extends UIBase {
 
 	protected childrenCreated(): void {
 		super.childrenCreated();
-		this.addChild(this.virt);
-		this.virt.visible = false;
-		this.scroller_map.viewport = this.list_cell;
-		this.GenMiGong().then(() => {
+		let self: GameUI = this;
+		self.addChild(self.virt);
+		self.virt.visible = false;
+		self.scroller_map.viewport = this.list_cell;
+		self.GenMiGong().then(() => {
 			console.log("地图生成完成")
-			this.AddListener();
+			PlayerDataManage.GetInstance().Getdata().then(res => {
+				self.txt_mapName.text = Config.GetInstance().config_map[res.level].name;
+			})
+			self.AddListener();
 		});
 		if (!egret.Capabilities.isMobile) {
-			this.txt_moveMode.visible = false;
-			this.toggle_moveMode.visible = false;
+			self.txt_moveMode.visible = false;
+			self.toggle_moveMode.visible = false;
 		}
 		else {
-			this.txt_moveMode.textFlow = [
+			self.txt_moveMode.textFlow = [
 				{ text: "当前操作模式：" },
 				{ text: "摇杆", style: { "textColor": 0x336600, "strokeColor": 0x6699cc, "stroke": 0.5 } }
 			];
 		}
-
 	}
 
 	private AddListener(): void {

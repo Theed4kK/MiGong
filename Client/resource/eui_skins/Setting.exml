@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="SettingSkin" width="500" height="600" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" >
+	<w:Config id="170af0c8135" ></w:Config>
+	<e:Image left="0" right="0" top="0" bottom="0" source="Bg_png"/>
+	<e:Label text="游戏设置" y="26" horizontalCenter="0" textAlign="center" verticalAlign="middle" stroke="1" strokeColor="0x5b5b5b"/>
+	<e:Image source="line_png" horizontalCenter="0" top="80"/>
+	<e:Group height="200" y="120" anchorOffsetX="0" left="0" right="0">
+		<e:Label text="当前操作模式" x="32" y="33.35" anchorOffsetX="0" width="340" scaleX="1" scaleY="1" size="26"/>
+		<e:ToggleSwitch label="asdada" x="372" y="33.32"/>
+	</e:Group>
+	<e:ToggleButton label="ToggleButton" x="268" y="468"/>
+</e:Skin>
