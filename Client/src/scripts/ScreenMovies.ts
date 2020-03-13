@@ -24,7 +24,6 @@ class ScreenMovies {
 		if (_txnums == 5) {
 			_txnums = Math.ceil(Math.random() * 4);
 		}
-		let callComplete = false;
 		for (let i = 0; i < tx1Number; i++) {
 			//计算每个的XY及宽高
 			let _mcW = w / Xnumber;
@@ -72,7 +71,7 @@ class ScreenMovies {
 			if (upNumber == tx1Number) {
 				taget.removeChild(loadTxGrp)
 			}
-			if(!callComplete){
+			if(call){
 				call();
 			}
 		}

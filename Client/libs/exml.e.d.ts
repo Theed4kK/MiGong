@@ -74,5 +74,7 @@ declare class ItemUISkin extends eui.Skin{
 }
 declare class Loading extends eui.Skin{
 }
+declare class SettingSkin extends eui.Skin{
+}
 declare class StartPageSkin extends eui.Skin{
 }

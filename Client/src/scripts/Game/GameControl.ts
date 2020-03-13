@@ -10,6 +10,11 @@ class GameControl {
 		this.speed = speed;
 		this.role.anchorOffsetX = this.role.width / 2;
 		this.role.anchorOffsetY = this.role.height / 2;
+		if (Setting.GetConfig().moveMode == MOVE_MODE.Gyroscope) {
+			this.orientation = new egret.DeviceOrientation();
+			this.orientation.addEventListener(egret.Event.CHANGE, this.onOrientation, this);
+			this.orientation.start();
+		}
 	}
 
 	public direction: number;
@@ -40,24 +45,6 @@ class GameControl {
 	private RefreshLight() {
 		let role = this.role;
 		this.maskLight.MoveMask(role.x, role.y, this.manageCells.currentCell, this.manageCells.currentBgRender);
-	}
-
-	public MoveModeChange() {
-		if (this.moveMode == MOVE_MODE.Rocker) {
-			this.moveMode = MOVE_MODE.Gyroscope;
-			if (!this.orientation) {
-				this.orientation = new egret.DeviceOrientation();
-			}
-			this.orientation.addEventListener(egret.Event.CHANGE, this.onOrientation, this);
-			this.orientation.start();
-			this.RoleMoveState(0);
-		}
-		else {
-			this.orientation.stop();
-			this.orientation.removeEventListener(egret.Event.CHANGE, this.onOrientation, this);
-			this.moveMode = MOVE_MODE.Rocker;
-			this.RoleMoveState(1);
-		}
 	}
 
 	private onOrientation(e: egret.OrientationEvent) {

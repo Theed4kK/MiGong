@@ -21,6 +21,7 @@
 		"bin-debug/scripts/GameEvent.js",
 		"bin-debug/scripts/ItemUI.js",
 		"bin-debug/scripts/ScreenMovies.js",
+		"bin-debug/scripts/Setting.js",
 		"bin-debug/scripts/StartPage.js",
 		"bin-debug/AssetAdapter.js",
 		"bin-debug/scripts/Cofing/ItemLib.js",

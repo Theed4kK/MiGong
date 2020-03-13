@@ -1,40 +1,40 @@
 {
-    "16b364587c8": {
-        "path": "scripts\\Game.ts",
-        "class": "Game",
-        "parentPath": ""
-    },
-    "global": {
-        "globalAutoLayerMarkEnable": true
-    },
-    "16b56b6b06d": {
-        "path": "scripts\\MapScroller.ts",
-        "class": "MapScroller",
-        "parentPath": ""
-    },
-    "16b70ad5af4": {
-        "path": "scripts\\CellBgRender.ts",
-        "class": "CellBgRender",
-        "parentPath": ""
-    },
-    "16b78c6ee92": {
-        "path": "scripts\\VirtualRocker.ts",
-        "class": "VirtualRocker",
-        "parentPath": ""
-    },
-    "16c6b5bfcd8": {
-        "path": "scripts\\ItemUI.ts",
-        "class": "ItemUI",
-        "parentPath": ""
-    },
-    "16cd25c4d5d": {
-        "path": "..\\resource\\eui_skins\\GameItem.ts",
-        "class": "GameItem",
-        "parentPath": ""
-    },
-    "170af0c8135": {
-        "path": "..\\resource\\eui_skins\\Setting.ts",
-        "class": "Setting",
-        "parentPath": ""
-    }
+  "16b364587c8": {
+    "path": "scripts\\Game.ts",
+    "class": "Game",
+    "parentPath": ""
+  },
+  "global": {
+    "globalAutoLayerMarkEnable": true
+  },
+  "16b56b6b06d": {
+    "path": "scripts\\MapScroller.ts",
+    "class": "MapScroller",
+    "parentPath": ""
+  },
+  "16b70ad5af4": {
+    "path": "scripts\\CellBgRender.ts",
+    "class": "CellBgRender",
+    "parentPath": ""
+  },
+  "16b78c6ee92": {
+    "path": "scripts\\VirtualRocker.ts",
+    "class": "VirtualRocker",
+    "parentPath": ""
+  },
+  "16c6b5bfcd8": {
+    "path": "scripts\\ItemUI.ts",
+    "class": "ItemUI",
+    "parentPath": ""
+  },
+  "16cd25c4d5d": {
+    "path": "..\\resource\\eui_skins\\GameItem.ts",
+    "class": "GameItem",
+    "parentPath": ""
+  },
+  "170af0c8135": {
+    "path": "..\\resource\\eui_skins\\Setting.ts",
+    "class": "Setting",
+    "parentPath": ""
+  }
 }

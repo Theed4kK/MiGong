@@ -14,7 +14,6 @@ class GameUI extends UIBase {
 	private input_touchError: eui.TextInput;
 
 	private txt_stepNum: eui.Label;
-	private txt_moveMode: eui.Label;
 	private txt_mapName: eui.Label;
 
 	private gameControl: GameControl;
@@ -29,34 +28,28 @@ class GameUI extends UIBase {
 	private group_role: eui.Group;
 	private group_bg: eui.Group;
 
-	private toggle_moveMode: eui.ToggleSwitch;
-
 	private stepNum: number = 0;
-	private virt: VirtualRocker = new VirtualRocker();
+	private virt: VirtualRocker;
 
 	protected childrenCreated(): void {
 		super.childrenCreated();
 		let self: GameUI = this;
-		self.addChild(self.virt);
-		self.virt.visible = false;
+		if (Setting.GetConfig().moveMode == MOVE_MODE.Rocker) {
+			self.virt = new VirtualRocker();
+			self.addChild(self.virt);
+			self.virt.visible = false;
+		}
+
 		self.scroller_map.viewport = this.list_cell;
 		self.GenMiGong().then(() => {
 			console.log("地图生成完成")
 			PlayerDataManage.GetInstance().Getdata().then(res => {
 				self.txt_mapName.text = Config.GetInstance().config_map[res.level].name;
 			})
+			self.img_Bg.touchEnabled = Setting.GetConfig().moveMode == MOVE_MODE.Rocker;
+			self.gameControl = new GameControl(self.group_role, 10, self.manageCells, )
 			self.AddListener();
 		});
-		if (!egret.Capabilities.isMobile) {
-			self.txt_moveMode.visible = false;
-			self.toggle_moveMode.visible = false;
-		}
-		else {
-			self.txt_moveMode.textFlow = [
-				{ text: "当前操作模式：" },
-				{ text: "摇杆", style: { "textColor": 0x336600, "strokeColor": 0x6699cc, "stroke": 0.5 } }
-			];
-		}
 	}
 
 	private AddListener(): void {
@@ -67,7 +60,6 @@ class GameUI extends UIBase {
 		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_CANCEL, this.CancelTouch, this);
 		GameEvent.addEventListener(GameEvent.RefreshCurRender, this.UpdateIndex, this);
 		GameEvent.addEventListener(GameEvent.MoveScroll, this.MoveScroll, this);
-		this.toggle_moveMode.addEventListener(egret.TouchEvent.TOUCH_TAP, this.SwitchMoveMode, this)
 	}
 
 	private RemoveListener(): void {
@@ -78,25 +70,6 @@ class GameUI extends UIBase {
 		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_CANCEL, this.CancelTouch, this);
 		GameEvent.removeEventListener(GameEvent.RefreshCurRender, this.UpdateIndex, this);
 		GameEvent.removeEventListener(GameEvent.MoveScroll, this.MoveScroll, this);
-		this.toggle_moveMode.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.SwitchMoveMode, this)
-	}
-
-	SwitchMoveMode() {
-		if (this.gameControl.moveMode == MOVE_MODE.Rocker) {
-			this.img_Bg.touchEnabled = false;
-			this.txt_moveMode.textFlow = [{ text: "当前操作模式：" }
-				, { text: "陀螺仪", style: { "textColor": 0x336600, "strokeColor": 0x6699cc, "stroke": 1 } }
-			];
-			this.virt.visible = false;
-			this.CancelTouch();
-		}
-		else {
-			this.txt_moveMode.textFlow = [{ text: "当前操作模式：" }
-				, { text: "摇杆", style: { "textColor": 0x336600, "strokeColor": 0x6699cc, "stroke": 1 } }
-			];
-			this.img_Bg.touchEnabled = true;
-		}
-		this.gameControl.MoveModeChange();
 	}
 
 	private ExitMap() {
@@ -141,6 +114,7 @@ class GameUI extends UIBase {
 	private Move(e: egret.TouchEvent): void {
 		let angle: number = this.virt.onTouchMove(e);
 		this.gameControl.direction = angle;
+		console.log(angle);
 	}
 
 	private CancelTouch() {
@@ -162,7 +136,6 @@ class GameUI extends UIBase {
 		self.txt_stepNum.text = "已探索：0";
 		let cells = await GenCells.GetCells();
 		self.manageCells = new ManageCells(cells, self.list_cell, self.group_bg);
-		self.gameControl = new GameControl(self.group_role, 10, self.manageCells, )
 		if (DBManage.GetInstance().userInfo.avatarUrl) {
 			RES.getResByUrl(DBManage.GetInstance().userInfo.avatarUrl, self.SetMaskAndFrame, this, RES.ResourceItem.TYPE_IMAGE)
 		}

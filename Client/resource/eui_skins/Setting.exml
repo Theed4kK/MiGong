@@ -2,11 +2,47 @@
 <e:Skin class="SettingSkin" width="500" height="600" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" >
 	<w:Config id="170af0c8135" ></w:Config>
 	<e:Image left="0" right="0" top="0" bottom="0" source="Bg_png"/>
-	<e:Label text="游戏设置" y="26" horizontalCenter="0" textAlign="center" verticalAlign="middle" stroke="1" strokeColor="0x5b5b5b"/>
-	<e:Image source="line_png" horizontalCenter="0" top="80"/>
-	<e:Group height="200" y="120" anchorOffsetX="0" left="0" right="0">
-		<e:Label text="当前操作模式" x="32" y="33.35" anchorOffsetX="0" width="340" scaleX="1" scaleY="1" size="26"/>
-		<e:ToggleSwitch label="asdada" x="372" y="33.32"/>
+	<e:Label text="游戏设置" y="26" horizontalCenter="0" textAlign="center" verticalAlign="middle" stroke="1" strokeColor="0x383838" fontFamily="SimHei"/>
+	<e:Image right="10" top="96" source="hanlin_lv_box_png" left="10" bottom="10"/>
+	<e:Image source="line_png" horizontalCenter="0" top="80" scaleX="0.68" scaleY="0.68"/>
+	<e:Image scaleX="1" scaleY="1" source="line1_png" left="20" right="20" top="204" height="2"/>
+	<e:Image scaleX="1" scaleY="1" source="line1_png" left="20" right="20" top="304" height="2"/>
+	<e:Group height="99" y="104.8" anchorOffsetX="0" left="0" right="0" anchorOffsetY="0">
+		<e:Label text="当前操作模式" x="32" y="33.35" anchorOffsetX="0" width="340" scaleX="1" scaleY="1" size="26" fontFamily="SimHei"/>
+		<e:CheckBox id="checkBox_moveMode" label="摇杆" x="328.75" y="22.44" anchorOffsetX="0" width="142.06" anchorOffsetY="0" height="50" selected="false">
+			<e:skinName>
+				<e:Skin states="up,down,disabled">
+				<e:Image width="25" height="25" source="mode_png" source.down="mode01_png" verticalCenter="0"/>
+				<e:Label id="labelDisplay" verticalCenter="0" text="摇杆" left="30" text.down="重力" verticalAlign="middle"/>
+	<e:Image width="40" height="40" x="100.34" verticalCenter="0" source="btn_change_png"/>
+				</e:Skin>
+			</e:skinName>
+		</e:CheckBox>
+		<e:Label id="txt_tips" text="非移动端无法使用重力模式" x="115" y="73.35" anchorOffsetX="0" width="340" scaleX="1" scaleY="1" size="20" textAlign="right" textColor="0x969696"/>
+		<e:Image x="16" y="-4" source="debris_bg_png"/>
 	</e:Group>
-	<e:ToggleButton label="ToggleButton" x="268" y="468"/>
+	<e:Group height="99" y="203.8" anchorOffsetX="0" left="0" right="0" anchorOffsetY="0">
+		<e:Label text="背景音乐" x="32" y="33.35" anchorOffsetX="0" width="340" scaleX="1" scaleY="1" size="26" fontFamily="SimHei"/>
+		<e:Image source="switch_bg_png" verticalCenter="0" right="35"/>
+		<e:CheckBox id="checkBox_sound" x="332.67" anchorOffsetX="0" anchorOffsetY="0" selected="true" label="" verticalCenter="-2">
+			<e:skinName>
+				<e:Skin states="up,down,disabled">
+				<e:Image width="82" height="45" source="switch_btn_red2_png" source.down="switch_btn_green2_png" height.up="45" width.up="82" width.down="82" height.down="45"/>
+				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" text.up="关" size.up="28" fontFamily.up="SimHei" y.up="9" horizontalCenter.up="45" verticalAlign.up="middle" textAlign.up="center" text.down="开" size.down="28" fontFamily.down="SimHei" horizontalCenter.down="45"/>
+				</e:Skin>
+			</e:skinName>
+		</e:CheckBox>
+	</e:Group>
+	<e:Group height="99" y="305.8" anchorOffsetX="0" left="0" right="0" anchorOffsetY="0">
+		<e:Label text="震动" x="32" y="33.35" anchorOffsetX="0" width="340" scaleX="1" scaleY="1" size="26" fontFamily="SimHei"/>
+		<e:Image source="switch_bg_png" verticalCenter="0" right="35"/>
+		<e:CheckBox id="checkBox_shock" x="332.67" anchorOffsetX="0" anchorOffsetY="0" selected="true" label="" verticalCenter="-2">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="82" height="45" source="switch_btn_red2_png" source.down="switch_btn_green2_png" height.up="45" width.up="82" width.down="82" height.down="45"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" text.up="关" size.up="28" fontFamily.up="SimHei" y.up="9" horizontalCenter.up="45" verticalAlign.up="middle" textAlign.up="center" text.down="开" size.down="28" fontFamily.down="SimHei" horizontalCenter.down="45"/>
+			</e:Skin>
+		</e:skinName>
+		</e:CheckBox>
+	</e:Group>
 </e:Skin>

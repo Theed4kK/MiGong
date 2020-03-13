@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "common_json,loading_jpg,game_json,green_fnt,green_png,Bg_png,line_png",
+			"keys": "common_json,loading_jpg,game_json,green_fnt,green_png,Bg_png,line_png,btn_setting_png,icon_jpg,levelIcon_json,btn_guide_png,mode01_png,mode_png,switch_btn_green2_png,switch_bg_png,switch_btn_red2_png,btn_change_png,btn_close7_png,hanlin_lv_box_png,line1_png,Bg2_png,Btn_exit_png,btn_continue_png",
 			"name": "preload"
 		}
 	],
@@ -78,6 +78,88 @@
 			"url": "assets/setting/line.png",
 			"type": "image",
 			"name": "line_png"
+		},
+		{
+			"url": "assets/startPage/btn_setting.png",
+			"type": "image",
+			"name": "btn_setting_png"
+		},
+		{
+			"url": "assets/startPage/icon.jpg",
+			"type": "image",
+			"name": "icon_jpg"
+		},
+		{
+			"url": "assets/levelIcon.json",
+			"type": "sheet",
+			"name": "levelIcon_json",
+			"subkeys": "001,002,003,004,005,006,007,008,009,010,011,012,013,014,015,016,017,018,019,020,021,022,023,024,025,026,027,028,029,030,031,032,033,034,035,036,037,038,039,040,041,042,043,044,045,046,047,048,049,050,051,052,053,054,055,056,057,058,059,060,061,062,063,064,065,066,067,068,069,070,071,072,073,074,075,076,077,078,079,080,081,082,083,084,085,086,087,088,089,090,091,092,093,094,095,096,097,098,099,100"
+		},
+		{
+			"url": "assets/startPage/btn_guide.png",
+			"type": "image",
+			"name": "btn_guide_png"
+		},
+		{
+			"url": "assets/setting/mode01.png",
+			"type": "image",
+			"name": "mode01_png"
+		},
+		{
+			"url": "assets/setting/mode.png",
+			"type": "image",
+			"name": "mode_png"
+		},
+		{
+			"url": "assets/setting/switch_btn_green2.png",
+			"type": "image",
+			"name": "switch_btn_green2_png"
+		},
+		{
+			"url": "assets/setting/switch_bg.png",
+			"type": "image",
+			"name": "switch_bg_png"
+		},
+		{
+			"url": "assets/setting/switch_btn_red2.png",
+			"type": "image",
+			"name": "switch_btn_red2_png"
+		},
+		{
+			"url": "assets/setting/btn_change.png",
+			"type": "image",
+			"name": "btn_change_png"
+		},
+		{
+			"url": "assets/setting/btn_close7.png",
+			"type": "image",
+			"name": "btn_close7_png"
+		},
+		{
+			"url": "assets/setting/hanlin_lv_box.png",
+			"type": "image",
+			"name": "hanlin_lv_box_png",
+			"scale9grid": "8,7,85,13"
+		},
+		{
+			"name": "line1_png",
+			"type": "image",
+			"url": "assets/setting/line1.png"
+		},
+		{
+			"name": "Bg2_png",
+			"type": "image",
+			"url": "assets/exitTips/Bg.png"
+		},
+		{
+			"name": "Btn_exit_png",
+			"type": "image",
+			"url": "assets/exitTips/Btn_exit.png"
+		},
+		{
+			"name": "btn_continue_png",
+			"type": "image",
+			"url": "assets/exitTips/btn_continue.png"
 		}
 	]
 }
