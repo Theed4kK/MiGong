@@ -43,11 +43,11 @@ const config: ResourceManagerConfig = {
                         target: "main.min.js"
                     }
                     ]),
-                    new ResSplitPlugin({
-                      matchers:[
-                          {from:"resource/**",to:`../${projectName}_wxgame_remote`}
-                      ]
-                  }),
+                //     new ResSplitPlugin({
+                //       matchers:[
+                //           {from:"resource/**",to:`../${projectName}_wxgame_remote`}
+                //       ]
+                //   }),
                     new ManifestPlugin({ output: 'manifest.js', useWxPlugin: useWxPlugin })
                 ]
             }

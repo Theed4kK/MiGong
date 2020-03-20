@@ -21,11 +21,15 @@ class Cell {
 	/**行走时用来标记格子是否已经通过 */
 	public isPassed: boolean = false;
 
-	public renderState: number = 0;
-
 	public id: number;
 
 	public item: number = 0;
 	public isSpecial: boolean;
+	public specialIndex: CELL_INDEX;
 
+}
+
+enum CELL_INDEX{
+	Start,
+	End
 }

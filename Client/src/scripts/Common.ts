@@ -1,5 +1,4 @@
 class Common {
-
 	/**获得一个随机整数 */
 	public static getRandomInt(min: number, max: number): number {
 		var Range = max - min;
@@ -7,7 +6,7 @@ class Common {
 		return (min + Math.round(Rand * Range));
 	}
 
-	/**把数组字段转换成数组
+	/**把数组字符串转换成数组
 	 * breakWord:分隔符
 	 * toNum:返回的是数值数组还是字符串数组
 	 */
@@ -33,6 +32,15 @@ class Common {
 		}
 		return data;
 	}
+}
 
-
+enum Color {
+	red = 0xff0000,
+	green = 0x00FF00,
+	blue = 0x0000FF,
+	yellow = 0xFFFF00,
+	black = 0x000000,
+	purple = 0x8A2BE2,
+	pink = 0xFF00FF,
+	white = 0xFFFFFF
 }

@@ -24,6 +24,7 @@ class PlayerDataManage implements IPlayerDataManage {
 		return PlayerDataManage.instance;
 	}
 
+	/**获得积分点数 */
 	async GetPoint(num: number) {
 		let data = await this.Getdata();
 		data.point += num;

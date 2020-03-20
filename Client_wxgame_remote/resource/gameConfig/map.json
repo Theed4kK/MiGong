@@ -43,5 +43,221 @@
     "drop_num": "5,11,15",
     "special_chance": 500,
     "des": ""
+  },
+  {
+    "id": 6,
+    "name": "迷宫6",
+    "size": 61,
+    "drop_item": "1,2,4",
+    "drop_num": "5,11,16",
+    "special_chance": 501,
+    "des": ""
+  },
+  {
+    "id": 7,
+    "name": "迷宫7",
+    "size": 62,
+    "drop_item": "1,2,5",
+    "drop_num": "5,11,17",
+    "special_chance": 502,
+    "des": ""
+  },
+  {
+    "id": 8,
+    "name": "迷宫8",
+    "size": 63,
+    "drop_item": "1,2,6",
+    "drop_num": "5,11,18",
+    "special_chance": 503,
+    "des": ""
+  },
+  {
+    "id": 9,
+    "name": "迷宫9",
+    "size": 64,
+    "drop_item": "1,2,7",
+    "drop_num": "5,11,19",
+    "special_chance": 504,
+    "des": ""
+  },
+  {
+    "id": 10,
+    "name": "迷宫10",
+    "size": 65,
+    "drop_item": "1,2,8",
+    "drop_num": "5,11,20",
+    "special_chance": 505,
+    "des": ""
+  },
+  {
+    "id": 11,
+    "name": "迷宫11",
+    "size": 66,
+    "drop_item": "1,2,9",
+    "drop_num": "5,11,21",
+    "special_chance": 506,
+    "des": ""
+  },
+  {
+    "id": 12,
+    "name": "迷宫12",
+    "size": 67,
+    "drop_item": "1,2,10",
+    "drop_num": "5,11,22",
+    "special_chance": 507,
+    "des": ""
+  },
+  {
+    "id": 13,
+    "name": "迷宫13",
+    "size": 68,
+    "drop_item": "1,2,11",
+    "drop_num": "5,11,23",
+    "special_chance": 508,
+    "des": ""
+  },
+  {
+    "id": 14,
+    "name": "迷宫14",
+    "size": 69,
+    "drop_item": "1,2,12",
+    "drop_num": "5,11,24",
+    "special_chance": 509,
+    "des": ""
+  },
+  {
+    "id": 15,
+    "name": "迷宫15",
+    "size": 70,
+    "drop_item": "1,2,13",
+    "drop_num": "5,11,25",
+    "special_chance": 510,
+    "des": ""
+  },
+  {
+    "id": 16,
+    "name": "迷宫16",
+    "size": 71,
+    "drop_item": "1,2,14",
+    "drop_num": "5,11,26",
+    "special_chance": 511,
+    "des": ""
+  },
+  {
+    "id": 17,
+    "name": "迷宫17",
+    "size": 72,
+    "drop_item": "1,2,15",
+    "drop_num": "5,11,27",
+    "special_chance": 512,
+    "des": ""
+  },
+  {
+    "id": 18,
+    "name": "迷宫18",
+    "size": 73,
+    "drop_item": "1,2,16",
+    "drop_num": "5,11,28",
+    "special_chance": 513,
+    "des": ""
+  },
+  {
+    "id": 19,
+    "name": "迷宫19",
+    "size": 74,
+    "drop_item": "1,2,17",
+    "drop_num": "5,11,29",
+    "special_chance": 514,
+    "des": ""
+  },
+  {
+    "id": 20,
+    "name": "迷宫20",
+    "size": 75,
+    "drop_item": "1,2,18",
+    "drop_num": "5,11,30",
+    "special_chance": 515,
+    "des": ""
+  },
+  {
+    "id": 21,
+    "name": "迷宫21",
+    "size": 76,
+    "drop_item": "1,2,19",
+    "drop_num": "5,11,31",
+    "special_chance": 516,
+    "des": ""
+  },
+  {
+    "id": 22,
+    "name": "迷宫22",
+    "size": 77,
+    "drop_item": "1,2,20",
+    "drop_num": "5,11,32",
+    "special_chance": 517,
+    "des": ""
+  },
+  {
+    "id": 23,
+    "name": "迷宫23",
+    "size": 78,
+    "drop_item": "1,2,21",
+    "drop_num": "5,11,33",
+    "special_chance": 518,
+    "des": ""
+  },
+  {
+    "id": 24,
+    "name": "迷宫24",
+    "size": 79,
+    "drop_item": "1,2,22",
+    "drop_num": "5,11,34",
+    "special_chance": 519,
+    "des": ""
+  },
+  {
+    "id": 25,
+    "name": "迷宫25",
+    "size": 80,
+    "drop_item": "1,2,23",
+    "drop_num": "5,11,35",
+    "special_chance": 520,
+    "des": ""
+  },
+  {
+    "id": 26,
+    "name": "迷宫26",
+    "size": 81,
+    "drop_item": "1,2,24",
+    "drop_num": "5,11,36",
+    "special_chance": 521,
+    "des": ""
+  },
+  {
+    "id": 27,
+    "name": "迷宫27",
+    "size": 82,
+    "drop_item": "1,2,25",
+    "drop_num": "5,11,37",
+    "special_chance": 522,
+    "des": ""
+  },
+  {
+    "id": 28,
+    "name": "迷宫28",
+    "size": 83,
+    "drop_item": "1,2,26",
+    "drop_num": "5,11,38",
+    "special_chance": 523,
+    "des": ""
+  },
+  {
+    "id": 29,
+    "name": "迷宫29",
+    "size": 84,
+    "drop_item": "1,2,27",
+    "drop_num": "5,11,39",
+    "special_chance": 524,
+    "des": ""
   }
 ]

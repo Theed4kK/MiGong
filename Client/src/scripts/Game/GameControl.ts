@@ -3,10 +3,13 @@ enum MOVE_MODE {
 	Gyroscope
 }
 class GameControl {
-	public constructor(role: eui.Group, speed: number, manageCells: ManageCells) {
+	public constructor(role: eui.Group, speed: number, manageCells: ManageCells, group_light?: eui.Group) {
 		this.role = role;
 		this.manageCells = manageCells;
-		// this.InitLight();
+		if (this.lightOpen) {
+			this.group_light = group_light;
+			this.InitLight();
+		}
 		this.speed = speed;
 		this.role.anchorOffsetX = this.role.width / 2;
 		this.role.anchorOffsetY = this.role.height / 2;
@@ -25,22 +28,25 @@ class GameControl {
 	private role: eui.Group;
 	private group_light: eui.Group;
 
+	private lightOpen = true;
+
 	private orientation: egret.DeviceOrientation;
-	public maskLight: LightMask;
+	private maskLight: LightMask = new LightMask;
 	wall_height = +Config.GetInstance().config_common["wall_height"].value;
 	wall_width = +Config.GetInstance().config_common["wall_height"].value;
 	cell_height = +Config.GetInstance().config_common["cell_height"].value;
 	cell_width = +Config.GetInstance().config_common["cell_height"].value;
 
+
 	/**初始化光照 */
-	// private InitLight() {
-	// 	let maskLight = this.maskLight;
-	// 	maskLight.SetMaskSize(this.maskSize[0], this.maskSize[1]);
-	// 	maskLight.MoveMask(this.cell_width / 2, this.cell_height / 2, this.manageCells.currentCell, this.manageCells.currentBgRender);
-	// 	this.group_light.addChild(this.maskLight);
-	// 	maskLight.x = 0;
-	// 	maskLight.y = 0;
-	// }
+	private InitLight() {
+		let maskLight = this.maskLight;
+		maskLight.InitLight();
+		maskLight.MoveMask(this.cell_width / 2, this.cell_height / 2, this.manageCells.currentCell, this.manageCells.currentBgRender);
+		this.group_light.addChild(this.maskLight);
+		maskLight.x = 0;
+		maskLight.y = 0;
+	}
 
 	private RefreshLight() {
 		let role = this.role;
@@ -128,6 +134,7 @@ class GameControl {
 		role.y += moveY;
 		GameEvent.dispatchEventWith(GameEvent.MoveScroll, false, { moveX: moveX, moveY: moveY });
 		self.manageCells.SetIndex(role);
+		if (self.lightOpen) { this.RefreshLight(); }
 	}
 
 	private IsEdge(type: number): boolean {

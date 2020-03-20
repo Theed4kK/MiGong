@@ -24,7 +24,8 @@
 		"ExitTips": "resource/eui_skins/Game/ExitTips.exml",
 		"StartPage": "resource/eui_skins/StartPage.exml",
 		"BagUI": "resource/eui_skins/item/BagUI.exml",
-		"BagItemRender": "resource/eui_skins/item/BagItemRender.exml"
+		"BagItemRender": "resource/eui_skins/item/BagItemRender.exml",
+		"Setting": "resource/eui_skins/Setting.exml"
 	},
 	"autoGenerateExmlsList": true,
 	"exmls": [
@@ -53,6 +54,7 @@
 		"resource/eui_skins/item/ItemRendererSkin.exml",
 		"resource/eui_skins/item/ItemUI.exml",
 		"resource/eui_skins/Loading.exml",
+		"resource/eui_skins/Setting.exml",
 		"resource/eui_skins/StartPage.exml"
 	],
 	"path": "resource/default.thm.json"

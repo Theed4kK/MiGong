@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<e:Skin class="GameItemSkin" width="640" height="86" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" >
-	<w:Config id="16cd25c4d5d" ></w:Config>
-	<e:Image anchorOffsetX="0" anchorOffsetY="0" source="board_msg_box_2_png" y="0" x="0"/>
-	<e:List id="list" anchorOffsetX="0" left="0" right="200" top="0" bottom="0"/>
-	<e:Button label="Button" x="476" y="16"/>
-</e:Skin>

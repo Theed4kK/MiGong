@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin class="GameItemRender" width="167" height="86" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
-	<e:Image id="img_icon" width="70" height="70" verticalCenter="0" left="10"/>
-	<e:Label id="txt_num" text="500" left="94" verticalCenter="0" size="36"/>
+<e:Skin class="GameItemRenderSkin" height="50" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Image id="img_icon" verticalCenter="0" left="0" width="50" height="50" source="gold_1"/>
+	<e:Label id="txt_num" left="52" size="30" fontFamily="Times" verticalAlign="middle" stroke="0.5" strokeColor="0xf77e09" textColor="0xe89110" text="× 50" verticalCenter="0"/>
 </e:Skin>

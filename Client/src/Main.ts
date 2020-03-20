@@ -60,9 +60,10 @@ class Main extends eui.UILayer {
         await DBManage.GetInstance().Init();
     }
 
+    private useLocalRes = true;
     private async loadResource() {
         try {
-            if (egret.Capabilities.runtimeType != egret.RuntimeType.WEB) {
+            if (egret.Capabilities.runtimeType != egret.RuntimeType.WEB && !this.useLocalRes) {
                 egret.ImageLoader.crossOrigin = "anonymous";
                 await RES.loadConfig("default.res.json", "http://192.168.11.104:8080/resource/");
                 console.log("使用网络资源");

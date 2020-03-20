@@ -43,7 +43,7 @@ class UIBase extends eui.Component implements eui.UIComponent {
 				}, self);
 			}
 		}
-
+		// UIBase.UILayer.removeChild(UIBase.bmp);
 	}
 
 	public static UILayer: eui.UILayer;
@@ -51,11 +51,14 @@ class UIBase extends eui.Component implements eui.UIComponent {
 	protected isScale: boolean = false;
 
 	private static uiList: { [name: string]: UIBase } = {};
-
+	private static bmp = new egret.Bitmap();
 	public static OpenUI<T>(creator: { new (...arg): UIBase }, ...arg): UIBase {
 		let className = creator.prototype.__class__;
 		let ui: UIBase = UIBase.uiList[className];
 		if (!ui || arg.length > 0) {
+			// UIBase.bmp.texture = RES.getRes("buffer_png");
+			// UIBase.UILayer.addChild(UIBase.bmp);
+			// egret.Tween.get(UIBase.bmp, { loop: true }).to({ rotation: 360 }, 2000, egret.Ease.sineIn);
 			if (ui) {
 				UIBase.UILayer.removeChild(ui);
 			}

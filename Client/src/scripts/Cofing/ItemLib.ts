@@ -2,6 +2,7 @@ class ItemLib {
 	public id: number;
 	public name: string;
 	public point: number;
+	public quality:string;
 	public need_point: number;
 	public weight: number;
 	public des: string;

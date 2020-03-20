@@ -6,6 +6,7 @@ class GameUI extends UIBase {
 
 	public manageCells: ManageCells;
 	private list_cell: eui.List;
+	private list_reward: eui.List;
 
 	private btn_exit: eui.Button;
 
@@ -24,9 +25,11 @@ class GameUI extends UIBase {
 
 	private img_Bg: eui.Image;
 	private img_role: eui.Image;
+	private img_map: eui.Image;
 
 	private group_role: eui.Group;
 	private group_bg: eui.Group;
+	private group_light: eui.Group;
 
 	private stepNum: number = 0;
 	private virt: VirtualRocker;
@@ -47,9 +50,27 @@ class GameUI extends UIBase {
 				self.txt_mapName.text = Config.GetInstance().config_map[res.level].name;
 			})
 			self.img_Bg.touchEnabled = Setting.GetConfig().moveMode == MOVE_MODE.Rocker;
-			self.gameControl = new GameControl(self.group_role, 10, self.manageCells, )
+			self.gameControl = new GameControl(self.group_role, 10, self.manageCells, self.group_light)
 			self.AddListener();
 		});
+	}
+
+	/**生成迷宫 */
+	private async GenMiGong() {
+		let row: number = 15;
+		let self: GameUI = this;
+		self.txt_stepNum.text = "已探索：0";
+		let cells = await GenCells.GetCells();
+		self.manageCells = new ManageCells(cells, self.list_cell, self.group_bg);
+		self.img_map.width = self.list_cell.contentWidth;
+		self.img_map.height = self.list_cell.contentHeight;
+		if (DBManage.GetInstance().userInfo.avatarUrl) {
+			RES.getResByUrl(DBManage.GetInstance().userInfo.avatarUrl, self.SetMaskAndFrame, this, RES.ResourceItem.TYPE_IMAGE)
+		}
+		else {
+			self.SetMaskAndFrame();
+		}
+		self.PlayStartAni();
 	}
 
 	private AddListener(): void {
@@ -58,7 +79,8 @@ class GameUI extends UIBase {
 		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.Move, this);
 		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_END, this.CancelTouch, this);
 		this.img_Bg.addEventListener(egret.TouchEvent.TOUCH_CANCEL, this.CancelTouch, this);
-		GameEvent.addEventListener(GameEvent.RefreshCurRender, this.UpdateIndex, this);
+		// GameEvent.addEventListener(GameEvent.RefreshCurRender, this.UpdateIndex, this);
+		GameEvent.addEventListener(GameEvent.GetItem, this.UpdateItem, this);
 		GameEvent.addEventListener(GameEvent.MoveScroll, this.MoveScroll, this);
 	}
 
@@ -68,7 +90,7 @@ class GameUI extends UIBase {
 		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.Move, this);
 		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_END, this.CancelTouch, this);
 		this.img_Bg.removeEventListener(egret.TouchEvent.TOUCH_CANCEL, this.CancelTouch, this);
-		GameEvent.removeEventListener(GameEvent.RefreshCurRender, this.UpdateIndex, this);
+		GameEvent.removeEventListener(GameEvent.GetItem, this.UpdateItem, this);
 		GameEvent.removeEventListener(GameEvent.MoveScroll, this.MoveScroll, this);
 	}
 
@@ -77,6 +99,7 @@ class GameUI extends UIBase {
 		exitTips.once("ExitMap", () => {
 			this.manageCells.ExitMap();
 			UIBase.CloseUI(GameUI, true);
+			UIBase.OpenUI(StartPage);
 		}, this)
 	}
 
@@ -105,16 +128,18 @@ class GameUI extends UIBase {
 		move(this.scroller_map, this.scroller_role, this.scroller_bg);
 	}
 
-	private UpdateIndex(e: egret.Event): void {
-		this.stepNum++
-		this.txt_stepNum.text = "已探索：" + this.stepNum.toString();
+	private UpdateItem(e: egret.Event): void {
+		// this.stepNum++
+		// this.txt_stepNum.text = "已探索：" + this.stepNum.toString();
+		let data: { id: number, value: number }[] = e.data;
+		this.list_reward.dataProvider = new eui.ArrayCollection(data);
+		this.list_reward.itemRenderer = GameItemRender;
 	}
 
 	/**触屏手指移动 */
 	private Move(e: egret.TouchEvent): void {
 		let angle: number = this.virt.onTouchMove(e);
 		this.gameControl.direction = angle;
-		console.log(angle);
 	}
 
 	private CancelTouch() {
@@ -126,23 +151,6 @@ class GameUI extends UIBase {
 	private BeginTouch(e: egret.TouchEvent): void {
 		this.virt.start(e.localX, e.localY);
 		this.gameControl.RoleMoveState(0);	//开始移动
-	}
-
-
-	/**生成迷宫 */
-	private async GenMiGong() {
-		let row: number = 15;
-		let self: GameUI = this;
-		self.txt_stepNum.text = "已探索：0";
-		let cells = await GenCells.GetCells();
-		self.manageCells = new ManageCells(cells, self.list_cell, self.group_bg);
-		if (DBManage.GetInstance().userInfo.avatarUrl) {
-			RES.getResByUrl(DBManage.GetInstance().userInfo.avatarUrl, self.SetMaskAndFrame, this, RES.ResourceItem.TYPE_IMAGE)
-		}
-		else {
-			self.SetMaskAndFrame();
-		}
-		self.PlayStartAni();
 	}
 
 	private SetMaskAndFrame(res?) {
@@ -170,7 +178,7 @@ class GameUI extends UIBase {
 
 	/**播放开始动画 */
 	private PlayStartAni(): void {
-		let obj: CellBgRender = this.manageCells.currentBgRender;
+		let obj: WallRender = this.manageCells.currentBgRender;
 		this.group_role.x = obj.x;
 		this.group_role.y = obj.y + (obj.height / 2);
 		egret.Tween.get(this.scroller_map.viewport).to({ scrollH: 0 }, this.scroller_map.viewport.scrollH / 0.5);
@@ -178,15 +186,5 @@ class GameUI extends UIBase {
 			this.img_Bg.touchEnabled = true;
 		});
 	}
-
-	private SetListScale(): void {
-		if (this.scroller_map.scaleX == 0.5) {
-			this.scroller_map.scaleX = 1;
-			this.scroller_map.scaleY = 1;
-		}
-		else {
-			this.scroller_map.scaleX = 0.5;
-			this.scroller_map.scaleY = 0.5;
-		}
-	}
 }
+

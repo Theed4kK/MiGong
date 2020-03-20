@@ -1,0 +1,32 @@
+{
+    "projectName": "game",
+    "files": [
+        "./title_bg.png",
+        "./style13_default.png",
+        "./wall1.png",
+        "./zhuoyue.png",
+        "./cell_bg_01.jpg",
+        "./cell_bg_02.jpg",
+        "./cell_bg_03.jpg",
+        "./gold_1.png",
+        "./gold_2.png",
+        "./gold_3.png",
+        "./gold_4.png",
+        "./gold_5.png",
+        "./gold_6.png",
+        "./gold_7.png",
+        "./headFrame.png",
+        "./headMask.png",
+        "./padIcon.png",
+        "./padIcon_01.png",
+        "./rect.png"
+    ],
+    "options": {
+        "layoutMath": "3",
+        "sizeMode": "2n",
+        "useExtension": 0,
+        "layoutGap": 0,
+        "extend": 0
+    },
+    "version": 5
+}

@@ -1,8 +1,8 @@
 class ScreenMovies {
 	//当前舞台
-	static MovieStart(_txnums,call?:Function): void {
+	static MovieStart(_txnums, call?: Function,OnComplete?:Function): void {
 		//创建一个截图Bitmap
-		let taget = UIBase.UILayer;
+		let taget = UIBase.UILayer.stage;
 		let w = taget.width;
 		let h = taget.height;
 
@@ -66,14 +66,19 @@ class ScreenMovies {
 			}
 		}
 		let upNumber = 0;
+		let completed = false; 
 		function onComplete(evt: Comment) {
 			upNumber++
 			if (upNumber == tx1Number) {
 				taget.removeChild(loadTxGrp)
 			}
-			if(call){
-				call();
+			if(OnComplete && !completed){
+				OnComplete();
+				completed= true;
 			}
+		}
+		if (call) {
+			call();
 		}
 	}
 }

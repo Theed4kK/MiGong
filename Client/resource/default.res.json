@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "common_json,loading_jpg,game_json,green_fnt,green_png,Bg_png,line_png,btn_setting_png,icon_jpg,levelIcon_json,btn_guide_png,mode01_png,mode_png,switch_btn_green2_png,switch_bg_png,switch_btn_red2_png,btn_change_png,btn_close7_png,hanlin_lv_box_png,line1_png,Bg2_png,Btn_exit_png,btn_continue_png",
+			"keys": "common_json,loading_jpg,game_json,green_fnt,green_png,Bg_png,line_png,btn_setting_png,icon_jpg,levelIcon_json,btn_guide_png,mode01_png,mode_png,switch_btn_green2_png,switch_bg_png,switch_btn_red2_png,btn_change_png,btn_close7_png,hanlin_lv_box_png,line1_png,Bg2_png,Btn_exit_png,btn_continue_png,buffer_png,map_bg_jpg,btn_exit_png,reward_bg_png",
 			"name": "preload"
 		}
 	],
@@ -142,24 +142,45 @@
 			"scale9grid": "8,7,85,13"
 		},
 		{
-			"name": "line1_png",
+			"url": "assets/setting/line1.png",
 			"type": "image",
-			"url": "assets/setting/line1.png"
+			"name": "line1_png"
 		},
 		{
-			"name": "Bg2_png",
+			"url": "assets/exitTips/Bg.png",
 			"type": "image",
-			"url": "assets/exitTips/Bg.png"
+			"name": "Bg2_png"
 		},
 		{
-			"name": "Btn_exit_png",
+			"url": "assets/exitTips/Btn_exit.png",
 			"type": "image",
-			"url": "assets/exitTips/Btn_exit.png"
+			"name": "Btn_exit_png"
 		},
 		{
-			"name": "btn_continue_png",
+			"url": "assets/exitTips/btn_continue.png",
 			"type": "image",
-			"url": "assets/exitTips/btn_continue.png"
+			"name": "btn_continue_png"
+		},
+		{
+			"url": "assets/buffer.png",
+			"type": "image",
+			"name": "buffer_png"
+		},
+		{
+			"url": "assets/game/map_bg.jpg",
+			"type": "image",
+			"name": "map_bg_jpg"
+		},
+		{
+			"url": "assets/game/btn_exit.png",
+			"type": "image",
+			"name": "btn_exit_png",
+			"scale9grid": "36,0,361,0"
+		},
+		{
+			"name": "reward_bg_png",
+			"type": "image",
+			"url": "assets/game/reward_bg.png"
 		}
 	]
 }

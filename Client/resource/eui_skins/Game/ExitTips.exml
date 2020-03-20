@@ -2,24 +2,30 @@
 <e:Skin class="ExitTipsSkin" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" >
 	<w:Config id="16fcbb7f426" ></w:Config>
 	<e:Image scale9Grid="2,2,12,12" x="0" y="0" scaleX="1" scaleY="1" source="Bg2_png"/>
-	<e:Label text="退出迷宫" top="0" anchorOffsetY="0" left="0" right="0" height="38.33" verticalAlign="middle" textAlign="center" x="-112" y="-409" scaleX="1" scaleY="1" fontFamily="KaiTi" textColor="0xf2e554" stroke="0.5" strokeColor="0x634808" anchorOffsetX="0" bold="true"/>
-	<e:Label id="txt_tips" text="中途逃离仅能带走一半宝藏，确认退出？" top="41" anchorOffsetY="0" height="43.21" verticalAlign="middle" textAlign="center" size="22" wordWrap="true" lineSpacing="10" y="-301" scaleX="1" scaleY="1" anchorOffsetX="0" width="501" horizontalCenter="0.5" fontFamily="SimHei" stroke="0.5" strokeColor="0x700d0d" textColor="0xff0000"/>
-	<e:Label id="txt_reward" text="确认退出？
-	当前已获得探索积分：500
-	已获得所有宝藏" top="86" anchorOffsetY="0" height="122" verticalAlign="top" textAlign="center" size="22" wordWrap="true" lineSpacing="10" y="-301" scaleX="1" scaleY="1" anchorOffsetX="0" width="501" horizontalCenter="0.5"/>
-	<e:Button id="btn_cancel" label="再等等" anchorOffsetX="0" width="104" anchorOffsetY="0" height="49" scaleX="1" scaleY="1" right="100" bottom="23" fontFamily="SimHei" textColor="0xd6d6d6">
+	<e:Label text="离开迷宫" top="0" anchorOffsetY="0" left="0" right="0" height="38.33" verticalAlign="middle" textAlign="center" x="-112" y="-409" scaleX="1" scaleY="1" fontFamily="KaiTi" textColor="0xf2e554" stroke="1" strokeColor="0x77550b" anchorOffsetX="0" bold="true" size="26"/>
+	<e:Label id="txt_tips" text="中途逃离仅能带走一半宝藏，确认退出？" top="51" anchorOffsetY="0" height="43.21" verticalAlign="middle" textAlign="center" size="22" wordWrap="true" lineSpacing="10" y="-301" scaleX="1" scaleY="1" anchorOffsetX="0" width="501" horizontalCenter="0" fontFamily="Microsoft YaHei" stroke="0.5" strokeColor="0x700d0d" textColor="0xff0000"/>
+	<e:Label id="txt_reward" text="当前已获得探索积分：500点\n当前已获得宝藏数量：5个	\n已获得所有宝藏" top="99" anchorOffsetY="0" height="109.87" verticalAlign="top" textAlign="center" size="20" wordWrap="true" lineSpacing="10" y="-301" scaleX="1" scaleY="1" anchorOffsetX="0" width="501" horizontalCenter="0.5" textColor="0xffb477" fontFamily="Microsoft YaHei"/>
+	<e:Button id="btn_cancel" label="再等等" anchorOffsetX="0" width="104" anchorOffsetY="0" height="49" scaleX="1" scaleY="1" right="100" bottom="23">
 		<e:skinName>
 			<e:Skin states="up,down,disabled">
 			<e:Image width="100%" height="100%" source="btn_continue_png"/>
-			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" fontFamily="SimHei" size="24" text="再等等" textColor="0x2d2d2d"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" fontFamily="Microsoft YaHei" size="24" text="再等等" textColor="0x2d2d2d"/>
 			</e:Skin>
 		</e:skinName>
 	</e:Button>
-	<e:Button id="btn_exit" label="退出" anchorOffsetX="0" width="104" anchorOffsetY="0" height="49" bottom="23" y="612.3299999999999" scaleX="1" scaleY="1" left="100">
+	<e:Button id="btn_exit" label="逃离" anchorOffsetX="0" width="104" anchorOffsetY="0" height="49" bottom="23" y="612.3299999999999" scaleX="1" scaleY="1" left="100">
 		<e:skinName>
 			<e:Skin states="up,down,disabled">
 			<e:Image width="100%" height="100%" source="Btn_exit_png"/>
-			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" text="退出" size="24" fontFamily="SimHei" textColor="0x2d2d2d"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" text="退出" size="24" fontFamily="Microsoft YaHei" textColor="0x2d2d2d"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="btn_exit0" label="退出" anchorOffsetX="0" width="104" anchorOffsetY="0" height="49" bottom="23" y="612.3299999999999" scaleX="1" scaleY="1" horizontalCenter="0" visible="false">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="btn_continue_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" text="退出" size="24" fontFamily="Microsoft YaHei" textColor="0x2d2d2d"/>
 			</e:Skin>
 		</e:skinName>
 	</e:Button>

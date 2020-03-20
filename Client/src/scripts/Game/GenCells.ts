@@ -21,6 +21,12 @@ class GenCells {
 			for (var j: number = 0; j < col; j++) {
 				let c: Cell = new Cell();
 				c.id = tmp;
+				if (tmp == 0) {
+					c.specialIndex = CELL_INDEX.Start;
+				}
+				if (tmp == (row * col - 1)) {
+					c.specialIndex = CELL_INDEX.End;
+				}
 				cell.push(c);
 				allCell.push(c);
 				tmp++;

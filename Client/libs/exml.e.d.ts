@@ -48,17 +48,17 @@ declare module skins{
 	class VSliderSkin extends eui.Skin{
 	}
 }
-declare class CellBgRenderSkin extends eui.Skin{
+declare class CellRenderSkin extends eui.Skin{
 }
 declare class ExitTipsSkin extends eui.Skin{
 }
 declare class GameSkin extends eui.Skin{
 }
-declare class GameItemSkin extends eui.Skin{
-}
-declare class GameItemRender extends eui.Skin{
+declare class GameItemRenderSkin extends eui.Skin{
 }
 declare class VirtualRockerSkin extends eui.Skin{
+}
+declare class WallRenderSkin extends eui.Skin{
 }
 declare class BagItemRenderSkin extends eui.Skin{
 }

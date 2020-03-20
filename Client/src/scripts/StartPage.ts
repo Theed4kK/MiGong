@@ -9,7 +9,7 @@ class StartPage extends UIBase {
 
 	private btn_start: eui.Button;
 	private btn_bag: eui.Button;
-	private btn_setting:eui.Button;
+	private btn_setting: eui.Button;
 
 	protected childrenCreated(): void {
 		super.childrenCreated();
@@ -19,8 +19,9 @@ class StartPage extends UIBase {
 
 	AddListeners() {
 		this.btn_start.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
-			UIBase.OpenUI(GameUI);
 			ScreenMovies.MovieStart(5);
+			UIBase.CloseUI(StartPage);
+			UIBase.OpenUI(GameUI);
 		}, this)
 		this.btn_bag.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
 			UIBase.OpenUI(BagUI);

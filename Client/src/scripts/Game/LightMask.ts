@@ -1,6 +1,9 @@
 class LightMask extends egret.Sprite {
 	private mask_shape: egret.Shape;
 	private cirleLight_shape: egret.Shape;
+	private mask_bitMap: egret.Bitmap;
+	private _mask_bitMap: egret.Bitmap;
+	private mask_con: egret.DisplayObjectContainer;
 
 	private radius: number;
 	wall_height: number = + Config.GetInstance().config_common["wall_height"].value;
@@ -13,54 +16,73 @@ class LightMask extends egret.Sprite {
 		self.cacheAsBitmap = true;
 
 		self.mask_shape = new egret.Shape();
-		self.mask_shape.blendMode = egret.BlendMode.ERASE;
-		self.mask_shape.alpha = 0.4;
+		self.mask_bitMap = new egret.Bitmap();
+		self._mask_bitMap = new egret.Bitmap();
+		self.mask_con = new egret.DisplayObjectContainer();
+		self.mask_con.addChild(self._mask_bitMap);
+		self.mask_con.addChild(self.mask_shape);
+		self.mask_bitMap.blendMode = egret.BlendMode.ERASE;
+		self.mask_bitMap.alpha = 0.4;
 
 		self.cirleLight_shape = new egret.Shape();
 		self.cirleLight_shape.blendMode = egret.BlendMode.ERASE;
 
-		self.addChild(self.mask_shape);
+		self.addChild(self.mask_bitMap);
 		self.addChild(self.cirleLight_shape);
 	}
 
 	//设置背景框的大小
-	public SetMaskSize(maskW: number, maskH: number) {
-		this.graphics.clear();
-		this.graphics.beginFill(0x000000, 1);
-		this.graphics.drawRect(this.wall_width, this.wall_height, maskW - this.wall_width * 2, maskH - this.wall_height * 2);
-		this.graphics.endFill();
-		this.radius = this.cell_width - this.wall_width * 2;
+	public async InitLight() {
+		let self: LightMask = this;
+		let playerData = await PlayerDataManage.GetInstance().Getdata();
+		let map: MapLib = Config.GetInstance().config_map[playerData.level];
+		let maskW = map.size * self.cell_width;
+		let maskH = 15 * self.cell_height;
+		self.graphics.clear();
+		self.graphics.beginFill(0x000000, 1);
+		self.graphics.drawRect(self.wall_width, self.wall_height, maskW - self.wall_width, maskH - self.wall_height);
+		self.graphics.endFill();
+		self.radius = self.cell_width - self.wall_width * 2;
 		let c_m = new egret.Matrix();
-		c_m.createGradientBox(this.radius * 2, this.radius * 2, 0, -this.radius, -this.radius);
+		c_m.createGradientBox(self.radius * 2, self.radius * 2, 0, -self.radius, -self.radius);
 		let colorGroup = [0, 255];
 		let alphaGroup = [1, 0.2];
-		this.cirleLight_shape.graphics.clear();
-		this.cirleLight_shape.graphics.beginGradientFill(egret.GradientType.RADIAL, [0xffffff, 0xffffff], alphaGroup, colorGroup, c_m);//这个渐变的参数是自己调的，可能不太理想，谁有好的参数可以留言，谢谢啦。
-		this.cirleLight_shape.graphics.drawCircle(0, 0, this.radius);
-		this.cirleLight_shape.graphics.endFill();
+		self.cirleLight_shape.graphics.clear();
+		self.cirleLight_shape.graphics.beginGradientFill(egret.GradientType.RADIAL, [0xffffff, 0xffffff], alphaGroup, colorGroup, c_m);//这个渐变的参数是自己调的，可能不太理想，谁有好的参数可以留言，谢谢啦。
+		self.cirleLight_shape.graphics.drawCircle(0, 0, self.radius);
+		self.cirleLight_shape.graphics.endFill();
 
-	}
+		self.mask_shape.graphics.beginFill(0x000000, 1);
+		self.mask_shape.graphics.drawCircle(0, 0, self.radius);
+		self.mask_shape.graphics.endFill();
 
-	public SetMaskPos(posx, posy) {
-		this.cirleLight_shape.x = posx;
-		this.cirleLight_shape.y = posy;
 	}
 
 	// private passedPos: { [x: number]: { [y: number]: boolean } } = {};
+	private render: egret.RenderTexture = new egret.RenderTexture();
+	private render1: egret.RenderTexture = new egret.RenderTexture();
 	设置光圈的位置
-	public MoveMask(posx: number, posy: number, cell: Cell, cellRender: CellBgRender) {
+	public MoveMask(posx: number, posy: number, cell: Cell, cellRender: WallRender) {
 		let self: LightMask = this;
 		self.cirleLight_shape.x = posx;
 		self.cirleLight_shape.y = posy;
-
-		// if (egret.Capabilities.runtimeType == egret.RuntimeType.WXGAME) {
-		// 	let point = self.cirleLight_shape.localToGlobal();
-		// 	platform.drawMask(egret.sys.mainCanvas(), { x: point.x, y: point.y, radius: self.radius });
-		// }
+		self.mask_shape.x = posx;
+		self.mask_shape.y = posy;
 
 		// self.mask_shape.graphics.beginFill(0x000000, 1);
 		// self.mask_shape.graphics.drawCircle(posx, posy, self.radius);
 		// self.mask_shape.graphics.endFill();
+
+		if (self.mask_bitMap.texture == self.render) {
+			self.render1.drawToTexture(self.mask_con);
+			self.mask_bitMap.texture = self.render1;
+			self._mask_bitMap.texture = self.render1;
+		}
+		else {
+			self.render.drawToTexture(self.mask_con);
+			self.mask_bitMap.texture = self.render;
+			self._mask_bitMap.texture = self.render;
+		}
 	}
 	// public MoveMask(posx: number, posy: number, cell: Cell, cellRender: CellBgRender) {
 	// 	let self: LightMask = this;

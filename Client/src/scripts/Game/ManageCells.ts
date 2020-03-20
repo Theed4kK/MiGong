@@ -18,8 +18,8 @@ class ManageCells {
 	public get currentCell(): Cell {
 		return this._currentCell;
 	};
-	private _currentBgRender: CellBgRender;
-	public get currentBgRender(): CellBgRender {
+	private _currentBgRender: WallRender;
+	public get currentBgRender(): WallRender {
 		return this._currentBgRender;
 	};
 
@@ -34,37 +34,9 @@ class ManageCells {
 		let self: ManageCells = this;
 		self.arrayCellList = new eui.ArrayCollection(this.cells);
 		self.cellList.dataProvider = self.arrayCellList;
-		self.cellList.itemRenderer = CellBgRender;
+		self.cellList.itemRenderer = WallRender;
 		self.cellList.validateNow();
 		self.cellList.validateDisplayList();
-
-		let ground_bitmap = new egret.Bitmap();
-		let wall_bitmap = new egret.Bitmap();
-		self.group_mapBg.addChild(ground_bitmap);
-		self.group_mapBg.addChild(wall_bitmap);
-		let ground_render = new egret.RenderTexture();
-		let wall_render = new egret.RenderTexture();
-
-		ground_render.drawToTexture(self.cellList);
-		ground_bitmap.texture = ground_render;
-		for (let i = 0; i < self.arrayCellList.length; i++) {
-			let cell: Cell = self.arrayCellList.getItemAt(i);
-			cell.renderState++;
-		}
-		self.arrayCellList.refresh();
-		self.cellList.validateNow();
-		self.cellList.validateDisplayList();
-
-		wall_render.drawToTexture(self.cellList);
-		wall_bitmap.texture = wall_render;
-		for (let i = 0; i < self.arrayCellList.length; i++) {
-			let cell: Cell = self.arrayCellList.getItemAt(i);
-			cell.renderState++;
-		}
-		self.arrayCellList.refresh();
-
-		// self.cellList.validateNow();
-		// self.cellList.validateDisplayList();
 		this.SetCurrentCell();
 	}
 
@@ -76,7 +48,7 @@ class ManageCells {
 	}
 
 	private col: number;
-	private returnCell: CellBgRender = null;
+	private returnCell: WallRender = null;
 	private mapData: {
 		point: number,
 		item: { [id: number]: number },
@@ -112,13 +84,14 @@ class ManageCells {
 			this._currentCell.item = 0;
 			this.arrayCellList.itemUpdated(this._currentCell);
 			this.mapData.itemNum++;
+			GameEvent.dispatchEventWith(GameEvent.GetItem,false,Common.DictionaryToArray(this.mapData.item));
 		}
 	}
 
 	private SetCurrentCell() {
 		let self: ManageCells = this;
 		self._currentCell = self.arrayCellList.getItemAt(self.index);
-		self._currentBgRender = self.cellList.getElementAt(self._index) as CellBgRender;
+		self._currentBgRender = self.cellList.getElementAt(self._index) as WallRender;
 		this.mapData.point++;
 		if (self._currentCell && !self._currentCell.isPassed) {
 			self._currentCell.isPassed = true;
