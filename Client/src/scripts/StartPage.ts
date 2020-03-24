@@ -1,6 +1,7 @@
 class StartPage extends UIBase {
 	public constructor() {
 		super();
+		this.once(egret.Event.REMOVED_FROM_STAGE, this.RemoveListeners, this);
 	}
 
 	protected partAdded(partName: string, instance: any): void {
@@ -19,14 +20,28 @@ class StartPage extends UIBase {
 
 	AddListeners() {
 		this.btn_start.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
-			ScreenMovies.MovieStart(5);
+			// ScreenMovies.MovieStart(5);
+			UIBase.OpenUI(GameUI, true);
 			UIBase.CloseUI(StartPage);
-			UIBase.OpenUI(GameUI);
 		}, this)
 		this.btn_bag.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
 			UIBase.OpenUI(BagUI);
 		}, this)
 		this.btn_setting.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
+			UIBase.OpenUI(Setting);
+		}, this)
+	}
+
+	RemoveListeners() {
+		this.btn_start.removeEventListener(egret.TouchEvent.TOUCH_TAP, () => {
+			// ScreenMovies.MovieStart(5);
+			UIBase.CloseUI(StartPage);
+			UIBase.OpenUI(GameUI);
+		}, this)
+		this.btn_bag.removeEventListener(egret.TouchEvent.TOUCH_TAP, () => {
+			UIBase.OpenUI(BagUI);
+		}, this)
+		this.btn_setting.removeEventListener(egret.TouchEvent.TOUCH_TAP, () => {
 			UIBase.OpenUI(Setting);
 		}, this)
 	}

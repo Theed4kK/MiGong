@@ -1,9 +1,9 @@
 class ManageCells {
-	public constructor(cells: Cell[], cellList: eui.List, group_mapBg: eui.Group) {
+	public constructor(cells: Cell[], cellList: eui.List, view: egret.Rectangle) {
 		this.cells = cells;
 		this.col = cells.length / 15;
 		this.cellList = cellList;
-		this.group_mapBg = group_mapBg;
+		this.view = view;
 		this.InitRenders();
 	}
 
@@ -13,13 +13,15 @@ class ManageCells {
 		return this._index;
 	}
 
+	private view: egret.Rectangle;
+
 	private _currentCell: Cell;
 	/**当前所在格子 */
 	public get currentCell(): Cell {
 		return this._currentCell;
 	};
-	private _currentBgRender: WallRender;
-	public get currentBgRender(): WallRender {
+	private _currentBgRender: CellRender;
+	public get currentBgRender(): CellRender {
 		return this._currentBgRender;
 	};
 
@@ -27,14 +29,13 @@ class ManageCells {
 	private cells: Cell[] = [];
 	private cellList: eui.List;
 	private arrayCellList: eui.ArrayCollection;
-	private group_mapBg: eui.Group;
 
 	/**初始化背景和墙格子 */
 	public InitRenders(): void {
 		let self: ManageCells = this;
 		self.arrayCellList = new eui.ArrayCollection(this.cells);
 		self.cellList.dataProvider = self.arrayCellList;
-		self.cellList.itemRenderer = WallRender;
+		self.cellList.itemRenderer = CellRender;
 		self.cellList.validateNow();
 		self.cellList.validateDisplayList();
 		this.SetCurrentCell();
@@ -48,7 +49,7 @@ class ManageCells {
 	}
 
 	private col: number;
-	private returnCell: WallRender = null;
+	private returnCell: CellRender = null;
 	private mapData: {
 		point: number,
 		item: { [id: number]: number },
@@ -75,23 +76,24 @@ class ManageCells {
 	}
 
 	GetCellItem(role: eui.Group) {
-		if (this._currentCell.item != 0 && this._currentBgRender.ItemTest(role)) {
-			if (this.mapData.item[this._currentCell.item]) {
-				this.mapData.item[this._currentCell.item]++;
+		let self: ManageCells = this;
+		if (self._currentCell.item != 0 && self._currentBgRender.ItemTest(role)) {
+			if (self.mapData.item[self._currentCell.item]) {
+				self.mapData.item[self._currentCell.item]++;
 			} else {
-				this.mapData.item[this._currentCell.item] = 1;
+				self.mapData.item[self._currentCell.item] = 1;
 			}
-			this._currentCell.item = 0;
-			this.arrayCellList.itemUpdated(this._currentCell);
-			this.mapData.itemNum++;
-			GameEvent.dispatchEventWith(GameEvent.GetItem,false,Common.DictionaryToArray(this.mapData.item));
+			self._currentCell.item = 0;
+			self.arrayCellList.itemUpdated(self._currentCell);
+			self.mapData.itemNum++;
+			GameEvent.dispatchEventWith(GameEvent.GetItem, false, Common.DictionaryToArray(self.mapData.item));
 		}
 	}
 
 	private SetCurrentCell() {
 		let self: ManageCells = this;
 		self._currentCell = self.arrayCellList.getItemAt(self.index);
-		self._currentBgRender = self.cellList.getElementAt(self._index) as WallRender;
+		self._currentBgRender = self.cellList.getElementAt(self._index) as CellRender;
 		this.mapData.point++;
 		if (self._currentCell && !self._currentCell.isPassed) {
 			self._currentCell.isPassed = true;
@@ -104,7 +106,7 @@ class ManageCells {
 		if (this.GetUnpassedCells(this.currentCell) > 1 && (this.returnPath.length == 0 || this.returnPath.length > 5)) {
 			this.returnPath = [];
 			if (this.returnCell != null) {
-				this.returnCell.HideReturnSign();
+				// this.returnCell.HideReturnSign();
 			}
 			this.returnCell = this._currentBgRender;
 		}

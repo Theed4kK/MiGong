@@ -9,30 +9,63 @@ class WallRender extends eui.ItemRenderer {
 		this.height = +Config.GetInstance().config_common["cell_height"].value
 	}
 
-	private img_exitSign: eui.Image;
-	private img_item: eui.Image;
-
 	private img_leftWall: eui.Image;
 	private img_rightWall: eui.Image;
 	private img_upWall: eui.Image;
 	private img_downWall: eui.Image;
 
-	private tw_autoReturn: egret.Tween;
-
-	private group_wall: eui.Group;
-
 	protected dataChanged(): void {
 		let self: WallRender = this;
 		let cell: Cell = self.data;
-		self.SetWall();
+		self.img_leftWall.visible = !cell.leftWall.isOpen;
+		self.img_rightWall.visible = !cell.rightWall.isOpen;
+		self.img_upWall.visible = !cell.upWall.isOpen;
+		self.img_downWall.visible = !cell.downWall.isOpen;
+	}
+}
+
+class CellRender extends eui.ItemRenderer {
+	public constructor() {
+		super();
+	}
+
+	protected childrenCreated(): void {
+		super.childrenCreated();
+		this.width = +Config.GetInstance().config_common["cell_width"].value;
+		this.height = +Config.GetInstance().config_common["cell_height"].value;
+		if(!CellRender.wall_width){
+			CellRender.wall_width =+Config.GetInstance().config_common["wall_width"].value;
+		}
+		if(!CellRender.wall_height){
+			CellRender.wall_height =+Config.GetInstance().config_common["wall_height"].value;
+		}
+	}
+
+	private img_bg: eui.Image;
+	private img_item: eui.Image;
+
+	//颜色矩阵数组-置灰
+	static colorMatrix = [
+		0.3, 0.6, 0, 0, 0,
+		0.3, 0.6, 0, 0, 0,
+		0.3, 0.6, 0, 0, 0,
+		0, 0, 0, 1, 0
+	];
+
+	static wall_width:number = null;
+	static wall_height:number = null;
+
+	protected dataChanged(): void {
+		let cell: Cell = this.data;
+		let self: CellRender = this;
 		if (cell.item != 0) {
 			let item = Config.GetInstance().config_item[cell.item];
 			let glow = new egret.GlowFilter(Color[item.quality], 0.5, 10, 10, 10, egret.BitmapFilterQuality.HIGH, false, true);
 			self.img_item.filters = [glow];
 			self.img_item.source = item.pic;
 			self.img_item.visible = true;
-			self.img_item.x = self.x + Common.getRandomInt(self.img_leftWall.width / 2, self.width - self.img_rightWall.width / 2 - self.img_item.width);
-			self.img_item.y = self.y + Common.getRandomInt(self.img_upWall.height / 2, self.height - self.img_downWall.height / 2 - self.img_item.height);
+			self.img_item.x = self.x + Common.getRandomInt(CellRender.wall_width / 2, self.width - CellRender.wall_width / 2 - self.img_item.width);
+			self.img_item.y = self.y + Common.getRandomInt(CellRender.wall_height / 2, self.height - CellRender.wall_height / 2 - self.img_item.height);
 		}
 		else {
 			self.img_item.visible = false;
@@ -53,54 +86,5 @@ class WallRender extends eui.ItemRenderer {
 			return true;
 		}
 		return false;
-	}
-
-	public HideReturnSign(): void {
-		this.img_exitSign.visible = false;
-	}
-
-	public StartAni(): void {
-
-	}
-
-	SetWall() {
-		let cell: Cell = this.data;
-		this.img_leftWall.visible = !cell.leftWall.isOpen;
-		this.img_rightWall.visible = !cell.rightWall.isOpen;
-		this.img_upWall.visible = !cell.upWall.isOpen;
-		this.img_downWall.visible = !cell.downWall.isOpen;
-	}
-}
-
-class CellRender extends eui.ItemRenderer {
-	public constructor() {
-		super();
-	}
-
-	protected childrenCreated(): void {
-		super.childrenCreated();
-		this.width = +Config.GetInstance().config_common["cell_width"].value
-		this.height = +Config.GetInstance().config_common["cell_height"].value
-	}
-
-	private img_bg: eui.Image;
-
-	//颜色矩阵数组-置灰
-	static colorMatrix = [
-		0.3, 0.6, 0, 0, 0,
-		0.3, 0.6, 0, 0, 0,
-		0.3, 0.6, 0, 0, 0,
-		0, 0, 0, 1, 0
-	];
-
-	protected dataChanged(): void {
-		let cell: Cell = this.data;
-		if (cell.isPassed) {
-			this.img_bg.filters = null;
-		}
-		else {
-			var colorFlilter = new egret.ColorMatrixFilter(CellRender.colorMatrix);
-			this.img_bg.filters = [colorFlilter];
-		}
 	}
 }

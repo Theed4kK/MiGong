@@ -3,11 +3,12 @@ enum MOVE_MODE {
 	Gyroscope
 }
 class GameControl {
-	public constructor(role: eui.Group, speed: number, manageCells: ManageCells, group_light?: eui.Group) {
+	public constructor(role: eui.Group, speed: number, manageCells: ManageCells, group_light?: eui.Group, view?: egret.Rectangle) {
 		this.role = role;
 		this.manageCells = manageCells;
 		if (this.lightOpen) {
 			this.group_light = group_light;
+			this.view = view;
 			this.InitLight();
 		}
 		this.speed = speed;
@@ -28,6 +29,7 @@ class GameControl {
 	private role: eui.Group;
 	private group_light: eui.Group;
 
+	private view: egret.Rectangle;
 	private lightOpen = true;
 
 	private orientation: egret.DeviceOrientation;
@@ -41,8 +43,8 @@ class GameControl {
 	/**初始化光照 */
 	private InitLight() {
 		let maskLight = this.maskLight;
-		maskLight.InitLight();
-		maskLight.MoveMask(this.cell_width / 2, this.cell_height / 2, this.manageCells.currentCell, this.manageCells.currentBgRender);
+		maskLight.InitLight(this.view);
+		maskLight.MoveMask(this.cell_width / 2, this.cell_height / 2);
 		this.group_light.addChild(this.maskLight);
 		maskLight.x = 0;
 		maskLight.y = 0;
@@ -50,7 +52,7 @@ class GameControl {
 
 	private RefreshLight() {
 		let role = this.role;
-		this.maskLight.MoveMask(role.x, role.y, this.manageCells.currentCell, this.manageCells.currentBgRender);
+		this.maskLight.MoveMask(role.x, role.y);
 	}
 
 	private onOrientation(e: egret.OrientationEvent) {

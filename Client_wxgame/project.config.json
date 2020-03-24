@@ -3,6 +3,7 @@
 	"setting": {
 		"urlCheck": false,
 		"es6": true,
+		"enhance": false,
 		"postcss": true,
 		"minified": true,
 		"newFeature": true,
@@ -11,6 +12,7 @@
 		"autoAudits": false,
 		"showShadowRootInWxmlPanel": true,
 		"scopeDataCheck": false,
+		"uglifyFileName": true,
 		"checkInvalidKey": true,
 		"checkSiteMap": true,
 		"uploadWithSourceMap": true,
@@ -22,7 +24,7 @@
 		"bundle": false
 	},
 	"compileType": "game",
-	"libVersion": "2.10.0",
+	"libVersion": "2.10.3",
 	"appid": "wx22cd8ca3db58d654",
 	"projectname": "MiGong",
 	"simulatorType": "wechat",

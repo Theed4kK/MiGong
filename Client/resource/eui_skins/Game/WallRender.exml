@@ -12,6 +12,6 @@
 		<e:Image id="img_downWall" bottom="-5" anchorOffsetY="0" fillMode="repeat" anchorOffsetX="0" left="-5" right="-5"
 		         touchEnabled="false" height="10" x="-5" y="195" source="wall1" scaleX="1" scaleY="1" />
 	</e:Group>
-	<e:Image id="img_item" source="" height="40" width="40" x="80" y="80" />
-	<e:Image id="img_exitSign" source="" height="40" width="40" verticalCenter="0" horizontalCenter="0" visible="false" />
+
+
 </e:Skin>

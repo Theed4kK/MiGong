@@ -32,6 +32,60 @@ class Common {
 		}
 		return data;
 	}
+
+	public static DisPlayToBmps(disObj: egret.DisplayObject, maxSize: number = 2048) {
+		let con = new egret.DisplayObjectContainer;
+		let col = disObj.width / maxSize;
+		let row = disObj.height / maxSize;
+		for (let i = 0; i < ~~col; i++) {
+			for (let j = 0; j < ~~row; j++) {
+				let render = new egret.RenderTexture;
+				let x = i * maxSize;
+				let y = j * maxSize;
+				let width = maxSize;
+				let height = maxSize;
+				Common.CreateBmp(con, disObj, x, y, width, height);
+			}
+			let x = i * maxSize;
+			let y = ~~row * maxSize;
+			let width = maxSize;
+			let height = disObj.height - ~~row * maxSize;
+			Common.CreateBmp(con, disObj, x, y, width, height);
+		}
+		for (let i = 0; i < ~~row; i++) {
+			let x = ~~col * maxSize;
+			let y = i * maxSize;
+			let width = disObj.width - ~~col * maxSize;
+			let height = maxSize;
+			Common.CreateBmp(con, disObj, x, y, width, height);
+		}
+		let x = ~~col * maxSize;
+		let y = ~~row * maxSize;
+		let width = disObj.width - ~~col * maxSize;
+		let height = disObj.height - ~~row * maxSize;
+		Common.CreateBmp(con, disObj, x, y, width, height);
+		return con;
+	}
+
+	private static CreateBmp(con: egret.DisplayObjectContainer, disObj: egret.DisplayObject, x, y, width, height) {
+		let render = new egret.RenderTexture;
+		render.drawToTexture(disObj, new egret.Rectangle(x, y, width, height));
+		let bmp = new egret.Bitmap(render);
+		con.addChild(bmp);
+		bmp.x = x;
+		bmp.y = y;
+	}
+
+	public static MapViewRefresh(con: egret.DisplayObjectContainer, view: egret.Rectangle) {
+		for (let i = 0; i < con.numChildren; i++) {
+			let child = con.getChildAt(i);
+			let rect = child.getBounds();
+			rect.x = child.x;
+			rect.y = child.y;
+			child.visible = rect.intersects(view);
+		}
+	}
+
 }
 
 enum Color {

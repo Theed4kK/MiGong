@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "common_json,loading_jpg,game_json,green_fnt,green_png,Bg_png,line_png,btn_setting_png,icon_jpg,levelIcon_json,btn_guide_png,mode01_png,mode_png,switch_btn_green2_png,switch_bg_png,switch_btn_red2_png,btn_change_png,btn_close7_png,hanlin_lv_box_png,line1_png,Bg2_png,Btn_exit_png,btn_continue_png,buffer_png,map_bg_jpg,btn_exit_png,reward_bg_png",
+			"keys": "common_json,loading_jpg,game_json,green_fnt,green_png,Bg_png,line_png,btn_setting_png,icon_jpg,levelIcon_json,btn_guide_png,mode01_png,mode_png,switch_btn_green2_png,switch_bg_png,switch_btn_red2_png,btn_change_png,btn_close7_png,hanlin_lv_box_png,line1_png,Bg2_png,Btn_exit_png,btn_continue_png,buffer_png,map_bg_jpg,btn_exit_png,reward_bg_png,headMask_png,rect_png",
 			"name": "preload"
 		}
 	],
@@ -178,9 +178,20 @@
 			"scale9grid": "36,0,361,0"
 		},
 		{
-			"name": "reward_bg_png",
+			"url": "assets/game/reward_bg.png",
 			"type": "image",
-			"url": "assets/game/reward_bg.png"
+			"name": "reward_bg_png"
+		},
+		{
+			"url": "assets/game/headMask.png",
+			"type": "image",
+			"name": "headMask_png"
+		},
+		{
+			"url": "assets/game/rect.png",
+			"type": "image",
+			"name": "rect_png",
+			"scale9grid": "1,1,8,8"
 		}
 	]
 }

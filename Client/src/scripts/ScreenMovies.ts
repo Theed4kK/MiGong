@@ -13,7 +13,7 @@ class ScreenMovies {
 		taget.addChild(loadTxGrp)
 
 		//循环创建多个截图bitmap 这里num自由设置
-		let tx1Number = 40;
+		let tx1Number = 5;
 
 		//每个横着的数量
 		let Xnumber = 5;

@@ -2,6 +2,7 @@ class GameEvent {
 	static MoveScroll = "MoveScroll";
 	static RefreshCurRender = "RefreshCurRender";
 	static GetItem = "GetItem";
+	static UILoad = "UILoad";
 
 	static eventObj: egret.DisplayObject = new egret.DisplayObject();
 
