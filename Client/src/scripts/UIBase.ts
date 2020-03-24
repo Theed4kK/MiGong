@@ -51,7 +51,7 @@ class UIBase extends eui.Component implements eui.UIComponent {
 
 	private static uiList: { [name: string]: UIBase } = {};
 	private static bmp = new egret.Bitmap();
-	public static OpenUI<T>(creator: { new (...arg): UIBase }, delay: boolean = false, ...arg): UIBase {
+	public static OpenUI<T>(creator: { new (...arg): UIBase }, ...arg): UIBase {
 		let className = creator.prototype.__class__;
 		let ui: UIBase = UIBase.uiList[className];
 		if (!ui || arg.length > 0) {
@@ -60,14 +60,7 @@ class UIBase extends eui.Component implements eui.UIComponent {
 			}
 			ui = new creator(...arg);
 			UIBase.uiList[className] = ui;
-			if (delay) {
-				ui.once(GameEvent.UILoad, () => {
-					UIBase.UILayer.addChild(ui);
-				}, this)
-			}
-			else {
-				UIBase.UILayer.addChild(ui);
-			}
+			UIBase.UILayer.addChild(ui);
 		} else {
 			ui.dispatchEvent(new egret.Event("OnOpen"));
 			ui.visible = true;

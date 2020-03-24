@@ -44,7 +44,7 @@ class GameControl {
 	private InitLight() {
 		let maskLight = this.maskLight;
 		maskLight.InitLight(this.view);
-		maskLight.MoveMask(this.cell_width / 2, this.cell_height / 2);
+		// maskLight.MoveMask(this.cell_width / 2, this.cell_height / 2);
 		this.group_light.addChild(this.maskLight);
 		maskLight.x = 0;
 		maskLight.y = 0;
@@ -106,7 +106,7 @@ class GameControl {
 		let speedX = +(Math.cos(self.direction) * self.speed * type).toFixed();
 		let speedY = +(Math.sin(self.direction) * self.speed * type).toFixed();
 		let cell: Cell = self.manageCells.currentCell;
-		let obj: egret.DisplayObject = self.manageCells.currentBgRender;
+		let obj: egret.DisplayObject = self.manageCells.currentCellRender;
 		let moveX: number = 0;
 		let moveY: number = 0;
 		let role = self.role;
@@ -142,7 +142,7 @@ class GameControl {
 	private IsEdge(type: number): boolean {
 		let isEdge: boolean = true;
 		let role: eui.Group = this.role;
-		let obj: egret.DisplayObject = this.manageCells.currentBgRender;
+		let obj: egret.DisplayObject = this.manageCells.currentCellRender;
 		switch (type) {
 			case 0:
 				isEdge = (Math.abs(role.y - obj.y)) < ((role.height / 2) + this.wall_height * 0.5);

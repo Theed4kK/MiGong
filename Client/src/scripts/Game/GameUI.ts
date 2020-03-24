@@ -2,7 +2,6 @@ class GameUI extends UIBase {
 	public constructor() {
 		super();
 		this.once(egret.Event.REMOVED_FROM_STAGE, this.RemoveListeners, this);
-
 	}
 
 	public manageCells: ManageCells;
@@ -34,8 +33,8 @@ class GameUI extends UIBase {
 	private stepNum: number = 0;
 	private virt: VirtualRocker;
 	private view: egret.Rectangle = new egret.Rectangle(0, 0, 30, 30);
-	private con_wall: egret.DisplayObjectContainer;
-	private con_cell: egret.DisplayObjectContainer;
+	private display_wall: { con: egret.DisplayObjectContainer, bmps: egret.Bitmap[] };
+	private display_cell: { con: egret.DisplayObjectContainer, bmps: egret.Bitmap[] };
 
 
 	protected childrenCreated(): void {
@@ -46,60 +45,70 @@ class GameUI extends UIBase {
 			self.addChild(self.virt);
 			self.virt.visible = false;
 		}
-		
-		self.GenMiGong().then(() => {
-			console.log("地图生成完成")
-			PlayerDataManage.GetInstance().Getdata().then(res => {
-				self.txt_mapName.text = Config.GetInstance().config_map[res.level].name;
-			})
-			self.mapSizeW = self.list_cell.contentWidth;
-			self.mapSizeH = self.list_cell.contentHeight;
-			self.img_Bg.touchEnabled = Setting.GetConfig().moveMode == MOVE_MODE.Rocker;
-			self.gameControl = new GameControl(self.group_role, 10, self.manageCells, self.group_light, self.view);
-			self.AddListener();
-			self.dispatchEvent(new egret.Event(GameEvent.UILoad));
-		});
+		self.scroller_map.parent.$hitTest = () => null;
+		PlayerDataManage.GetInstance().Getdata().then(res => {
+			self.txt_mapName.text = Config.GetInstance().config_map[res.level].name;
+		})
+		self.AddListener();
+		self.GenMiGong();
 	}
 
+	private arrlist: eui.ArrayCollection;
 	/**生成迷宫 */
 	private async GenMiGong() {
-		let row: number = 15;
 		let self: GameUI = this;
-		self.txt_stepNum.text = "已探索：0";
 		let cells = await GenCells.GetCells();
-		self.list_wall.dataProvider = new eui.ArrayCollection(cells);
-		self.list_wall.itemRenderer = WallRender;
-		self.list_wall.validateNow();
-		self.list_wall.validateDisplayList();
-		self.con_wall = Common.DisPlayToBmps(self.list_wall);
-		self.group_map.addChildAt(self.con_wall, 0);
-		self.list_wall.visible = false;
-		self.manageCells = new ManageCells(cells, self.list_cell, self.view);
-		self.CreateMapBg();
-		self.scroller_map.once(egret.Event.RENDER, () => {
-			self.scroller_map.getLayoutBounds(self.view);
-			self.RefreshMapView();
-		}, self)
+		self.arrlist = new eui.ArrayCollection(cells);
+		self.addEventListener(egret.Event.ENTER_FRAME, self.CreateMapBg, self);
 		if (DBManage.GetInstance().userInfo.avatarUrl) {
 			RES.getResByUrl(DBManage.GetInstance().userInfo.avatarUrl, self.SetMaskAndFrame, this, RES.ResourceItem.TYPE_IMAGE)
 		}
 		else {
 			self.SetMaskAndFrame();
 		}
-		self.PlayStartAni();
 	}
 
+	private frameTime = 0;
 	/** */
 	private CreateMapBg() {
 		let self: GameUI = this;
-		self.bmp_cell = new egret.Bitmap;
-		self.bmp_cell.texture = RES.getRes("cell_bg_01");
-		self.bmp_cell.fillMode = egret.BitmapFillMode.REPEAT;
-		self.bmp_cell.width = self.list_cell.contentWidth;
-		self.bmp_cell.height = self.list_cell.contentHeight;
-		self.con_cell = Common.DisPlayToBmps(self.bmp_cell);
-		self.group_map.addChildAt(self.con_cell, 0);
-		self.scroller_map.parent.$hitTest = () => null;
+		switch (self.frameTime) {
+			case 0:
+				self.scroller_map.getLayoutBounds(self.view);
+				self.list_wall.dataProvider = self.arrlist;
+				self.list_wall.itemRenderer = WallRender;
+				self.list_wall.validateNow();
+				self.list_wall.validateDisplayList();
+				self.display_wall = Common.DisPlayToBmps(self.list_wall);
+				self.group_map.addChildAt(self.display_wall.con, 0);
+				self.list_wall.parent.removeChild(self.list_wall);
+				Common.MapViewRefresh(self.display_wall, self.view);
+				break;
+			case 5:
+				self.list_cell.dataProvider = self.arrlist;
+				self.list_cell.itemRenderer = CellRender;
+				self.list_cell.validateNow();
+				self.list_cell.validateDisplayList();
+				self.bmp_cell = new egret.Bitmap;
+				self.bmp_cell.texture = RES.getRes("cell_bg_01");
+				self.bmp_cell.fillMode = egret.BitmapFillMode.REPEAT;
+				self.bmp_cell.width = self.list_cell.measuredWidth;
+				self.bmp_cell.height = self.list_cell.measuredHeight;
+				self.display_cell = Common.DisPlayToBmps(self.bmp_cell);
+				self.group_map.addChildAt(self.display_cell.con, 0);
+				self.mapSizeW = self.list_cell.measuredWidth;
+				self.mapSizeH = self.list_cell.measuredHeight;
+				Common.MapViewRefresh(self.display_cell, self.view);
+				break;
+			case 20:
+				self.manageCells = new ManageCells(self.arrlist, self.list_cell);
+				self.gameControl = new GameControl(self.group_role, 10, self.manageCells, self.group_light, self.view);
+				self.PlayStartAni();
+				self.img_Bg.touchEnabled = Setting.GetConfig().moveMode == MOVE_MODE.Rocker;
+				self.removeEventListener(egret.Event.ENTER_FRAME, self.CreateMapBg, self);
+				break;
+		}
+		self.frameTime++;
 	}
 
 	private AddListener(): void {
@@ -124,7 +133,7 @@ class GameUI extends UIBase {
 	}
 
 	private ExitMap() {
-		let exitTips = UIBase.OpenUI(ExitTips, false, this.txt_stepNum.text, this.txt_stepNum.text);
+		let exitTips = UIBase.OpenUI(ExitTips, this.txt_stepNum.text, this.txt_stepNum.text);
 		exitTips.once("ExitMap", () => {
 			this.manageCells.ExitMap();
 			UIBase.CloseUI(GameUI, true);
@@ -155,12 +164,8 @@ class GameUI extends UIBase {
 		scroll.viewport.scrollV += (isUp * moveY);
 		this.view.x = scroll.viewport.scrollH;
 		this.view.y = scroll.viewport.scrollV;
-		this.RefreshMapView();
-	}
-
-	private RefreshMapView() {
-		Common.MapViewRefresh(this.con_cell, this.view);
-		Common.MapViewRefresh(this.con_wall, this.view);
+		Common.MapViewRefresh(this.display_cell, this.view);
+		Common.MapViewRefresh(this.display_wall, this.view);
 	}
 
 	private UpdateItem(e: egret.Event): void {
@@ -213,8 +218,8 @@ class GameUI extends UIBase {
 
 	/**播放开始动画 */
 	private PlayStartAni(): void {
-		let obj: CellRender = this.manageCells.currentBgRender;
-		this.group_role.x = obj.x;
+		let obj: CellRender = this.manageCells.currentCellRender;
+			this.group_role.x = obj.x;
 		this.group_role.y = obj.y + (obj.height / 2);
 		egret.Tween.get(this.scroller_map.viewport).to({ scrollH: 0 }, this.scroller_map.viewport.scrollH / 0.5);
 		egret.Tween.get(this.group_role).wait(this.scroller_map.viewport.scrollH / 0.5).to({ x: obj.x + (obj.width / 2) }, 1000).call(() => {

@@ -13,7 +13,7 @@
 			</e:Skin>
 		</e:skinName>
 	</e:Button>
-	<e:Button id="btn_bag" label="物品" anchorOffsetX="0" width="160.61" anchorOffsetY="0" height="71.21" bottom="428" right="31"/>
+	<e:Button id="btn_bag" label="物品" anchorOffsetX="0" width="160.61" anchorOffsetY="0" height="71.21" right="31" verticalCenter="251"/>
 
 	<e:Button id="btn_setting" label="" bottom="4" right="8">
 		<e:skinName>
@@ -23,7 +23,7 @@
 			</e:Skin>
 		</e:skinName>
 	</e:Button>
-	<e:Group width="458" height="104" anchorOffsetY="0" anchorOffsetX="0" left="52" bottom="415">
+	<e:Group width="458" height="104" anchorOffsetY="0" anchorOffsetX="0" left="52" verticalCenter="251">
 		<e:Image id="img_role" width="80" height="80" scaleX="1" scaleY="1" verticalCenter="0" left="20" source="icon_jpg"/>
 		<e:Image id="img_levelIcon" width="15" height="15" scaleX="1" scaleY="1" left="124" bottom="24" source="001"/>
 		<e:Label id="txt_roleName" text="角色名字默认微信昵称" stroke="0.5" strokeColor="0xd8790a" scaleX="1" scaleY="1" left="118" top="17" size="26" fontFamily="SimHei"/>

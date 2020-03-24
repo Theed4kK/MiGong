@@ -1,10 +1,9 @@
 class ManageCells {
-	public constructor(cells: Cell[], cellList: eui.List, view: egret.Rectangle) {
-		this.cells = cells;
-		this.col = cells.length / 15;
+	public constructor(arrList: eui.ArrayCollection, cellList: eui.List) {
+		this.arrayCellList = arrList;
+		this.col = arrList.length / 15;
 		this.cellList = cellList;
-		this.view = view;
-		this.InitRenders();
+		this.SetCurrentCell();
 	}
 
 	private _index: number = 0;
@@ -13,33 +12,19 @@ class ManageCells {
 		return this._index;
 	}
 
-	private view: egret.Rectangle;
-
 	private _currentCell: Cell;
 	/**当前所在格子 */
 	public get currentCell(): Cell {
 		return this._currentCell;
 	};
-	private _currentBgRender: CellRender;
-	public get currentBgRender(): CellRender {
-		return this._currentBgRender;
+	private _currentCellRender: CellRender;
+	public get currentCellRender(): CellRender {
+		return this._currentCellRender;
 	};
 
 	public returnPath: number[] = [];
-	private cells: Cell[] = [];
 	private cellList: eui.List;
 	private arrayCellList: eui.ArrayCollection;
-
-	/**初始化背景和墙格子 */
-	public InitRenders(): void {
-		let self: ManageCells = this;
-		self.arrayCellList = new eui.ArrayCollection(this.cells);
-		self.cellList.dataProvider = self.arrayCellList;
-		self.cellList.itemRenderer = CellRender;
-		self.cellList.validateNow();
-		self.cellList.validateDisplayList();
-		this.SetCurrentCell();
-	}
 
 	ExitMap() {
 		if (this.mapData.itemNum > 0) {
@@ -77,7 +62,7 @@ class ManageCells {
 
 	GetCellItem(role: eui.Group) {
 		let self: ManageCells = this;
-		if (self._currentCell.item != 0 && self._currentBgRender.ItemTest(role)) {
+		if (self._currentCell.item != 0 && self._currentCellRender.ItemTest(role)) {
 			if (self.mapData.item[self._currentCell.item]) {
 				self.mapData.item[self._currentCell.item]++;
 			} else {
@@ -93,7 +78,7 @@ class ManageCells {
 	private SetCurrentCell() {
 		let self: ManageCells = this;
 		self._currentCell = self.arrayCellList.getItemAt(self.index);
-		self._currentBgRender = self.cellList.getElementAt(self._index) as CellRender;
+		self._currentCellRender = self.cellList.getElementAt(self._index) as CellRender;
 		this.mapData.point++;
 		if (self._currentCell && !self._currentCell.isPassed) {
 			self._currentCell.isPassed = true;
@@ -108,7 +93,7 @@ class ManageCells {
 			if (this.returnCell != null) {
 				// this.returnCell.HideReturnSign();
 			}
-			this.returnCell = this._currentBgRender;
+			this.returnCell = this._currentCellRender;
 		}
 		if (this.returnCell != null) {
 			if (this.returnPath.indexOf(this.index) == -1) {

@@ -4,7 +4,7 @@ class LightMask extends egret.DisplayObjectContainer {
 	private mask_bitMap: egret.Bitmap = new egret.Bitmap();
 	private mask_bitMap_tmp: egret.Bitmap = new egret.Bitmap();
 	private mask_con: egret.DisplayObjectContainer = new egret.DisplayObjectContainer();
-	private con: egret.DisplayObjectContainer = new egret.DisplayObjectContainer();
+	private display: { con: egret.DisplayObjectContainer, bmps: egret.Bitmap[] };
 	private sprite: egret.Sprite = new egret.Sprite;
 
 	private radius: number;
@@ -26,10 +26,10 @@ class LightMask extends egret.DisplayObjectContainer {
 		self.sprite.addChild(self.cirleLight_shape);
 	}
 
-	private view:egret.Rectangle;
+	private view: egret.Rectangle;
 	maxSize = 2048;
 	//设置背景框的大小
-	public async InitLight(view:egret.Rectangle) {
+	public async InitLight(view: egret.Rectangle) {
 		let self: LightMask = this;
 		self.view = view;
 		let playerData = await PlayerDataManage.GetInstance().Getdata();
@@ -37,13 +37,12 @@ class LightMask extends egret.DisplayObjectContainer {
 		let maskW = map.size * self.cell_width - self.wall_width;
 		let maskH = 15 * self.cell_height - self.wall_height;
 		let sprite = self.sprite;
-
+		self.radius = self.cell_width - self.wall_width * 2;
 		//绘制遮罩形状
 		sprite.graphics.clear();
 		sprite.graphics.beginFill(0x000000, 1);
 		sprite.graphics.drawRect(self.wall_width, self.wall_height, maskW, maskH);
 		sprite.graphics.endFill();
-		self.radius = self.cell_width - self.wall_width * 2;
 		let c_m = new egret.Matrix();
 		c_m.createGradientBox(self.radius * 2, self.radius * 2, 0, -self.radius, -self.radius);
 		let colorGroup = [0, 255];
@@ -57,14 +56,15 @@ class LightMask extends egret.DisplayObjectContainer {
 		self.mask_shape.graphics.endFill();
 
 		//遮罩分割添加到显示列表
-		self.con = Common.DisPlayToBmps(self.sprite);
-		self.addChild(self.con);
+		self.display = Common.DisPlayToBmps(self.sprite);
+		self.addChild(self.display.con);
+		Common.MapViewRefresh(self.display, self.cirleLight_shape.getBounds());
 	}
 
 	// private passedPos: { [x: number]: { [y: number]: boolean } } = {};
 	private render: egret.RenderTexture = new egret.RenderTexture();
 	private render1: egret.RenderTexture = new egret.RenderTexture();
-	设置光圈的位置
+	//设置光圈的位置
 	public MoveMask(posx: number, posy: number) {
 		let self: LightMask = this;
 		self.cirleLight_shape.x = posx;
@@ -83,23 +83,18 @@ class LightMask extends egret.DisplayObjectContainer {
 			self.mask_bitMap_tmp.texture = self.render;
 		}
 
-		//判断坐标与哪些遮罩图相交
-		for (let i = 0; i < self.con.numChildren; i++) {
-			let child = self.con.getChildAt(i) as egret.Bitmap;
-			let rect1 = new egret.Rectangle(posx - self.radius, posy - self.radius, self.radius * 2, self.radius * 2);
-			let rect2 = child.getBounds();
-			rect2.x=child.x;
-			rect2.y=child.y;
-			if(rect1.intersects(rect2)){
-				self.RefreshBmp(child);
+		//判断光照与哪些遮罩图相交
+		let rect = new egret.Rectangle(posx - self.radius, posy - self.radius, self.radius * 2, self.radius * 2);
+		self.display.bmps.forEach(bmp => {
+			let rect2 = bmp.getBounds();
+			rect2.x = bmp.x;
+			rect2.y = bmp.y;
+			if (rect2.intersects(rect)) {
+				let render = bmp.texture as egret.RenderTexture;
+				render.drawToTexture(self.sprite, rect2);
 			}
-			child.visible = rect2.intersects(self.view)
-		}
-	}
-
-	private RefreshBmp(bmp: egret.Bitmap) {
-		let texture = bmp.texture as egret.RenderTexture;
-		texture.drawToTexture(this.sprite, new egret.Rectangle(bmp.x, bmp.y, bmp.width, bmp.height));
+		})
+		Common.MapViewRefresh(self.display, self.view);
 	}
 
 	// public MoveMask(posx: number, posy: number, cell: Cell, cellRender: CellBgRender) {

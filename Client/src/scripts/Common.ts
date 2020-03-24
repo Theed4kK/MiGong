@@ -37,53 +37,69 @@ class Common {
 		let con = new egret.DisplayObjectContainer;
 		let col = disObj.width / maxSize;
 		let row = disObj.height / maxSize;
+		let bmps: egret.Bitmap[] = [];
 		for (let i = 0; i < ~~col; i++) {
 			for (let j = 0; j < ~~row; j++) {
-				let render = new egret.RenderTexture;
-				let x = i * maxSize;
-				let y = j * maxSize;
-				let width = maxSize;
-				let height = maxSize;
-				Common.CreateBmp(con, disObj, x, y, width, height);
+				let rect = new egret.Rectangle(
+					i * maxSize,
+					j * maxSize,
+					maxSize,
+					maxSize
+				)
+				let bmp = Common.CreateBmp(con, disObj, rect);
+				bmps.push(bmp);
 			}
-			let x = i * maxSize;
-			let y = ~~row * maxSize;
-			let width = maxSize;
-			let height = disObj.height - ~~row * maxSize;
-			Common.CreateBmp(con, disObj, x, y, width, height);
+			let rect = new egret.Rectangle(
+				i * maxSize,
+				~~row * maxSize,
+				maxSize,
+				disObj.height - ~~row * maxSize
+			)
+			let bmp = Common.CreateBmp(con, disObj, rect);
+			bmps.push(bmp);
 		}
 		for (let i = 0; i < ~~row; i++) {
-			let x = ~~col * maxSize;
-			let y = i * maxSize;
-			let width = disObj.width - ~~col * maxSize;
-			let height = maxSize;
-			Common.CreateBmp(con, disObj, x, y, width, height);
+			let rect = new egret.Rectangle(
+				~~col * maxSize,
+				i * maxSize,
+				disObj.width - ~~col * maxSize,
+				maxSize
+			)
+			let bmp = Common.CreateBmp(con, disObj, rect);
+			bmps.push(bmp);
 		}
-		let x = ~~col * maxSize;
-		let y = ~~row * maxSize;
-		let width = disObj.width - ~~col * maxSize;
-		let height = disObj.height - ~~row * maxSize;
-		Common.CreateBmp(con, disObj, x, y, width, height);
-		return con;
+		let rect = new egret.Rectangle(
+			~~col * maxSize,
+			~~row * maxSize,
+			disObj.width - ~~col * maxSize,
+			disObj.height - ~~row * maxSize
+		)
+		let bmp = Common.CreateBmp(con, disObj, rect);
+		bmps.push(bmp);
+		return { con: con, bmps: bmps };
 	}
 
-	private static CreateBmp(con: egret.DisplayObjectContainer, disObj: egret.DisplayObject, x, y, width, height) {
+	private static CreateBmp(con: egret.DisplayObjectContainer, disObj: egret.DisplayObject, rect: egret.Rectangle) {
 		let render = new egret.RenderTexture;
-		render.drawToTexture(disObj, new egret.Rectangle(x, y, width, height));
+		render.drawToTexture(disObj, rect);
 		let bmp = new egret.Bitmap(render);
-		con.addChild(bmp);
-		bmp.x = x;
-		bmp.y = y;
+		bmp.x = rect.x;
+		bmp.y = rect.y;
+		return bmp;
 	}
 
-	public static MapViewRefresh(con: egret.DisplayObjectContainer, view: egret.Rectangle) {
-		for (let i = 0; i < con.numChildren; i++) {
-			let child = con.getChildAt(i);
-			let rect = child.getBounds();
-			rect.x = child.x;
-			rect.y = child.y;
-			child.visible = rect.intersects(view);
-		}
+	public static MapViewRefresh(display: { con: egret.DisplayObjectContainer, bmps: egret.Bitmap[] }, view: egret.Rectangle) {
+		display.bmps.forEach(bmp => {
+			let rect = bmp.getBounds();
+			rect.x = bmp.x;
+			rect.y = bmp.y;
+			if (rect.intersects(view) && !display.con.contains(bmp)) {
+				display.con.addChild(bmp);
+			}
+			else if (!rect.intersects(view) && display.con.contains(bmp)) {
+				display.con.removeChild(bmp);
+			}
+		})
 	}
 
 }
