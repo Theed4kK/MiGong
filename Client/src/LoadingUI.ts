@@ -27,9 +27,13 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-class LoadingUI extends eui.Component implements RES.PromiseTaskReporter {
+class LoadingUI extends UIBase implements RES.PromiseTaskReporter {
     public constructor() {
         super();
+    }
+    
+    protected childrenCreated(): void {
+        super.childrenCreated();
     }
 
     private progressBar: eui.ProgressBar;

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin class="skins.ProgressBarSkin" minWidth="30" minHeight="18" xmlns:e="http://ns.egret.com/eui">
+<e:Skin class="skins.ProgressBarSkin" minWidth="30" minHeight="18" xmlns:e="http://ns.egret.com/eui" width="500">
 	<e:Image scale9Grid="1,1,4,4" width="100%"
-			 height="100%" verticalCenter="0" source="track_sb"/>
-	<e:Image id="thumb" height="100%" width="100%" source="thumb"/>
+			 height="100%" verticalCenter="0" source="bg_png"/>
+	<e:Image id="thumb" height="100%" width="100%" source="green2_png"/>
 	<e:Label id="labelDisplay" textAlign="center" verticalAlign="middle"
-			 size="15" fontFamily="Tahoma" textColor="0x707070"
-			 horizontalCenter="0" verticalCenter="0"/>
+			 size="24" fontFamily="Times"
+			 horizontalCenter="0" verticalCenter="0" text="1/3" textColor="0xffffff" stroke="0.3"/>
 </e:Skin>

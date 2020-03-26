@@ -33,7 +33,7 @@ class Common {
 		return data;
 	}
 
-	public static DisPlayToBmps(disObj: egret.DisplayObject, maxSize: number = 2048) {
+	public static DisPlayToBmps(disObj: egret.DisplayObject, maxSize: number = 1500) {
 		let con = new egret.DisplayObjectContainer;
 		let col = disObj.width / maxSize;
 		let row = disObj.height / maxSize;

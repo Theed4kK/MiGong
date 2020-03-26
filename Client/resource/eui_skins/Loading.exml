@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin class="Loading" width="750" height="1624" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
-	<e:Image left="0" right="0" top="0" bottom="0" source="loading_jpg"/>
+<e:Skin class="Loading" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+	<e:Image source="loading_jpg" height="1624" verticalCenter="0" width="750" horizontalCenter="0"/>
 
-	<e:ProgressBar id="progressBar" width="478" height="20" anchorOffsetX="0" x="136" y="802"/>
+	<e:ProgressBar id="progressBar" height="20" anchorOffsetX="0" bottom="261" value="50" right="0" left="0"/>
+	<e:Label text="加载中..." bottom="219" horizontalCenter="0" verticalAlign="top" textAlign="center"/>
 </e:Skin>

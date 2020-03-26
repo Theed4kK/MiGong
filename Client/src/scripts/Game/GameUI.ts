@@ -37,9 +37,11 @@ class GameUI extends UIBase {
 	private display_cell: { con: egret.DisplayObjectContainer, bmps: egret.Bitmap[] };
 
 
+	private loading = new LoadingUI;
 	protected childrenCreated(): void {
 		super.childrenCreated();
 		let self: GameUI = this;
+		self.addChild(self.loading);
 		if (Setting.GetConfig().moveMode == MOVE_MODE.Rocker) {
 			self.virt = new VirtualRocker();
 			self.addChild(self.virt);
@@ -74,6 +76,8 @@ class GameUI extends UIBase {
 		let self: GameUI = this;
 		switch (self.frameTime) {
 			case 0:
+				self.loading.onProgress(1, 3);
+				self.frameTime = 1000;
 				self.scroller_map.getLayoutBounds(self.view);
 				self.list_wall.dataProvider = self.arrlist;
 				self.list_wall.itemRenderer = WallRender;
@@ -81,10 +85,14 @@ class GameUI extends UIBase {
 				self.list_wall.validateDisplayList();
 				self.display_wall = Common.DisPlayToBmps(self.list_wall);
 				self.group_map.addChildAt(self.display_wall.con, 0);
+
 				self.list_wall.parent.removeChild(self.list_wall);
 				Common.MapViewRefresh(self.display_wall, self.view);
+				self.frameTime = 1;
 				break;
-			case 5:
+			case 1:
+				self.loading.onProgress(2, 3);
+				self.frameTime = 1000;
 				self.list_cell.dataProvider = self.arrlist;
 				self.list_cell.itemRenderer = CellRender;
 				self.list_cell.validateNow();
@@ -92,23 +100,25 @@ class GameUI extends UIBase {
 				self.bmp_cell = new egret.Bitmap;
 				self.bmp_cell.texture = RES.getRes("cell_bg_01");
 				self.bmp_cell.fillMode = egret.BitmapFillMode.REPEAT;
-				self.bmp_cell.width = self.list_cell.measuredWidth;
-				self.bmp_cell.height = self.list_cell.measuredHeight;
+				self.bmp_cell.width = self.list_cell.width;
+				self.bmp_cell.height = self.list_cell.height;
 				self.display_cell = Common.DisPlayToBmps(self.bmp_cell);
 				self.group_map.addChildAt(self.display_cell.con, 0);
-				self.mapSizeW = self.list_cell.measuredWidth;
-				self.mapSizeH = self.list_cell.measuredHeight;
+				self.mapSizeW = self.list_cell.width;
+				self.mapSizeH = self.list_cell.height;
 				Common.MapViewRefresh(self.display_cell, self.view);
+				self.frameTime = 2;
 				break;
-			case 20:
+			case 2:
+				self.loading.onProgress(3, 3);
+				self.frameTime = 1000;
 				self.manageCells = new ManageCells(self.arrlist, self.list_cell);
 				self.gameControl = new GameControl(self.group_role, 10, self.manageCells, self.group_light, self.view);
+				self.removeChild(self.loading);
 				self.PlayStartAni();
-				self.img_Bg.touchEnabled = Setting.GetConfig().moveMode == MOVE_MODE.Rocker;
 				self.removeEventListener(egret.Event.ENTER_FRAME, self.CreateMapBg, self);
 				break;
 		}
-		self.frameTime++;
 	}
 
 	private AddListener(): void {
@@ -184,13 +194,13 @@ class GameUI extends UIBase {
 
 	private CancelTouch() {
 		this.gameControl.direction = null;
-		this.gameControl.RoleMoveState(1);	//停止移动
+		this.gameControl.RoleMoveState(2);	//停止移动
 		this.virt.visible = false;
 	}
 
 	private BeginTouch(e: egret.TouchEvent): void {
 		this.virt.start(e.localX, e.localY);
-		this.gameControl.RoleMoveState(0);	//开始移动
+		this.gameControl.RoleMoveState(1);	//开始移动
 	}
 
 	private SetMaskAndFrame(res?) {
@@ -218,12 +228,12 @@ class GameUI extends UIBase {
 
 	/**播放开始动画 */
 	private PlayStartAni(): void {
-		let obj: CellRender = this.manageCells.currentCellRender;
-			this.group_role.x = obj.x;
-		this.group_role.y = obj.y + (obj.height / 2);
-		egret.Tween.get(this.scroller_map.viewport).to({ scrollH: 0 }, this.scroller_map.viewport.scrollH / 0.5);
-		egret.Tween.get(this.group_role).wait(this.scroller_map.viewport.scrollH / 0.5).to({ x: obj.x + (obj.width / 2) }, 1000).call(() => {
-			this.img_Bg.touchEnabled = true;
+		let self: GameUI = this;
+		let obj: CellRender = self.manageCells.currentCellRender;
+		// self.group_role.x = obj.x;
+		// self.group_role.y = obj.y + (obj.height / 2);
+		self.gameControl.RoleMoveState(3, [0], () => {
+			self.img_Bg.touchEnabled = Setting.GetConfig().moveMode == MOVE_MODE.Rocker;
 		});
 	}
 }

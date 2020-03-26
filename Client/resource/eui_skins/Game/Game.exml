@@ -7,7 +7,7 @@
 	<e:Image id="btn_return" x="482" y="1019" anchorOffsetX="0" anchorOffsetY="0" source="" width="104" height="50"
 	         visible="false" />
 	<e:Image touchEnabled="false" scaleX="1" scaleY="1" fillMode="scale" anchorOffsetX="0" top="0" source="title_bg" left="0" right="0"/>
-	<e:Label id="txt_mapName" text="地图名字" scaleX="1" scaleY="1" fontFamily="KaiTi" size="30" touchEnabled="false" left="20" verticalAlign="middle" textAlign="left" height="57" right="0" top="0" anchorOffsetX="0" textColor="0xc6c605" stroke="0.5" strokeColor="0x4c3d03"/>
+	<e:Label id="txt_mapName" text="地图名字" scaleX="1" scaleY="1" fontFamily="KaiTi" size="36" touchEnabled="false" left="31" verticalAlign="middle" textAlign="left" height="57" right="0" top="0" anchorOffsetX="0" textColor="0xc6c605" stroke="0.5" strokeColor="0x4c3d03" bold="true"/>
 	<e:Group touchThrough="false" touchEnabled="false" touchChildren="false" top="57" left="0" right="0" anchorOffsetY="0"
 	         bottom="215">
 

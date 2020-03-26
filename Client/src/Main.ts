@@ -73,10 +73,18 @@ class Main extends eui.UILayer {
                 console.log("使用本地资源");
             }
             await this.loadTheme();
+            //初始化UI显示容器
+            let uiLayer = new eui.UILayer();
+            UIBase.UILayer = uiLayer;
+            this.stage.addChild(uiLayer);
+            //加载loading页面
             const loadingView = new LoadingUI();
             this.stage.addChild(loadingView);
+            //加载预加载资源
             await RES.loadGroup("preload", 0, loadingView);
-            await Config.GetInstance().InitCofing();//解析配置文件
+            //解析配置文件
+            await Config.GetInstance().InitCofing();
+            //移除loading页面
             this.stage.removeChild(loadingView);
         }
         catch (e) {
@@ -101,10 +109,6 @@ class Main extends eui.UILayer {
      * Create scene interface
      */
     protected createGameScene(): void {
-        // this.stage.addChild(new StartPage());
-        let uiLayer = new eui.UILayer();
-        UIBase.UILayer = uiLayer;
-        this.stage.addChild(uiLayer);
         UIBase.OpenUI(StartPage);
     }
 

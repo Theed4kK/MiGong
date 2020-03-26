@@ -61,61 +61,102 @@ class GameControl {
 		}
 	}
 
-	public RoleMoveState(state: number, start: number = 0, target: number = 0): void {
+	/**state：为1时开始手动移动  为2时停止手动移动  为3时开始自动移动,需传入路径数组,可选参数callback  为4时停止自动移动 */
+	public RoleMoveState(state: number, paths?: number[], call?: Function): void {
 		switch (state) {
 			//操作移动
-			case 0:
-				this.role.addEventListener(egret.Event.ENTER_FRAME, this.PlayerMove, this);
+			case 1:
+				if (this.autoMoveState) { return; }
+				this.role.addEventListener(egret.Event.ENTER_FRAME, this.RoleMove, this);
 				break;
 			//停止操作移动
-			case 1:
-				this.role.removeEventListener(egret.Event.ENTER_FRAME, this.PlayerMove, this);
-				break;
 			case 2:
-				this.role.addEventListener(egret.Event.ENTER_FRAME, this.RoleAutoMove, this);
+				this.role.removeEventListener(egret.Event.ENTER_FRAME, this.RoleMove, this);
 				break;
+			//开始自动移动
 			case 3:
-				this.RoleAutoMove();
+				if (this.autoMoveState) { return; }
+				this.role.addEventListener(egret.Event.ENTER_FRAME, this.RoleAutoMove, this);
+				this.paths = paths;
+				this.autoMoveState = true;
+				this.call = call;
+				break;
+			//停止自动移动
+			case 4:
+				this.role.removeEventListener(egret.Event.ENTER_FRAME, this.RoleAutoMove, this);
+				this.autoMoveState = false;
 				break;
 		}
 	}
 
+	private paths: number[];
+	private autoMoveState: boolean = false;
+	private call: Function;
 	private RoleAutoMove(): void {
-		let path: number[] = this.manageCells.returnPath;
-
-		if (path.length == 0) { return; }
-		let index: number;
-		if (path.length > 1) {
-			index = path[path.length - 2] + 0.5;
-		} else {
-			index = path[0] + 0.5;
-		}
-		this.direction = Math.atan2(index * this.cell_height - this.role.y, index * this.cell_width - this.role.x);
-		this.RoleMove(2);
-	}
-
-	private PlayerMove(): void {
-		this.RoleMove(1);
-	}
-
-	/**角色移动,type:1为手动引动  2为自动移动 */
-	private RoleMove(type: number = 1): void {
 		let self: GameControl = this;
+		let paths = self.paths;
+		let moveX = 0, moveY = 0;
+		if (paths.length == 0) {
+			if (self.call) { self.call(); }
+			self.RoleMoveState(4);
+		}
+		else {
+			if (paths.length == 1) {
+				let obj = self.manageCells.currentCellRender;
+				if (obj.y + self.cell_height / 2 == self.role.y && obj.x + self.cell_width / 2 == self.role.x) {
+					paths.splice(-1, 1);
+				}
+				else {
+					let angle: number = Math.atan2(obj.y + self.cell_height / 2 - self.role.y, obj.x + self.cell_width / 2 - self.role.x);
+					let speedX = +(Math.cos(angle) * self.speed).toFixed();
+					let speedY = +(Math.sin(angle) * self.speed).toFixed();
+					moveX = speedX > 0 ? Math.min(speedX, obj.x + self.cell_width / 2 - self.role.x) : Math.max(speedX, obj.x + self.cell_width / 2 - self.role.x);
+					moveY = speedY > 0 ? Math.min(speedY, obj.y + self.cell_width / 2 - self.role.y) : Math.max(speedY, obj.y + self.cell_width / 2 - self.role.y);
+				}
+			}
+			else if (paths.length > 1) {
+				let isVertical = Math.abs(paths[paths.length - 2] - paths[paths.length - 1]) != 1;
+				let obj = self.manageCells.currentCellRender;
+				if (isVertical) {
+					let symbol = obj.x + self.cell_width / 2 > self.role.x ? 1 : -1;
+					moveX = Math.min(Math.abs(obj.x + self.cell_width / 2 - self.role.x), self.speed) * symbol;
+					symbol = paths[paths.length - 1] > paths[paths.length - 2] ? -1 : 1;
+					moveY = Math.min(Math.abs(self.speed - moveX), self.speed) * symbol;
+				}
+				else {
+					let symbol = obj.y + self.cell_height / 2 > self.role.y ? 1 : -1;
+					moveY = Math.min(Math.abs(obj.y + self.cell_height / 2 - self.role.y), self.speed) * symbol;
+					symbol = paths[paths.length - 1] > paths[paths.length - 2] ? -1 : 1;
+					moveX = Math.min(Math.abs(self.speed - moveY), self.speed) * symbol;
+				}
+			}
+			self.role.x += moveX;
+			self.role.y += moveY;
+			self.RefreshView(moveX, moveY);
+			if (paths[paths.length - 1] != self.manageCells.index) {
+				paths.splice(-1, 1);
+			}
+		}
+	}
+
+	/**角色移动 */
+	private RoleMove(): void {
+		let self: GameControl = this;
+		if (self.autoMoveState) { return; }
 		if (self.direction == null) { return; }
 		let startTimer: number = egret.getTimer();
-		let speedX = +(Math.cos(self.direction) * self.speed * type).toFixed();
-		let speedY = +(Math.sin(self.direction) * self.speed * type).toFixed();
+		let speedX = +(Math.cos(self.direction) * self.speed).toFixed();
+		let speedY = +(Math.sin(self.direction) * self.speed).toFixed();
 		let cell: Cell = self.manageCells.currentCell;
 		let obj: egret.DisplayObject = self.manageCells.currentCellRender;
 		let moveX: number = 0;
 		let moveY: number = 0;
 		let role = self.role;
-
 		let moveRight = speedX > 0;
 		let nearWall: Wall = moveRight ? cell.rightWall : cell.leftWall;
 		if (!nearWall.isOpen || self.IsEdge(0)) {
 			let width: number = self.wall_width * 0.5 + role.width * 0.5;
-			let distance: number = Math.abs(obj.x + (moveRight ? 1 : 0) * obj.width / type - role.x) - width;
+			let distance: number = Math.abs(obj.x + (moveRight ? 1 : 0) * obj.width - role.x) - width;
 			moveX = moveRight ? Math.min(distance, speedX) : Math.max(-distance, speedX);
 		}
 		else {
@@ -127,16 +168,21 @@ class GameControl {
 		nearWall = moveRight ? cell.upWall : cell.downWall;
 		if (!nearWall.isOpen || self.IsEdge(1)) {
 			let height: number = self.wall_height * 0.5 + role.height * 0.5;
-			let distance: number = Math.abs(obj.y + (moveRight ? 0 : 1) * obj.height / type - role.y) - height;
+			let distance: number = Math.abs(obj.y + (moveRight ? 0 : 1) * obj.height - role.y) - height;
 			moveY = moveRight ? Math.max(-distance, speedY) : Math.min(distance, speedY);
 		}
 		else {
 			moveY = speedY;
 		}
 		role.y += moveY;
+		self.RefreshView(moveX, moveY);
+	}
+
+	private RefreshView(moveX: number, moveY: number) {
+		let self: GameControl = this;
 		GameEvent.dispatchEventWith(GameEvent.MoveScroll, false, { moveX: moveX, moveY: moveY });
-		self.manageCells.SetIndex(role);
-		if (self.lightOpen) { this.RefreshLight(); }
+		self.manageCells.SetIndex(self.role);
+		if (self.lightOpen) { self.RefreshLight(); }
 	}
 
 	private IsEdge(type: number): boolean {
