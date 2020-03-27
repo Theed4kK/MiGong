@@ -9,11 +9,13 @@ class UIBase extends eui.Component implements eui.UIComponent {
 	protected childrenCreated() {
 		super.childrenCreated();
 		let self: UIBase = this;
+		//界面适配
 		if (self.width >= UIBase.UILayer.width && self.height >= UIBase.UILayer.height) {
 			self.width = UIBase.UILayer.width;
 			self.height = UIBase.UILayer.height;
 		}
 		else {
+			//非全屏界面是否需要缩放，一般适用于背景无法拉伸且大小比例超出最大比例的界面
 			if (self.isScale) {
 				let scale = Math.min(UIBase.UILayer.width / self.width, UIBase.UILayer.height / self.height);
 				self.scaleX = scale;
