@@ -25,11 +25,12 @@ class Cell {
 
 	public item: number = 0;
 	public isSpecial: boolean;
+	/**标记格子是入口或出口 */
 	public specialIndex: CELL_INDEX;
 
 }
 
-enum CELL_INDEX{
+enum CELL_INDEX {
 	Start,
 	End
 }

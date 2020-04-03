@@ -17,8 +17,18 @@ class WallRender extends eui.ItemRenderer {
 	protected dataChanged(): void {
 		let self: WallRender = this;
 		let cell: Cell = self.data;
-		self.img_leftWall.visible = !cell.leftWall.isOpen;
-		self.img_rightWall.visible = !cell.rightWall.isOpen;
+		if (cell.specialIndex == CELL_INDEX.Start) {
+			self.img_leftWall.visible = false;
+		}
+		else {
+			self.img_leftWall.visible = !cell.leftWall.isOpen;
+		}
+		if (cell.specialIndex == CELL_INDEX.End) {
+			self.img_rightWall.visible = false;
+		}
+		else {
+			self.img_rightWall.visible = !cell.rightWall.isOpen;
+		}
 		self.img_upWall.visible = !cell.upWall.isOpen;
 		self.img_downWall.visible = !cell.downWall.isOpen;
 	}
@@ -33,11 +43,11 @@ class CellRender extends eui.ItemRenderer {
 		super.childrenCreated();
 		this.width = +Config.GetInstance().config_common["cell_width"].value;
 		this.height = +Config.GetInstance().config_common["cell_height"].value;
-		if(!CellRender.wall_width){
-			CellRender.wall_width =+Config.GetInstance().config_common["wall_width"].value;
+		if (!CellRender.wall_width) {
+			CellRender.wall_width = +Config.GetInstance().config_common["wall_width"].value;
 		}
-		if(!CellRender.wall_height){
-			CellRender.wall_height =+Config.GetInstance().config_common["wall_height"].value;
+		if (!CellRender.wall_height) {
+			CellRender.wall_height = +Config.GetInstance().config_common["wall_height"].value;
 		}
 	}
 
@@ -52,8 +62,8 @@ class CellRender extends eui.ItemRenderer {
 		0, 0, 0, 1, 0
 	];
 
-	static wall_width:number = null;
-	static wall_height:number = null;
+	static wall_width: number = null;
+	static wall_height: number = null;
 
 	protected dataChanged(): void {
 		let cell: Cell = this.data;
@@ -64,8 +74,6 @@ class CellRender extends eui.ItemRenderer {
 			self.img_item.filters = [glow];
 			self.img_item.source = item.pic;
 			self.img_item.visible = true;
-			self.img_item.x = self.x + Common.getRandomInt(CellRender.wall_width / 2, self.width - CellRender.wall_width / 2 - self.img_item.width);
-			self.img_item.y = self.y + Common.getRandomInt(CellRender.wall_height / 2, self.height - CellRender.wall_height / 2 - self.img_item.height);
 		}
 		else {
 			self.img_item.visible = false;

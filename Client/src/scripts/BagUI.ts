@@ -87,7 +87,7 @@ class BagItemRender extends eui.ItemRenderer {
 
 	protected dataChanged() {
 		let config = Config.GetInstance().config_item[this.data.id];
-		this.img_icon.texture = RES.getRes(config.pic);
+		this.img_icon.source = config.pic;
 		this.txt_name.text = config.name;
 		this.txt_num.text = `当前拥有：${this.data.value}`;
 		this.txt_des.text = config.des;

@@ -43,6 +43,7 @@ class LightMask extends egret.DisplayObjectContainer {
 		sprite.graphics.beginFill(0x000000, 1);
 		sprite.graphics.drawRect(self.wall_width, self.wall_height, maskW, maskH);
 		sprite.graphics.endFill();
+
 		let c_m = new egret.Matrix();
 		c_m.createGradientBox(self.radius * 2, self.radius * 2, 0, -self.radius, -self.radius);
 		let colorGroup = [0, 255];

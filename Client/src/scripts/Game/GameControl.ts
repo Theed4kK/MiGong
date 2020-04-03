@@ -64,16 +64,13 @@ class GameControl {
 	/**state：为1时开始手动移动  为2时停止手动移动  为3时开始自动移动,需传入路径数组,可选参数callback  为4时停止自动移动 */
 	public RoleMoveState(state: number, paths?: number[], call?: Function): void {
 		switch (state) {
-			//操作移动
 			case 1:
 				if (this.autoMoveState) { return; }
 				this.role.addEventListener(egret.Event.ENTER_FRAME, this.RoleMove, this);
 				break;
-			//停止操作移动
 			case 2:
 				this.role.removeEventListener(egret.Event.ENTER_FRAME, this.RoleMove, this);
 				break;
-			//开始自动移动
 			case 3:
 				if (this.autoMoveState) { return; }
 				this.role.addEventListener(egret.Event.ENTER_FRAME, this.RoleAutoMove, this);
@@ -81,7 +78,6 @@ class GameControl {
 				this.autoMoveState = true;
 				this.call = call;
 				break;
-			//停止自动移动
 			case 4:
 				this.role.removeEventListener(egret.Event.ENTER_FRAME, this.RoleAutoMove, this);
 				this.autoMoveState = false;
@@ -142,9 +138,11 @@ class GameControl {
 	/**角色移动 */
 	private RoleMove(): void {
 		let self: GameControl = this;
-		if (self.autoMoveState) { return; }
+		if (self.autoMoveState) {
+			self.RoleMoveState(2);
+			return;
+		}
 		if (self.direction == null) { return; }
-		let startTimer: number = egret.getTimer();
 		let speedX = +(Math.cos(self.direction) * self.speed).toFixed();
 		let speedY = +(Math.sin(self.direction) * self.speed).toFixed();
 		let cell: Cell = self.manageCells.currentCell;
@@ -152,30 +150,37 @@ class GameControl {
 		let moveX: number = 0;
 		let moveY: number = 0;
 		let role = self.role;
-		let moveRight = speedX > 0;
-		let nearWall: Wall = moveRight ? cell.rightWall : cell.leftWall;
+		let movePlus = speedX > 0;
+		let nearWall: Wall = movePlus ? cell.rightWall : cell.leftWall;
 		if (!nearWall.isOpen || self.IsEdge(0)) {
 			let width: number = self.wall_width * 0.5 + role.width * 0.5;
-			let distance: number = Math.abs(obj.x + (moveRight ? 1 : 0) * obj.width - role.x) - width;
-			moveX = moveRight ? Math.min(distance, speedX) : Math.max(-distance, speedX);
+			let distance: number = Math.abs(obj.x + (movePlus ? 1 : 0) * obj.width - role.x) - width;
+			moveX = movePlus ? Math.min(distance, speedX) : Math.max(-distance, speedX);
+
 		}
 		else {
 			moveX = speedX;
 		}
 		role.x += moveX;
 
-		moveRight = speedY < 0;
-		nearWall = moveRight ? cell.upWall : cell.downWall;
+		movePlus = speedY < 0;
+		nearWall = movePlus ? cell.upWall : cell.downWall;
 		if (!nearWall.isOpen || self.IsEdge(1)) {
 			let height: number = self.wall_height * 0.5 + role.height * 0.5;
-			let distance: number = Math.abs(obj.y + (moveRight ? 0 : 1) * obj.height - role.y) - height;
-			moveY = moveRight ? Math.max(-distance, speedY) : Math.min(distance, speedY);
+			let distance: number = Math.abs(obj.y + (movePlus ? 0 : 1) * obj.height - role.y) - height;
+			moveY = movePlus ? Math.max(-distance, speedY) : Math.min(distance, speedY);
 		}
 		else {
 			moveY = speedY;
 		}
 		role.y += moveY;
 		self.RefreshView(moveX, moveY);
+		if (cell.specialIndex == CELL_INDEX.Start && speedX < 0 && Math.abs(moveX) < Math.abs(speedX)) {
+			GameEvent.dispatchEventWith(GameEvent.ExitMap);
+		}
+		if (cell.specialIndex == CELL_INDEX.End && speedX > 0 && Math.abs(moveX) < Math.abs(speedX)) {
+			GameEvent.dispatchEventWith(GameEvent.ExitMap);
+		}
 	}
 
 	private RefreshView(moveX: number, moveY: number) {

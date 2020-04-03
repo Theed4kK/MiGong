@@ -6,16 +6,20 @@ class UIBase extends eui.Component implements eui.UIComponent {
 
 	private bgClose: boolean = false;
 
+	protected open: egret.tween.TweenGroup;
+
 	protected childrenCreated() {
 		super.childrenCreated();
 		let self: UIBase = this;
+		if (self.open) {
+			self.open.play(0);
+		}
 		//界面适配
 		if (self.width >= UIBase.UILayer.width && self.height >= UIBase.UILayer.height) {
 			self.width = UIBase.UILayer.width;
 			self.height = UIBase.UILayer.height;
 		}
 		else {
-			//非全屏界面是否需要缩放，一般适用于背景无法拉伸且大小比例超出最大比例的界面
 			if (self.isScale) {
 				let scale = Math.min(UIBase.UILayer.width / self.width, UIBase.UILayer.height / self.height);
 				self.scaleX = scale;
@@ -49,10 +53,10 @@ class UIBase extends eui.Component implements eui.UIComponent {
 
 	public static UILayer: eui.UILayer;
 
+	/**非全屏界面是否需要缩放，一般适用于背景无法拉伸且大小比例超出最大比例的界面 */
 	protected isScale: boolean = false;
 
 	private static uiList: { [name: string]: UIBase } = {};
-	private static bmp = new egret.Bitmap();
 	public static OpenUI<T>(creator: { new (...arg): UIBase }, ...arg): UIBase {
 		let className = creator.prototype.__class__;
 		let ui: UIBase = UIBase.uiList[className];

@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "common_json,loading_jpg,game_json,green_fnt,green_png,Bg_png,line_png,btn_setting_png,icon_jpg,levelIcon_json,btn_guide_png,mode01_png,mode_png,switch_btn_green2_png,switch_bg_png,switch_btn_red2_png,btn_change_png,btn_close7_png,hanlin_lv_box_png,line1_png,Bg2_png,Btn_exit_png,btn_continue_png,buffer_png,map_bg_jpg,btn_exit_png,reward_bg_png,headMask_png,rect_png,green2_png,bg_png,exit_bg_jpg,Btn_exit_1_png",
+			"keys": "common_json,loading_jpg,game_json,green_fnt,green_png,Bg_png,line_png,btn_setting_png,icon_jpg,levelIcon_json,btn_guide_png,mode01_png,mode_png,switch_btn_green2_png,switch_bg_png,switch_btn_red2_png,btn_change_png,btn_close7_png,hanlin_lv_box_png,line1_png,Bg2_png,Btn_exit_png,btn_continue_png,buffer_png,map_bg_jpg,btn_exit_png,reward_bg_png,headMask_png,rect_png,green2_png,bg_png,Btn_exit_1_png,xinyang_png,Btn_exit_2_png,reward_bg2_png,Bg_jpg,btn_bag_png,light10_png",
 			"name": "preload"
 		}
 	],
@@ -52,11 +52,6 @@
 			"url": "assets/startPage/btn_enter_new.png",
 			"type": "image",
 			"name": "btn_enter_new_png"
-		},
-		{
-			"url": "assets/startPage/board_bg2.jpg",
-			"type": "image",
-			"name": "board_bg2_jpg"
 		},
 		{
 			"url": "assets/green.fnt",
@@ -204,14 +199,39 @@
 			"url": "assets/loading/bg.png"
 		},
 		{
-			"name": "exit_bg_jpg",
-			"type": "image",
-			"url": "assets/exitTips/exit_bg.jpg"
-		},
-		{
 			"name": "Btn_exit_1_png",
 			"type": "image",
 			"url": "assets/exitTips/Btn_exit_1.png"
+		},
+		{
+			"name": "xinyang_png",
+			"type": "image",
+			"url": "assets/icon/xinyang.png"
+		},
+		{
+			"name": "Btn_exit_2_png",
+			"type": "image",
+			"url": "assets/exitTips/Btn_exit_2.png"
+		},
+		{
+			"name": "reward_bg2_png",
+			"type": "image",
+			"url": "assets/exitTips/reward_bg.png"
+		},
+		{
+			"name": "Bg_jpg",
+			"type": "image",
+			"url": "assets/startPage/Bg.jpg"
+		},
+		{
+			"name": "btn_bag_png",
+			"type": "image",
+			"url": "assets/startPage/btn_bag.png"
+		},
+		{
+			"name": "light10_png",
+			"type": "image",
+			"url": "assets/game/light10.png"
 		}
 	]
 }

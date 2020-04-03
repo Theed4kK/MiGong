@@ -7,4 +7,5 @@ class LevelLib {
 	public point:number;
 	public weight_bearing:number;
 	public map_choose:number;
+	public icon:string;
 }

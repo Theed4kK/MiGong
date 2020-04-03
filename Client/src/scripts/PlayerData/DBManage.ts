@@ -15,9 +15,9 @@ class DBManage {
 	}
 
 	userInfo: any;
-	async Init() {
+	async Init(width?: number, height?: number) {
 		let self: DBManage = this;
-		self.userInfo = await platform.getUserInfo("http://image.biaobaiju.com/uploads/20180802/03/1533152912-BmPIzdDxuT.jpg");
+		self.userInfo = await platform.getUserInfo(width, height);
 		console.log(self.userInfo);
 		if (egret.Capabilities.runtimeType == egret.RuntimeType.WXGAME) {
 			wx.cloud.init();

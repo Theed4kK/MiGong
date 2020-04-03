@@ -6,8 +6,7 @@
  */
 declare interface Platform {
 
-    getUserInfo(buttonImage?: string): Promise<any>;
-
+    getUserInfo(width?: number, height?: number): Promise<any>;
     login(): Promise<any>;
     drawMask?(canvas: any, arc: any): any;
 }

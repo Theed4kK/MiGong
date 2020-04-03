@@ -55,9 +55,8 @@ class Main extends eui.UILayer {
 
     private async runGame() {
         await this.loadResource()
-        this.createGameScene();
         await platform.login();
-        await DBManage.GetInstance().Init();
+        this.createGameScene();
     }
 
     private useLocalRes = true;

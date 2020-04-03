@@ -3,7 +3,7 @@
 	<w:Declarations>
 	</w:Declarations>
 	<w:Config id="16fcbc6bb06" ></w:Config>
-	<e:Image source="board_bg2_jpg" height="1624" width="750" x="0" anchorOffsetX="0" anchorOffsetY="0" bottom="0"/>
+	<e:Image height="1624" width="750" anchorOffsetX="0" anchorOffsetY="0" source="Bg_jpg" verticalCenter="0" horizontalCenter="0"/>
 
 	<e:Button id="btn_start" label="" anchorOffsetX="0" anchorOffsetY="0" horizontalCenter="0" verticalCenter="0">
 		<e:skinName>
@@ -13,9 +13,9 @@
 			</e:Skin>
 		</e:skinName>
 	</e:Button>
-	<e:Button id="btn_bag" label="物品" anchorOffsetX="0" width="160.61" anchorOffsetY="0" height="71.21" right="31" verticalCenter="251"/>
 
-	<e:Button id="btn_setting" label="" bottom="4" right="8">
+
+	<e:Button id="btn_setting" label="" right="8" top="5">
 		<e:skinName>
 			<e:Skin states="up,down,disabled">
 			<e:Image width="100%" height="100%" source="btn_setting_png"/>
@@ -23,10 +23,19 @@
 			</e:Skin>
 		</e:skinName>
 	</e:Button>
-	<e:Group width="458" height="104" anchorOffsetY="0" anchorOffsetX="0" left="52" verticalCenter="251">
-		<e:Image id="img_role" width="80" height="80" scaleX="1" scaleY="1" verticalCenter="0" left="20" source="icon_jpg"/>
-		<e:Image id="img_levelIcon" width="15" height="15" scaleX="1" scaleY="1" left="124" bottom="24" source="001"/>
-		<e:Label id="txt_roleName" text="角色名字默认微信昵称" stroke="0.5" strokeColor="0xd8790a" scaleX="1" scaleY="1" left="118" top="17" size="26" fontFamily="SimHei"/>
-		<e:Label id="txt_roleInfo" text="LV. 10   狂热者" stroke="0" strokeColor="0xD8790A" size="20" textColor="0xe2e2e2" scaleX="1" scaleY="1" left="157" bottom="21" fontFamily="SimHei"/>
+	<e:Group id="group_userInfo" height="122" anchorOffsetY="0" anchorOffsetX="0" left="0" right="0" bottom="50">
+		<e:Image left="0" right="0" top="0" bottom="0" source="rect" alpha=".3"/>
+		<e:Image id="img_role" width="80" height="80" scaleX="1" scaleY="1" verticalCenter="0" left="50" source="icon_jpg"/>
+		<e:Image id="img_levelIcon" scaleX="1" scaleY="1" left="150" source="001" verticalCenter="21.5"/>
+		<e:Label id="txt_roleName" text="没有任何信仰的平民" stroke=".5" strokeColor="0x593004" scaleX="1" scaleY="1" left="148" size="26" fontFamily="SimHei" textColor="0xffffff" verticalCenter="-22"/>
+		<e:Label id="txt_levelTips" text="LV.10 狂热者" stroke="0" strokeColor="0xD8790A" size="20" scaleX="1" scaleY="1" left="175" fontFamily="SimHei" textColor="0x90ede7" verticalCenter="21"/>
+		<e:Button id="btn_bag" label="" anchorOffsetX="0" anchorOffsetY="0" right="60" verticalCenter="0" x="582" y="10" scaleX="1" scaleY="1">
+			<e:skinName>
+			<e:Skin states="up,down,disabled">
+				<e:Image width="100%" height="100%" source="btn_bag_png"/>
+				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+			</e:skinName>
+		</e:Button>
 	</e:Group>
 </e:Skin>

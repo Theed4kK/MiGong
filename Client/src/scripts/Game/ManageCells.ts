@@ -26,13 +26,6 @@ class ManageCells {
 	private cellList: eui.List;
 	private arrayCellList: eui.ArrayCollection;
 
-	ExitMap() {
-		if (this.mapData.itemNum > 0) {
-			ItemManage.GetInstance().GetItems(this.mapData.item);
-		}
-		PlayerDataManage.GetInstance().GetPoint(this.mapData.point);
-	}
-
 	private col: number;
 	private returnCell: CellRender = null;
 	private mapData: {
@@ -45,8 +38,13 @@ class ManageCells {
 		itemNum: 0
 	};
 
-	cell_width = +Config.GetInstance().config_common["cell_width"].value;
-	cell_height = +Config.GetInstance().config_common["cell_height"].value;
+	private cell_width = +Config.GetInstance().config_common["cell_width"].value;
+	private cell_height = +Config.GetInstance().config_common["cell_height"].value;
+
+	/**玩家步长 */
+	length = 1;
+	/**玩家有效探索路径 */
+	path: number[] = [];
 	/**设置当前所在格子编号 */
 	public SetIndex(role: eui.Group): void {
 		let h: number = Math.floor(role.x / this.cell_width);
@@ -54,8 +52,9 @@ class ManageCells {
 		let index: number = v * this.col + h;
 		if (this._index != index) {
 			this._index = index
+			this.length++;
 			this.SetCurrentCell();
-			this.SetReturnPath();
+			this.RecordPath();
 		}
 		this.GetCellItem(role);
 	}
@@ -68,10 +67,12 @@ class ManageCells {
 			} else {
 				self.mapData.item[self._currentCell.item] = 1;
 			}
+			self.mapData.itemNum++;
+			GameEvent.dispatchEventWith(GameEvent.GetItem, false,
+				{ id: self._currentCell.item, value: self.mapData.item[self._currentCell.item] }
+			);
 			self._currentCell.item = 0;
 			self.arrayCellList.itemUpdated(self._currentCell);
-			self.mapData.itemNum++;
-			GameEvent.dispatchEventWith(GameEvent.GetItem, false, Common.DictionaryToArray(self.mapData.item));
 		}
 	}
 
@@ -86,21 +87,25 @@ class ManageCells {
 		}
 	}
 
-	/**设置返回路径 */
-	private SetReturnPath(): void {
-		if (this.GetUnpassedCells(this.currentCell) > 1 && (this.returnPath.length == 0 || this.returnPath.length > 5)) {
-			this.returnPath = [];
-			if (this.returnCell != null) {
+	/**记录路径 */
+	private RecordPath(): void {
+		let self: ManageCells = this;
+		if (self.path.indexOf(self.index) == -1) {
+			self.path.push(self.index);
+		}
+		if (self.GetUnpassedCells(self.currentCell) > 1 && (self.returnPath.length == 0 || self.returnPath.length > 5)) {
+			self.returnPath = [];
+			if (self.returnCell != null) {
 				// this.returnCell.HideReturnSign();
 			}
-			this.returnCell = this._currentCellRender;
+			self.returnCell = self._currentCellRender;
 		}
-		if (this.returnCell != null) {
-			if (this.returnPath.indexOf(this.index) == -1) {
-				this.returnPath.push(this.index);
+		if (self.returnCell != null) {
+			if (self.returnPath.indexOf(self.index) == -1) {
+				self.returnPath.push(self.index);
 			}
 			else {
-				this.returnPath.splice(-1, 1);
+				self.returnPath.splice(-1, 1);
 			}
 		}
 	}

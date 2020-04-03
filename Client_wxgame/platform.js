@@ -16,7 +16,7 @@ class WxgamePlatform {
     })
   }
 
-  getUserInfo(iconPath) {
+  getUserInfo(width, height) {
     const showErrModal = this.showErrModal;
     return new Promise((resolve, reject) => {
       let sysInfo = wx.getSystemInfoSync();
@@ -30,14 +30,19 @@ class WxgamePlatform {
           if (sdkVersionNum >= 201 && !res.authSetting['scope.userInfo']) {
             // 创建获取用户信息按钮
             var button = wx.createUserInfoButton({
-              type: 'image',
+              type: 'text',
               text: '',
-              image: iconPath,
               style: {
                 left: 0,
                 top: 0,
-                width: 100,
-                height: 100
+                width: width,
+                height: height,
+                lineHeight: 0,
+                textAlign: 'center',
+                backgroundcolor: '',
+                color: '#ffffff',
+                fontSize: 16,
+                borderRadius: 4
               }
             });
             button.onTap((res) => {

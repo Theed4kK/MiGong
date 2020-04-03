@@ -33,18 +33,19 @@ class ItemManage implements IPlayerDataManage {
 		this.SaveData();
 	}
 
-	async GetItems(items: { [id: number]: number }) {
-		if (items == {}) { return; }
+	async GetItems(items: eui.ArrayCollection) {
+		if (!items || items.length == 0) { return; }
 		let data = await this.Getdata();
-		for (let id in items) {
-			if (data[id]) {
-				data[id] += items[id];
+		for (let i = 0; i < items.length; i++) {
+			let itemInfo: { id: number, value: number } = items.getItemAt(i);
+			if (data[itemInfo.id]) {
+				data[itemInfo.id] += itemInfo.value;
 			}
 			else {
-				data[id] = items[id];
+				data[itemInfo.id] = itemInfo.value;
 			}
-			if (data[id] == 0) {
-				delete data[id];
+			if (data[itemInfo.id] == 0) {
+				delete data[itemInfo.id];
 			}
 		}
 		this.SaveData();

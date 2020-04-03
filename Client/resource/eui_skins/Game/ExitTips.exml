@@ -1,60 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin class="ExitTipsSkin" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" >
-	<w:Config id="16fcbb7f426" ></w:Config>
-
-
-
-
-
-
-	<e:Group id="group_flee" width="578" height="297" horizontalCenter="0" verticalCenter="0" visible="false">
-
-
-		<e:Image scale9Grid="2,2,12,12" x="0" y="0" scaleX="1" scaleY="1" source="Bg2_png"/>
-
-		<e:Button id="btn_cancel" label="再等等" anchorOffsetX="0" width="104" anchorOffsetY="0" height="49" scaleX="1" scaleY="1" right="100" bottom="23" x="374" y="225">
-			<e:skinName>
-			<e:Skin states="up,down,disabled">
-				<e:Image width="100%" height="100%" source="btn_continue_png"/>
-				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" fontFamily="Microsoft YaHei" size="22" text="再等等" textColor="0x000000"/>
-			</e:Skin>
-			</e:skinName>
-		</e:Button>
-		<e:Button id="btn_exit" label="逃离" anchorOffsetX="0" width="104" anchorOffsetY="0" height="49" bottom="23" y="225" scaleX="1" scaleY="1" left="100" x="100">
-			<e:skinName>
-			<e:Skin states="up,down,disabled">
-				<e:Image width="100%" height="100%" source="Btn_exit_png"/>
-				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" text="退出" size="22" fontFamily="Microsoft YaHei" textColor="0x2d2d2d"/>
-			</e:Skin>
-			</e:skinName>
-		</e:Button>
-		<e:Label text="逃离迷宫" top="0" anchorOffsetY="0" left="0" right="0" height="38.33" verticalAlign="middle" textAlign="center" x="0" y="0" scaleX="1" scaleY="1" fontFamily="KaiTi" textColor="0xf2e554" stroke="1" strokeColor="0x77550b" anchorOffsetX="0" bold="true" size="26"/>
-		<e:Label id="txt_tips" text="中途逃离仅能带走一半宝藏，确认离开？" top="40" anchorOffsetY="0" height="171.21" verticalAlign="middle" textAlign="center" size="26" wordWrap="true" lineSpacing="10" y="51" scaleX="1" scaleY="1" anchorOffsetX="0" width="501" horizontalCenter="0.5" fontFamily="Microsoft YaHei" stroke="0.5" strokeColor="0x700d0d" textColor="0xff0000" x="39"/>
-	</e:Group>
-	<e:Group id="group_exit" x="0" y="0">
-		<e:Image scale9Grid="2,2,12,12" scaleX="1" scaleY="1" source="exit_bg_jpg" verticalCenter="0" horizontalCenter="0"/>
-		<e:Label text="恭喜您找到迷宫出口" top="153" anchorOffsetY="0" left="0" right="0" height="38.33" verticalAlign="middle" textAlign="center" x="0" y="0" scaleX="1" scaleY="1" fontFamily="KaiTi" textColor="0xF2E554" stroke="2" strokeColor="0xe52200" anchorOffsetX="0" bold="true" size="50"/>
-		<e:Image anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="380" bottom="480" source="rect" scale9Grid="1,1,8,8" alpha="0.6"/>
-		<e:Scroller left="0" right="0" anchorOffsetY="0" bottom="480" top="380">
+<e:Skin class="ExitTipsSkin" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing"
+        xmlns:tween="egret.tween.*" width="750" height="1624">
+	<w:Declarations>
+		<tween:TweenGroup id="open">
+			<tween:TweenItem target="{group_exit}">
+				<tween:Set>
+					<tween:props>
+						<e:Object  scaleY="{0}"/>
+					</tween:props>
+				</tween:Set>
+				<tween:To duration="600" ease="cubicOut">
+					<tween:props>
+						<e:Object scaleY="{1}" alpha="{1}" />
+					</tween:props>
+				</tween:To>
+			</tween:TweenItem>
+		</tween:TweenGroup>
+	</w:Declarations>
+	<e:Group id="group_exit" touchThrough="false" left="0" right="0" top="0" bottom="0">
+		<e:Image scaleX="1" scaleY="1"  source="rect" scale9Grid="1,1,8,8" left="0" right="0" top="0" bottom="0" alpha="0.8"/>
+		<e:Label id="txt_title" text="你还未找到迷宫出口" top="153" anchorOffsetY="0" left="0" right="0" height="38.33"
+		         verticalAlign="middle" textAlign="center" x="0" y="0" scaleX="1" scaleY="1" fontFamily="KaiTi"
+		         textColor="0xF2E554" stroke="2" strokeColor="0xe52200" anchorOffsetX="0" size="50" bold="true" />
+		<e:Image anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="380" bottom="739"
+		         alpha="0.8"  source="reward_bg2_png" scale9Grid="10,8,421,175"/>
+		<e:Scroller left="0" right="0" anchorOffsetY="0" bottom="739" top="380">
 			<e:Group anchorOffsetY="0" height="655.15">
-				<e:List y="0" left="0" right="0" itemRendererSkinName="GameItemRenderSkin" anchorOffsetY="0">
+				<e:List id="list_reward" y="0" left="0" right="0" anchorOffsetY="0">
 					<e:layout>
-						<e:TileLayout verticalGap="30" horizontalGap="35" orientation="rows" columnAlign="justifyUsingWidth" horizontalAlign="center"/>
+						<e:TileLayout verticalGap="25" horizontalGap="17.6" orientation="rows" columnAlign="left" horizontalAlign="center"
+						              paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10" />
 					</e:layout>
 				</e:List>
 			</e:Group>
 		</e:Scroller>
-		<e:Button label="离  开" bottom="177" horizontalCenter="0">
+		<e:Button id="btn_exit0" label="离      开" bottom="100" horizontalCenter="0">
 			<e:skinName>
 				<e:Skin states="up,down,disabled">
-				<e:Image width="100%" height="100%" source="Btn_exit_1_png"/>
-				<e:Label id="labelDisplay" text="离  开" fontFamily="SimHei" size="36" textColor="0xf7ea18" textAlign="center" verticalAlign="middle" anchorOffsetY="0" left="9" right="7" top="0" bottom="5" anchorOffsetX="0"/>
+					<e:Image width="100%" height="100%" source="Btn_exit_1_png" />
+					<e:Label id="labelDisplay" text="离  开" fontFamily="SimHei" size="36" textAlign="center" verticalAlign="middle"
+					         anchorOffsetY="0" left="0" right="0" top="0" bottom="0" anchorOffsetX="0" bold="true" textColor="0x057a82" />
 				</e:Skin>
 			</e:skinName>
 		</e:Button>
-		<e:Label text="所有宝藏上贡后可获得信仰值：50000点" anchorOffsetY="0" anchorOffsetX="0" bottom="438" left="0" right="0" fontFamily="Microsoft YaHei" textAlign="center" textColor="0xf9b807"/>
-		<e:Label text="本次探索获得以下战利品" anchorOffsetY="0" left="0" right="0" textAlign="center" verticalAlign="bottom" fontFamily="Microsoft YaHei" stroke="0.1" strokeColor="0x057014" textColor="0xaac141" top="335"/>
-		<e:Label id="txt_cancel" text="等等，我还要继续找宝藏" anchorOffsetY="0" textAlign="center" verticalAlign="bottom" fontFamily="Microsoft YaHei" stroke="0.1" strokeColor="0x057014" textColor="0xAAC141" lineSpacing="6" anchorOffsetX="0" width="233.33" size="26" right="0" bottom="199" x="516.67" y="1369" scaleX="1" scaleY="1" border="false"/>
+		<e:Button id="btn_exit1" label="逃      离" bottom="100" horizontalCenter="0" visible="false">
+			<e:skinName>
+				<e:Skin states="up,down,disabled">
+					<e:Image width="100%" height="100%" source="Btn_exit_2_png" />
+					<e:Label id="labelDisplay" text="逃      离" fontFamily="SimHei" size="36" textAlign="center" verticalAlign="middle"
+					         anchorOffsetY="0" left="0" right="0" top="0" bottom="0" anchorOffsetX="0" bold="true" textColor="0x870909" />
+				</e:Skin>
+			</e:skinName>
+		</e:Button>
+		<e:Image source="xinyang_png" left="0" bottom="687" />
+		<e:Label text="所有宝藏直接上贡后可获得：" anchorOffsetY="0" anchorOffsetX="0" bottom="691" left="34" right="350"
+		         fontFamily="Microsoft YaHei" textAlign="left" size="26" textColor="0xff8e00" />
+		<e:Label text="探索总长" bottom="580" fontFamily="KaiTi" size="40" left="80" right="122" textAlign="left" textColor="0xbff20c"/>
+		<e:Label text="当前步长" bottom="482" fontFamily="KaiTi" size="40" left="80" right="122" textAlign="left" textColor="0xbff20c"/>
+		<e:Label text="总评价" bottom="346" fontFamily="KaiTi" size="50" left="80" textAlign="left" textColor="0xefa607" width="270"/>
+		<e:Label id="txt_rewardTips" text="本次探索获得以下战利品：" anchorOffsetY="0" left="7" right="0" textAlign="left" verticalAlign="bottom"
+		         fontFamily="Microsoft YaHei" stroke="0.1" strokeColor="0x057014" top="342" textColor="0x52bf41" size="26" />
+		<e:Label id="txt_cancel" text="等等，我还要继续找宝藏" anchorOffsetY="0" textAlign="center" verticalAlign="bottom"
+		         fontFamily="Microsoft YaHei" stroke="0.1" strokeColor="0x057014" lineSpacing="6" anchorOffsetX="0"
+		         width="427" size="30" bottom="200" y="1369" scaleX="1" scaleY="1" border="false" horizontalCenter="0"
+		         textColor="0x70e814" />
+		<e:BitmapLabel id="txt_pointNum" height="40" font="green_fnt" text="231231" left="371" bottom="681" />
+		<e:BitmapLabel id="txt_effectiveLength" height="40" font="green_fnt" text="5555" bottom="579" right="167"/>
+		<e:BitmapLabel id="txt_length" height="40" font="green_fnt" text="5555" bottom="484" right="167"/>
+		<e:BitmapLabel id="txt_evaluate" height="40" font="green_fnt" text="5555" bottom="353" right="167"/>
 	</e:Group>
-
+	<e:Group id="group_flee" horizontalCenter="0" verticalCenter="0" touchThrough="false" visible="false">
+		<e:Image scale9Grid="2,2,12,12" x="0" y="0" scaleX="1" scaleY="1" source="Bg2_png" />
+		<e:Button id="btn_cancel" label="再等等" anchorOffsetX="0" width="104" anchorOffsetY="0" height="49" scaleX="1"
+		          scaleY="1" right="100" bottom="23" x="374" y="225">
+			<e:skinName>
+				<e:Skin states="up,down,disabled">
+					<e:Image width="100%" height="100%" source="btn_continue_png" />
+					<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" fontFamily="Microsoft YaHei" size="22"
+					         text="再等等" textColor="0x000000" />
+				</e:Skin>
+			</e:skinName>
+		</e:Button>
+		<e:Button id="btn_exit" label="逃离" anchorOffsetX="0" width="104" anchorOffsetY="0" height="49" bottom="23" y="225"
+		          scaleX="1" scaleY="1" left="100" x="100">
+			<e:skinName>
+				<e:Skin states="up,down,disabled">
+					<e:Image width="100%" height="100%" source="Btn_exit_png" />
+					<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" text="退出" size="22" fontFamily="Microsoft YaHei"
+					         textColor="0x2d2d2d" />
+				</e:Skin>
+			</e:skinName>
+		</e:Button>
+		<e:Label text="逃离迷宫" top="0" anchorOffsetY="0" left="0" right="0" height="38.33" verticalAlign="middle"
+		         textAlign="center" x="0" y="0" scaleX="1" scaleY="1" fontFamily="KaiTi" textColor="0xf2e554" stroke="1"
+		         strokeColor="0x77550b" anchorOffsetX="0" bold="true" size="26" />
+		<e:Label id="txt_tips" text="从出口逃离将扣除 当前等级*100 点信仰值，确认逃离？" top="40" anchorOffsetY="0" height="171.21"
+		         verticalAlign="middle" textAlign="center" size="26" wordWrap="true" lineSpacing="10" y="51" scaleX="1"
+		         scaleY="1" anchorOffsetX="0" width="501" horizontalCenter="0.5" fontFamily="Microsoft YaHei"
+		         strokeColor="0x062f87" x="39" textColor="0xf2790e" />
+	</e:Group>
 </e:Skin>

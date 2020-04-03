@@ -27,7 +27,8 @@
 					<e:TileLayout horizontalGap="0" verticalGap="0" requestedRowCount="15" paddingTop="5" paddingBottom="5" paddingLeft="5" paddingRight="5" orientation="rows"/>
 					</e:layout>
 				</e:List>
-				<e:Group id="group_light" left="0" right="0" top="0" bottom="0" x="0" y="0" scaleX="1" scaleY="1"/>
+				<e:Group id="group_light" left="0" right="0" top="0" bottom="0" x="0" y="0" scaleX="1" scaleY="1">
+				</e:Group>
 				<e:Group id="group_role" width="45" height="45" x="0" y="0" scaleX="1" scaleY="1" includeInLayout="false">
 					<e:Image id="img_mask" scaleX="1" scaleY="1" includeInLayout="true" left="3" right="3" top="3" bottom="3" source="headMask"/>
 					<e:Image id="img_role" scaleX="1" scaleY="1" includeInLayout="true" left="3" top="3" bottom="3" right="3" source="gold_2" mask="img_mask"/>
